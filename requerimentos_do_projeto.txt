@@ -1,0 +1,5 @@
+-> Demanda
+    - Pertence a alguém
+    - Ciclo de vida: recebida > em andamento > Finalizada
+    - Demanda -> varias tarefa
+    - Cada etapa do ciclo de vida > registrado na linha do tempo
