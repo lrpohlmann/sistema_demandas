@@ -2,8 +2,42 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import NamedTuple, Optional, Protocol, Sequence
+from typing import Any, MutableSequence, NamedTuple, Optional, Protocol, Sequence
 from types import SimpleNamespace
+
+
+@dataclass
+class Tarefa:
+    id_tarefa: Optional[int] = None
+
+
+@dataclass
+class DemandaPadrao:
+    tarefas: MutableSequence
+    linha_do_tempo: MutableSequence
+    responsavel: Optional[Any] = None
+    id_demanda: Optional[int] = None
+
+
+def test_adicionar_tarefa_na_demanda():
+    class _TemTarefas(Protocol):
+        tarefas: MutableSequence
+
+    def adicionar_tarefas_na_demanda(
+        demanda: _TemTarefas, *tarefas: Any
+    ) -> _TemTarefas:
+        for t in tarefas:
+            demanda.tarefas.append(t)
+        return demanda
+
+    demanda = DemandaPadrao(tarefas=[], linha_do_tempo=[])
+
+    tarefa1 = 1
+    tarefa2 = 2
+
+    demanda = adicionar_tarefas_na_demanda(demanda, tarefa1, tarefa2)
+
+    assert demanda.tarefas == [tarefa1, tarefa2]
 
 
 class FatoProtocol(Protocol):
