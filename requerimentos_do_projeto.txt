@@ -1,5 +1,10 @@
 -> Demanda
     - Pertence a alguém
     - Ciclo de vida: recebida > em andamento > Finalizada
-    - Demanda -> varias tarefa
+    - Demanda -> varias tarefas
     - Cada etapa do ciclo de vida > registrado na linha do tempo
+
+-> Tarefa
+    - Pode ser atribuido ao responsável pela demanda ou para outra pessoa
+    - Titulo, Descrição, responsável, arquivos necessários, datatempo criação, status
+    - ao ser finalizada deve ser posta na linha do tempo da demanda

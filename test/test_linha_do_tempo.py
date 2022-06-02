@@ -6,9 +6,31 @@ from typing import Any, MutableSequence, NamedTuple, Optional, Protocol, Sequenc
 from types import SimpleNamespace
 
 
+class StatusTarefa(Enum):
+    EM_ABERTO = "EM ABERTO"
+    FINALIZADA = "FINALIZADA"
+
+
 @dataclass
 class Tarefa:
+    titulo: str
+    responsavel: str
+    status: StatusTarefa = StatusTarefa.EM_ABERTO
     id_tarefa: Optional[int] = None
+    descricao: Optional[str] = None
+    criacao: datetime = field(default_factory=datetime.now)
+    arquivos_necessarios: Optional[Sequence[Path]] = None
+
+
+def test_instanciar_tarefa():
+    Tarefa(
+        "Emitir Nota",
+        StatusTarefa.EM_ABERTO,
+        [Path("arquivo.txt")],
+        "Emitir a nota para a empresa x.",
+        datetime.now(),
+        [Path("a.txt")],
+    )
 
 
 @dataclass
