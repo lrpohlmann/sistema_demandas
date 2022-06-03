@@ -6,6 +6,11 @@ from typing import Any, MutableSequence, NamedTuple, Optional, Protocol, Sequenc
 from types import SimpleNamespace
 
 
+@dataclass
+class Usuario:
+    pass
+
+
 class StatusTarefa(Enum):
     EM_ABERTO = "EM ABERTO"
     FINALIZADA = "FINALIZADA"
@@ -14,7 +19,7 @@ class StatusTarefa(Enum):
 @dataclass
 class Tarefa:
     titulo: str
-    responsavel: str
+    responsavel: Usuario
     status: StatusTarefa = StatusTarefa.EM_ABERTO
     id_tarefa: Optional[int] = None
     descricao: Optional[str] = None
@@ -22,44 +27,18 @@ class Tarefa:
     arquivos_necessarios: Optional[Sequence[Path]] = None
 
 
-def test_instanciar_tarefa():
-    Tarefa(
-        "Emitir Nota",
-        StatusTarefa.EM_ABERTO,
-        [Path("arquivo.txt")],
-        "Emitir a nota para a empresa x.",
-        datetime.now(),
-        [Path("a.txt")],
-    )
+@dataclass
+class LinhaDoTempo:
+    id_linha_do_tempo: Optional[int]
+    sequencia_de_fatos: MutableSequence = field(default_factory=list)
 
 
 @dataclass
 class DemandaPadrao:
     tarefas: MutableSequence
-    linha_do_tempo: MutableSequence
-    responsavel: Optional[Any] = None
+    linha_do_tempo: LinhaDoTempo
+    responsavel: Optional[Usuario] = None
     id_demanda: Optional[int] = None
-
-
-def test_adicionar_tarefa_na_demanda():
-    class _TemTarefas(Protocol):
-        tarefas: MutableSequence
-
-    def adicionar_tarefas_na_demanda(
-        demanda: _TemTarefas, *tarefas: Any
-    ) -> _TemTarefas:
-        for t in tarefas:
-            demanda.tarefas.append(t)
-        return demanda
-
-    demanda = DemandaPadrao(tarefas=[], linha_do_tempo=[])
-
-    tarefa1 = 1
-    tarefa2 = 2
-
-    demanda = adicionar_tarefas_na_demanda(demanda, tarefa1, tarefa2)
-
-    assert demanda.tarefas == [tarefa1, tarefa2]
 
 
 class FatoProtocol(Protocol):
@@ -87,6 +66,48 @@ def inserir_fatos(
     sequencia_de_fatos: Sequence[FatoProtocol], *fatos: FatoProtocol
 ) -> Sequence[FatoProtocol]:
     return sorted([*sequencia_de_fatos, *fatos], key=lambda f: f.data_hora)
+
+
+def test_instanciar_tarefa():
+    Tarefa(
+        "Emitir Nota",
+        StatusTarefa.EM_ABERTO,
+        [Path("arquivo.txt")],
+        "Emitir a nota para a empresa x.",
+        datetime.now(),
+        [Path("a.txt")],
+    )
+
+    Tarefa(
+        titulo="Imprimir Arquivo",
+        responsavel=Usuario(),
+        arquivos_necessarios=None,
+        criacao=datetime(2022, 4, 2, 9, 3),
+        descricao="",
+        id_tarefa=None,
+        status=StatusTarefa.EM_ABERTO,
+    )
+
+
+def test_adicionar_tarefa_na_demanda():
+    class _TemTarefas(Protocol):
+        tarefas: MutableSequence
+
+    def adicionar_tarefas_na_demanda(
+        demanda: _TemTarefas, *tarefas: Any
+    ) -> _TemTarefas:
+        for t in tarefas:
+            demanda.tarefas.append(t)
+        return demanda
+
+    demanda = DemandaPadrao(tarefas=[], linha_do_tempo=[])
+
+    tarefa1 = 1
+    tarefa2 = 2
+
+    demanda = adicionar_tarefas_na_demanda(demanda, tarefa1, tarefa2)
+
+    assert demanda.tarefas == [tarefa1, tarefa2]
 
 
 def test_inserir_fato_na_sequencia_de_fatos():
