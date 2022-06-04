@@ -12,42 +12,12 @@ from typing import (
     runtime_checkable,
 )
 from types import SimpleNamespace
+from sistema.model.entidades.demanda import DemandaPadrao
+from sistema.model.entidades.fato import FatoSimples
 
-
-@dataclass
-class Usuario:
-    pass
-
-
-class StatusTarefa(Enum):
-    EM_ABERTO = "EM ABERTO"
-    FINALIZADA = "FINALIZADA"
-
-
-@dataclass
-class Tarefa:
-    titulo: str
-    responsavel: Usuario
-    id_tarefa: Optional[int]
-    status: StatusTarefa = StatusTarefa.EM_ABERTO
-    id_tarefa: Optional[int] = None
-    descricao: Optional[str] = None
-    criacao: datetime = field(default_factory=datetime.now)
-    arquivos_necessarios: Optional[Sequence[Path]] = None
-
-
-@dataclass
-class LinhaDoTempo:
-    id_linha_do_tempo: Optional[int] = None
-    sequencia_de_fatos: MutableSequence = field(default_factory=list)
-
-
-@dataclass
-class DemandaPadrao:
-    tarefas: MutableSequence
-    linha_do_tempo: LinhaDoTempo
-    responsavel: Optional[Usuario] = None
-    id_demanda: Optional[int] = None
+from sistema.model.entidades.linha_do_tempo import LinhaDoTempo
+from sistema.model.entidades.tarefa import StatusTarefa, Tarefa
+from sistema.model.entidades.usuario import Usuario
 
 
 class TarefaNaoEncontradaException(Exception):
@@ -70,22 +40,6 @@ def finalizar_tarefa_da_demanda(id_tarefa, demanda):
 class FatoProtocol(Protocol):
     data_hora: datetime
     tipo: str
-
-
-class TipoFatos(Enum):
-    SIMPLES = "Fato Simples"
-
-
-@dataclass
-class FatoSimples:
-    titulo: str
-    data_hora: datetime
-    descricao: Optional[str]
-    arquivos: Sequence[Path] = field(default_factory=list)
-
-    @property
-    def tipo(self):
-        return TipoFatos.SIMPLES
 
 
 def inserir_fatos(
