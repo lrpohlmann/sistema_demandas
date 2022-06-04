@@ -12,6 +12,8 @@ from typing import (
     runtime_checkable,
 )
 from types import SimpleNamespace
+from pyrsistent.typing import PVector
+
 from sistema.model.entidades.demanda import DemandaPadrao
 from sistema.model.entidades.fato import FatoSimples, FatoTarefaFinalizada
 
@@ -56,16 +58,15 @@ def test_instanciar_tarefa():
 
 def test_adicionar_tarefa_na_demanda():
     class _TemTarefas(Protocol):
-        tarefas: MutableSequence
+        tarefas: PVector
 
     def adicionar_tarefas_na_demanda(
         demanda: _TemTarefas, *tarefas: Any
     ) -> _TemTarefas:
-        for t in tarefas:
-            demanda.tarefas.append(t)
-        return demanda
+        tarefas_adicionadas = demanda.tarefas.extend(tarefas)
+        return demanda.set(tarefas=tarefas_adicionadas)
 
-    demanda = DemandaPadrao(tarefas=[], linha_do_tempo=[])
+    demanda = DemandaPadrao(linha_do_tempo=LinhaDoTempo())
 
     tarefa1 = 1
     tarefa2 = 2
@@ -122,7 +123,12 @@ def test_finalizar_tarefa_de_uma_demanda():
         status=StatusTarefa.EM_ABERTO,
     )
 
-    demanda = DemandaPadrao([tarefa], LinhaDoTempo())
+    demanda = DemandaPadrao(
+        tarefas=[
+            tarefa,
+        ],
+        linha_do_tempo=LinhaDoTempo(),
+    )
 
     finalizar_tarefa_da_demanda(1, demanda)
 

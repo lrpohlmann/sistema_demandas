@@ -1,13 +1,19 @@
 from dataclasses import dataclass
-from typing import MutableSequence, Optional
+from typing import MutableSequence, Optional, Sequence
+from pyrsistent import PRecord, field, plist, pvector
+from pyrsistent.typing import PVector
 
 from sistema.model.entidades.linha_do_tempo import LinhaDoTempo
+from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
 
 
-@dataclass
-class DemandaPadrao:
-    tarefas: MutableSequence
-    linha_do_tempo: LinhaDoTempo
-    responsavel: Optional[Usuario] = None
-    id_demanda: Optional[int] = None
+class DemandaPadrao(PRecord):
+    linha_do_tempo: LinhaDoTempo = field(type=(LinhaDoTempo,), mandatory=True)
+    tarefas: PVector[Tarefa] = field(factory=pvector, initial=pvector(), mandatory=True)
+    responsavel: Optional[Usuario] = field(
+        initial=None, type=(type(None), Usuario), mandatory=True
+    )
+    id_demanda: Optional[int] = field(
+        initial=None, type=(type(None), int), mandatory=True
+    )
