@@ -1,8 +1,12 @@
-from dataclasses import dataclass, field
-from typing import MutableSequence, Optional
+from pyrsistent import PRecord, field, pvector
+from pyrsistent.typing import PVector
+from typing import MutableSequence, Optional, Union
+
+from sistema.model.entidades.fato import FatoSimples, FatoTarefaFinalizada
 
 
-@dataclass
-class LinhaDoTempo:
-    id_linha_do_tempo: Optional[int] = None
-    sequencia_de_fatos: MutableSequence = field(default_factory=list)
+class LinhaDoTempo(PRecord):
+    id_linha_do_tempo: Optional[int] = field(initial=type(None), type=(type(None), int))
+    sequencia_de_fatos: PVector[Union[FatoSimples, FatoTarefaFinalizada]] = field(
+        factory=pvector, initial=pvector()
+    )

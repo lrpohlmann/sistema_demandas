@@ -24,7 +24,11 @@ def get_tarefa(id_tarefa: int, demanda: _TemTarefas):
 def finalizar_tarefa_da_demanda(id_tarefa, demanda):
     t = get_tarefa(id_tarefa, demanda)
     tarefa = set_status(t, StatusTarefa.FINALIZADA)
-    demanda.linha_do_tempo.sequencia_de_fatos.append(
+    nova_sequencia_de_fatos = demanda.linha_do_tempo.sequencia_de_fatos.append(
         FatoTarefaFinalizada("", datetime(2022, 5, 1, 15, 0))
     )
-    return demanda
+    nova_linha_do_tempo = demanda.linha_do_tempo.set(
+        sequencia_de_fatos=nova_sequencia_de_fatos
+    )
+
+    return demanda.set(linha_do_tempo=nova_linha_do_tempo)

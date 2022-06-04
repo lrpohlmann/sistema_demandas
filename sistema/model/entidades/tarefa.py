@@ -15,8 +15,8 @@ class StatusTarefa(Enum):
 @dataclass
 class Tarefa:
     titulo: str
-    responsavel: Usuario
-    id_tarefa: Optional[int]
+    responsavel: Optional[Usuario] = None
+    id_tarefa: Optional[int] = None
     status: StatusTarefa = StatusTarefa.EM_ABERTO
     id_tarefa: Optional[int] = None
     descricao: Optional[str] = None

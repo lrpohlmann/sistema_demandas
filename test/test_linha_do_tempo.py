@@ -118,10 +118,7 @@ def test_insercao_de_fatos_especificos():
 
 
 def test_finalizar_tarefa_de_uma_demanda():
-    tarefa = SimpleNamespace(
-        id_tarefa=1,
-        status=StatusTarefa.EM_ABERTO,
-    )
+    tarefa = Tarefa(id_tarefa=1, titulo="Tarefa 1")
 
     demanda = DemandaPadrao(
         tarefas=[
@@ -130,7 +127,7 @@ def test_finalizar_tarefa_de_uma_demanda():
         linha_do_tempo=LinhaDoTempo(),
     )
 
-    finalizar_tarefa_da_demanda(1, demanda)
+    demanda = finalizar_tarefa_da_demanda(1, demanda)
 
     assert isinstance(
         demanda.linha_do_tempo.sequencia_de_fatos[-1], FatoTarefaFinalizada
