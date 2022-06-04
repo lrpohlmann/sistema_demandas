@@ -36,19 +36,12 @@ def inserir_fatos(
 
 
 def test_instanciar_tarefa():
-    Tarefa(
-        "Emitir Nota",
-        StatusTarefa.EM_ABERTO,
-        [Path("arquivo.txt")],
-        "Emitir a nota para a empresa x.",
-        datetime.now(),
-        [Path("a.txt")],
-    )
+    Tarefa(titulo="Emitir nota", criacao=datetime.now())
 
     Tarefa(
         titulo="Imprimir Arquivo",
         responsavel=Usuario(),
-        arquivos_necessarios=None,
+        arquivos_necessarios=[],
         criacao=datetime(2022, 4, 2, 9, 3),
         descricao="",
         id_tarefa=None,
@@ -118,7 +111,7 @@ def test_insercao_de_fatos_especificos():
 
 
 def test_finalizar_tarefa_de_uma_demanda():
-    tarefa = Tarefa(id_tarefa=1, titulo="Tarefa 1")
+    tarefa = Tarefa(id_tarefa=1, titulo="Tarefa 1", criacao=datetime.now())
 
     demanda = DemandaPadrao(
         tarefas=[
@@ -132,4 +125,7 @@ def test_finalizar_tarefa_de_uma_demanda():
     assert isinstance(
         demanda.linha_do_tempo.sequencia_de_fatos[-1], FatoTarefaFinalizada
     )
-    assert tarefa.status == StatusTarefa.FINALIZADA
+
+    for t in demanda.tarefas:
+        if t.id_tarefa == 1:
+            assert t.status == StatusTarefa.FINALIZADA

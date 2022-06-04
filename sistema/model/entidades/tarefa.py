@@ -1,8 +1,9 @@
-from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Optional, Sequence
+from pyrsistent import PRecord, field, pvector_field
+from pyrsistent.typing import PVector
 
 from sistema.model.entidades.usuario import Usuario
 
@@ -12,13 +13,23 @@ class StatusTarefa(Enum):
     FINALIZADA = "FINALIZADA"
 
 
-@dataclass
-class Tarefa:
-    titulo: str
-    responsavel: Optional[Usuario] = None
-    id_tarefa: Optional[int] = None
-    status: StatusTarefa = StatusTarefa.EM_ABERTO
-    id_tarefa: Optional[int] = None
-    descricao: Optional[str] = None
-    criacao: datetime = field(default_factory=datetime.now)
-    arquivos_necessarios: Optional[Sequence[Path]] = None
+class Tarefa(PRecord):
+    titulo: str = field(type=str, mandatory=True)
+    responsavel: Optional[Usuario] = field(
+        type=(type(None), Usuario), initial=None, mandatory=True
+    )
+    id_tarefa: Optional[int] = field(
+        type=(type(None), int), initial=None, mandatory=True
+    )
+    status: StatusTarefa = field(initial=StatusTarefa.EM_ABERTO, mandatory=True)
+    id_tarefa: Optional[int] = field(
+        type=(type(None), int), initial=None, mandatory=True
+    )
+    descricao: Optional[str] = field(
+        type=(type(None), str), initial=None, mandatory=True
+    )
+    criacao: datetime = field(type=datetime, mandatory=True)
+    arquivos_necessarios: PVector[Path] = pvector_field(
+        optional=False,
+        item_type=Path,
+    )
