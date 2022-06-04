@@ -13,7 +13,7 @@ from typing import (
 )
 from types import SimpleNamespace
 from sistema.model.entidades.demanda import DemandaPadrao
-from sistema.model.entidades.fato import FatoSimples
+from sistema.model.entidades.fato import FatoSimples, FatoTarefaFinalizada
 
 from sistema.model.entidades.linha_do_tempo import LinhaDoTempo
 from sistema.model.entidades.tarefa import StatusTarefa, Tarefa
@@ -29,7 +29,7 @@ def finalizar_tarefa_da_demanda(id_tarefa, demanda):
         if t.id_tarefa == id_tarefa:
             t.status = StatusTarefa.FINALIZADA
             demanda.linha_do_tempo.sequencia_de_fatos.append(
-                SimpleNamespace(data_hora=datetime(2022, 1, 1, 15, 0), tipo="")
+                FatoTarefaFinalizada("", datetime(2022, 5, 1, 15, 0))
             )
             return demanda
 
@@ -141,4 +141,6 @@ def test_finalizar_tarefa_de_uma_demanda():
 
     finalizar_tarefa_da_demanda(1, demanda)
 
-    assert isinstance(demanda.linha_do_tempo.sequencia_de_fatos[-1], FatoProtocol)
+    assert isinstance(
+        demanda.linha_do_tempo.sequencia_de_fatos[-1], FatoTarefaFinalizada
+    )

@@ -16,5 +16,5 @@
 
 
 >>Testes:
-    - (OK) finalização da tarefa vira um Fato na Linha do Tempo
+    - (OK) finalização da tarefa vira um FatoTarefaFinalizada na Linha do Tempo
     
