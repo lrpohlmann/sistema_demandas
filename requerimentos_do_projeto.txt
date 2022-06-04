@@ -8,3 +8,13 @@
     - Pode ser atribuido ao responsável pela demanda ou para outra pessoa
     - Titulo, Descrição, responsável, arquivos necessários, datatempo criação, status
     - ao ser finalizada deve ser posta na linha do tempo da demanda
+
+-> Fato
+    - um fato para cada evento ocorrido?
+    - FatoBase: datatempo, ...
+    - FatoSimples: titulo, descricao, arquivos...
+
+
+>>Testes:
+    - (OK) finalização da tarefa vira um Fato na Linha do Tempo
+    

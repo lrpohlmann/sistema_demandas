@@ -2,7 +2,15 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, MutableSequence, NamedTuple, Optional, Protocol, Sequence
+from typing import (
+    Any,
+    MutableSequence,
+    NamedTuple,
+    Optional,
+    Protocol,
+    Sequence,
+    runtime_checkable,
+)
 from types import SimpleNamespace
 
 
@@ -20,6 +28,7 @@ class StatusTarefa(Enum):
 class Tarefa:
     titulo: str
     responsavel: Usuario
+    id_tarefa: Optional[int]
     status: StatusTarefa = StatusTarefa.EM_ABERTO
     id_tarefa: Optional[int] = None
     descricao: Optional[str] = None
@@ -29,7 +38,7 @@ class Tarefa:
 
 @dataclass
 class LinhaDoTempo:
-    id_linha_do_tempo: Optional[int]
+    id_linha_do_tempo: Optional[int] = None
     sequencia_de_fatos: MutableSequence = field(default_factory=list)
 
 
@@ -41,6 +50,23 @@ class DemandaPadrao:
     id_demanda: Optional[int] = None
 
 
+class TarefaNaoEncontradaException(Exception):
+    pass
+
+
+def finalizar_tarefa_da_demanda(id_tarefa, demanda):
+    for t in demanda.tarefas:
+        if t.id_tarefa == id_tarefa:
+            t.status = StatusTarefa.FINALIZADA
+            demanda.linha_do_tempo.sequencia_de_fatos.append(
+                SimpleNamespace(data_hora=datetime(2022, 1, 1, 15, 0), tipo="")
+            )
+            return demanda
+
+    raise TarefaNaoEncontradaException()
+
+
+@runtime_checkable
 class FatoProtocol(Protocol):
     data_hora: datetime
     tipo: str
@@ -149,3 +175,16 @@ def test_insercao_de_fatos_especificos():
 
     assert nova_seq_fatos[0] == fato1
     assert nova_seq_fatos[1] == fato2
+
+
+def test_finalizar_tarefa_de_uma_demanda():
+    tarefa = SimpleNamespace(
+        id_tarefa=1,
+        status=StatusTarefa.EM_ABERTO,
+    )
+
+    demanda = DemandaPadrao([tarefa], LinhaDoTempo())
+
+    finalizar_tarefa_da_demanda(1, demanda)
+
+    assert isinstance(demanda.linha_do_tempo.sequencia_de_fatos[-1], FatoProtocol)
