@@ -132,3 +132,4 @@ def test_finalizar_tarefa_de_uma_demanda():
     assert isinstance(
         demanda.linha_do_tempo.sequencia_de_fatos[-1], FatoTarefaFinalizada
     )
+    assert tarefa.status == StatusTarefa.FINALIZADA
