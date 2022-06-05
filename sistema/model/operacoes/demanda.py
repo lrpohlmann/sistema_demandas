@@ -31,10 +31,10 @@ def atualizar_tarefa_por_id(
     id_tarefa, demanda: _TemTarefas, atualizacao: Callable[[Any], Any]
 ):
     t = get_tarefa(id_tarefa, demanda)
-    return maps.escrever(
+    return maps.atualizar(
         demanda,
         "tarefas",
-        valor=demanda.tarefas.set(demanda.tarefas.index(t), atualizacao(t)),
+        atualizar_callable=lambda x: x.set(demanda.tarefas.index(t), atualizacao(t)),
     )
 
 
