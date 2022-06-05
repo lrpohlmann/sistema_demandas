@@ -1,5 +1,8 @@
-from typing import Any, Mapping, Protocol
+from typing import Any, Callable, Mapping, Protocol, TypeVar
 from pyrsistent import pmap
+
+
+T = TypeVar("T")
 
 
 class MapImutavel(Protocol):
@@ -41,3 +44,11 @@ def escrever(mapping: MapImutavel, *chaves: Any, valor: Any) -> MapImutavel:
 
 def _escrever(mapping: MapImutavel, chave, valor):
     return mapping.set(chave, valor)
+
+
+def atualizar(
+    mapping: MapImutavel, *chaves, atualizar_callable: Callable[[T], T]
+) -> MapImutavel:
+    valor = ler(mapping, *chaves)
+    valor_atualizado = atualizar_callable(valor)
+    return escrever(mapping, *chaves, valor=valor_atualizado)
