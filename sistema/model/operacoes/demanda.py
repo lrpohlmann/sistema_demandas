@@ -43,15 +43,11 @@ def finalizar_tarefa_da_demanda(id_tarefa, demanda):
         id_tarefa, demanda, lambda t: set_status(t, StatusTarefa.FINALIZADA)
     )
 
-    seq_fatos = maps.ler(demanda, "linha_do_tempo", "sequencia_de_fatos")
-    nova_sequencia_de_fatos = seq_fatos.append(
-        FatoTarefaFinalizada("", datetime(2022, 5, 1, 15, 0))
-    )
-    demanda_atualizada = maps.escrever(
+    return maps.atualizar(
         demanda,
         "linha_do_tempo",
         "sequencia_de_fatos",
-        valor=nova_sequencia_de_fatos,
+        atualizar_callable=lambda x: x.append(
+            FatoTarefaFinalizada("", datetime(2022, 5, 1, 15, 0))
+        ),
     )
-
-    return demanda_atualizada
