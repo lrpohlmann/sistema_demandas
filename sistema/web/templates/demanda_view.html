@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div>
+    <h1>Demanda X</h1>
+</div>
+<div class="row">
+    <div class="col-12">
+        <ul class="list-group">
+            <li class="list-group-item"><span>id: </span><span>1</span></li>
+            <li class="list-group-item"><span>Status: </span><span>Em Aberto</span></li>
+            <li class="list-group-item"><span>Responsável: </span><span>Leonardo</span></li>
+            <li class="list-group-item">
+                <span>Descrição: </span>
+                <div>-</div>
+            </li>
+        </ul>
+    </div>
+    <div class="col">
+        <div class="row">
+            <div class="col-12">
+                <h2>Tarefas</h2>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">Fazer OS</div>
+                                <div>
+                                    <ul>
+                                        <li>Id: 3</li>
+                                        <li>Responsável: Leonardo</li>
+                                        <li>Status: Em Aberto</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <form action="">
+                    <legend>Nova Tarefa</legend>
+                    <div>
+                        <label for="tarefa-titulo">Título</label>
+                        <input type="text" name="titulo" id="tarefa-titulo">
+                    </div>
+                    <div>
+                        <label for="tarefa-responsavel">Responsável</label>
+                        <select name="responsavel" id="tarefa-responsavel">
+                            <option value="1">Leonardo</option>
+                            <option value="2">Jayme</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div>
+            <h2>Linha do Tempo</h2>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <time datetime="2022-05-12 14:03">12/05/2022 14:03</time>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div>Tipo</div>
+                                <div>Registro da Demanda</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <time datetime="2022-05-13 09:30">13/05/2022 09:30</time>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div>Tipo</div>
+                                <div>Abertura Processo</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
