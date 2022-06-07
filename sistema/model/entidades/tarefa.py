@@ -18,9 +18,6 @@ class Tarefa(PRecord):
     responsavel: Optional[Usuario] = field(
         type=(type(None), Usuario), initial=None, mandatory=True
     )
-    id_tarefa: Optional[int] = field(
-        type=(type(None), int), initial=None, mandatory=True
-    )
     status: StatusTarefa = field(initial=StatusTarefa.EM_ABERTO, mandatory=True)
     id_tarefa: Optional[int] = field(
         type=(type(None), int), initial=None, mandatory=True
