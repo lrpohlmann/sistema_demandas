@@ -17,7 +17,6 @@ from pyrsistent.typing import PVector
 from sistema.model.entidades.demanda import DemandaPadrao, TipoDemanda
 from sistema.model.entidades.fato import FatoSimples, FatoTarefaFinalizada
 
-from sistema.model.entidades.linha_do_tempo import LinhaDoTempo
 from sistema.model.entidades.tarefa import StatusTarefa, Tarefa
 from sistema.model.entidades.usuario import Usuario
 from sistema.model.operacoes.demanda import finalizar_tarefa_da_demanda
@@ -60,7 +59,6 @@ def test_adicionar_tarefa_na_demanda():
         return demanda.set(tarefas=tarefas_adicionadas)
 
     demanda = DemandaPadrao(
-        linha_do_tempo=LinhaDoTempo(),
         data_criacao=datetime.now(),
         tipo=TipoDemanda(id_tipo_demanda=1, nome="Alterar Tabela de Horários"),
     )
@@ -121,16 +119,13 @@ def test_finalizar_tarefa_de_uma_demanda():
         tarefas=[
             tarefa,
         ],
-        linha_do_tempo=LinhaDoTempo(),
         data_criacao=datetime.now(),
         tipo=TipoDemanda(id_tipo_demanda=1, nome="Alterar Tabela de Horários"),
     )
 
     demanda = finalizar_tarefa_da_demanda(1, demanda)
 
-    assert isinstance(
-        demanda.linha_do_tempo.sequencia_de_fatos[-1], FatoTarefaFinalizada
-    )
+    assert isinstance(demanda.linha_do_tempo[-1], FatoTarefaFinalizada)
 
     for t in demanda.tarefas:
         if t.id_tarefa == 1:

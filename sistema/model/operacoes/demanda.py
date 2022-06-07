@@ -46,7 +46,6 @@ def finalizar_tarefa_da_demanda(id_tarefa, demanda):
     return maps.atualizar(
         demanda,
         "linha_do_tempo",
-        "sequencia_de_fatos",
         atualizar_callable=lambda x: x.append(
             FatoTarefaFinalizada("", datetime(2022, 5, 1, 15, 0))
         ),
