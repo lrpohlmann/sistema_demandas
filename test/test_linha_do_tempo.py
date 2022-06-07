@@ -14,7 +14,7 @@ from typing import (
 from types import SimpleNamespace
 from pyrsistent.typing import PVector
 
-from sistema.model.entidades.demanda import DemandaPadrao
+from sistema.model.entidades.demanda import DemandaPadrao, TipoDemanda
 from sistema.model.entidades.fato import FatoSimples, FatoTarefaFinalizada
 
 from sistema.model.entidades.linha_do_tempo import LinhaDoTempo
@@ -59,7 +59,11 @@ def test_adicionar_tarefa_na_demanda():
         tarefas_adicionadas = demanda.tarefas.extend(tarefas)
         return demanda.set(tarefas=tarefas_adicionadas)
 
-    demanda = DemandaPadrao(linha_do_tempo=LinhaDoTempo())
+    demanda = DemandaPadrao(
+        linha_do_tempo=LinhaDoTempo(),
+        data_criacao=datetime.now(),
+        tipo=TipoDemanda(id_tipo_demanda=1, nome="Alterar Tabela de Horários"),
+    )
 
     tarefa1 = 1
     tarefa2 = 2
@@ -118,6 +122,8 @@ def test_finalizar_tarefa_de_uma_demanda():
             tarefa,
         ],
         linha_do_tempo=LinhaDoTempo(),
+        data_criacao=datetime.now(),
+        tipo=TipoDemanda(id_tipo_demanda=1, nome="Alterar Tabela de Horários"),
     )
 
     demanda = finalizar_tarefa_da_demanda(1, demanda)
