@@ -24,6 +24,26 @@ def main():
     return render_template("home.html", demandas=demandas)
 
 
-@app.route("/demanda")
-def demanda():
+@app.route("/demanda/<int:demanda>", methods=["GET", "PUT", "DELETE"])
+def demanda_view():
     return render_template("demanda_view.html")
+
+
+@app.route(
+    "/demanda",
+    methods=[
+        "POST",
+    ],
+)
+def demanda():
+    ...
+
+
+@app.route("/tarefa", methods=["POST"])
+def tarefa():
+    ...
+
+
+@app.route("/tarefa/<int:id_tarefa>", methods=["GET", "PUT", "DELETE"])
+def tarefa_view():
+    ...

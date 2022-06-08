@@ -10,8 +10,8 @@ from sistema.model.entidades.tarefa import Tarefa
 
 
 class TipoFatos(Enum):
-    SIMPLES = "Fato Simples"
-    TAREFA_FINALIZADA = "Tarefa Finalizada"
+    SIMPLES = "SIMPLES"
+    TAREFA_FINALIZADA = "TAREFA FINALIZADA"
 
 
 class FatoSimples(PRecord):
