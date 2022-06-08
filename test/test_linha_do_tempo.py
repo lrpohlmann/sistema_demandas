@@ -94,15 +94,15 @@ def test_inserir_fato_na_sequencia_de_fatos():
 
 def test_insercao_de_fatos_especificos():
     fato1 = FatoSimples(
-        "E-mail pedido",
-        datetime(2022, 2, 15, 15, 10),
-        "Pedido de alteração da empresa x",
+        titulo="E-mail pedido",
+        data_hora=datetime(2022, 2, 15, 15, 10),
+        descricao="Pedido de alteração da empresa x",
     )
 
     fato2 = FatoSimples(
-        "resposta pedido",
-        datetime(2022, 2, 16, 7, 10),
-        "Envio documento de reposta",
+        titulo="resposta pedido",
+        data_hora=datetime(2022, 2, 16, 7, 10),
+        descricao="Envio documento de reposta",
     )
 
     seq_fatos = []

@@ -47,6 +47,10 @@ def finalizar_tarefa_da_demanda(id_tarefa, demanda):
         demanda,
         "linha_do_tempo",
         atualizar_callable=lambda x: x.append(
-            FatoTarefaFinalizada("", datetime(2022, 5, 1, 15, 0))
+            FatoTarefaFinalizada(
+                titulo="",
+                data_hora=datetime(2022, 5, 1, 15, 0),
+                tarefa=get_tarefa(id_tarefa, demanda),
+            )
         ),
     )
