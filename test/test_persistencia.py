@@ -69,5 +69,11 @@ def test_inserir_documento(_engine: Engine):
         res = conn.execute(query)
 
     doc_salvo = res.fetchone()
-    for k in documento.keys():
-        assert k in doc_salvo._fields
+    dict_doc_salvo = doc_salvo._mapping
+    for k, v in documento.items():
+        if k == "id_documento":
+            assert dict_doc_salvo[k] == 1
+        elif k == "tipo":
+            assert dict_doc_salvo[k] == v.id_tipo_documento
+        else:
+            assert dict_doc_salvo[k] == v
