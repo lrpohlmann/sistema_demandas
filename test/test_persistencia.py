@@ -1,4 +1,5 @@
 from telnetlib import DO
+from typing import Mapping
 from sqlalchemy import (
     create_engine,
     Table,
@@ -11,6 +12,8 @@ from sqlalchemy import (
     select,
 )
 from sqlalchemy.engine import Engine
+from sqlalchemy import event
+
 import pytest
 
 from sistema.model.entidades.documento import Documento, TipoDocumento
@@ -36,6 +39,13 @@ def init_tabela_documento(metadata):
         Column("descricao", String),
         Column("arquivo", String),
     )
+
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA foreign_keys=ON")
+    cursor.close()
 
 
 @pytest.fixture
@@ -89,3 +99,41 @@ def test_inserir_documento(_engine, _metadata):
             assert dict_doc_salvo[k] == v.id_tipo_documento
         else:
             assert dict_doc_salvo[k] == v
+
+
+def test_obter_documento_do_db(_engine, _metadata):
+    tipo_documento_tabela = init_tabela_tipo_document(_metadata)
+
+    documento_tabela = init_tabela_documento(_metadata)
+
+    _metadata.create_all(bind=_engine)
+
+    with _engine.begin() as conn:
+        conn.execute(insert(tipo_documento_tabela).values([{"nome": "PROCESSO"}]))
+        conn.execute(
+            insert(documento_tabela).values([{"tipo": 1, "nome": "Processo12-05-2022"}])
+        )
+
+    with _engine.begin() as conn:
+        doc_db = conn.execute(select(documento_tabela)).fetchone()
+        tipo_doc_db = conn.execute(
+            select(tipo_documento_tabela).filter(
+                tipo_documento_tabela.c.id_tipo_documento == doc_db["tipo"]
+            )
+        ).fetchone()
+
+    dados_db = dict(**doc_db._mapping)
+    dados_db["tipo"] = dict(**tipo_doc_db._mapping)
+
+    def reconstituir_documento(dados_db: Mapping) -> Documento:
+        return Documento(
+            id_documento=dados_db["id_documento"],
+            identificador=dados_db["identificador"],
+            tipo=TipoDocumento(**dados_db["tipo"]),
+            nome=dados_db["nome"],
+            descricao=dados_db["descricao"],
+            arquivo=dados_db["arquivo"],
+        )
+
+    documento_reconstituido = reconstituir_documento(dados_db)
+    assert isinstance(documento_reconstituido, Documento)
