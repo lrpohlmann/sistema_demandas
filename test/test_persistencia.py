@@ -16,22 +16,17 @@ import pytest
 from sistema.model.entidades.documento import Documento, TipoDocumento
 
 
-@pytest.fixture
-def _engine():
-    return create_engine("sqlite+pysqlite:///:memory:", echo=True, future=True)
-
-
-def test_inserir_documento(_engine: Engine):
-    metadata = MetaData(bind=_engine)
-
-    tipo_documento_tabela = Table(
+def init_tabela_tipo_document(metadata):
+    return Table(
         "tipo_documento",
         metadata,
         Column("id_tipo_documento", Integer, primary_key=True),
         Column("nome", String, nullable=False),
     )
 
-    documento_tabela = Table(
+
+def init_tabela_documento(metadata):
+    return Table(
         "documento",
         metadata,
         Column("id_documento", Integer, primary_key=True),
@@ -42,7 +37,24 @@ def test_inserir_documento(_engine: Engine):
         Column("arquivo", String),
     )
 
-    metadata.create_all()
+
+@pytest.fixture
+def _engine():
+    return create_engine("sqlite+pysqlite:///:memory:", echo=True, future=True)
+
+
+@pytest.fixture
+def _metadata():
+    return MetaData()
+
+
+def test_inserir_documento(_engine, _metadata):
+
+    tipo_documento_tabela = init_tabela_tipo_document(_metadata)
+
+    documento_tabela = init_tabela_documento(_metadata)
+
+    _metadata.create_all(bind=_engine)
 
     def inserir_tipo_documento(tipo: TipoDocumento):
         with _engine.begin() as conn:
