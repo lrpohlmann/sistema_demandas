@@ -28,7 +28,7 @@ class DemandaPadrao(PRecord):
         type=(type(None), Documento), mandatory=True, initial=None
     )
     data_criacao: datetime = field(mandatory=True, type=(datetime,))
-    data_entraga: Optional[datetime] = field(
+    data_entrega: Optional[datetime] = field(
         mandatory=True, type=(type(None), datetime), initial=None
     )
     tipo: TipoDemanda = field(type=TipoDemanda, mandatory=True)
