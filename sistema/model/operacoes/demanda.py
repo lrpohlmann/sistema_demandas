@@ -1,18 +1,29 @@
 from datetime import datetime
-from typing import Any, Callable, Protocol, Sequence
+from typing import Any, Callable, MutableMapping, Protocol, MutableSequence
 
-from sistema.model.entidades.fato import FatoTarefaFinalizada
+from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.entidades.tarefa import StatusTarefa
-from sistema.model.operacoes.tarefa import set_status
-from sistema.servicos.funcional import maps
+from sistema.model.operacoes import tarefa
 
 
 class TarefaNaoEncontradaException(Exception):
     pass
 
 
+class _Tarefa(Protocol):
+    status: str
+
+
 class _TemTarefas(Protocol):
-    tarefas: Sequence
+    tarefas: MutableSequence[_Tarefa]
+
+
+class _TemFatos(Protocol):
+    fatos: MutableSequence
+
+
+class _TarefaEFatos(_TemTarefas, _TemFatos):
+    pass
 
 
 def get_tarefa(id_tarefa: int, demanda: _TemTarefas):
@@ -23,34 +34,30 @@ def get_tarefa(id_tarefa: int, demanda: _TemTarefas):
     raise TarefaNaoEncontradaException()
 
 
-def remover_tarefa(tarefa, demanda):
-    return maps.escrever(demanda, "tarefas", valor=demanda.tarefas.remove(tarefa))
+def remover_tarefa(tarefa: _Tarefa, demanda: _TemTarefas):
+    demanda.tarefas.remove(tarefa)
+    return demanda
 
 
 def atualizar_tarefa_por_id(
-    id_tarefa, demanda: _TemTarefas, atualizacao: Callable[[Any], Any]
+    id_tarefa, demanda: _TemTarefas, atualizacao: Callable[[_Tarefa], _Tarefa]
 ):
     t = get_tarefa(id_tarefa, demanda)
-    return maps.atualizar(
-        demanda,
-        "tarefas",
-        atualizar_callable=lambda x: x.set(demanda.tarefas.index(t), atualizacao(t)),
-    )
+    atualizacao(t)
+    return demanda
 
 
-def finalizar_tarefa_da_demanda(id_tarefa, demanda):
+def finalizar_tarefa_da_demanda(id_tarefa: int, demanda: _TarefaEFatos):
     demanda = atualizar_tarefa_por_id(
-        id_tarefa, demanda, lambda t: set_status(t, StatusTarefa.FINALIZADA)
+        id_tarefa, demanda, lambda t: tarefa.set_status(t, StatusTarefa.FINALIZADA)
     )
 
-    return maps.atualizar(
-        demanda,
-        "linha_do_tempo",
-        atualizar_callable=lambda x: x.append(
-            FatoTarefaFinalizada(
-                titulo="",
-                data_hora=datetime(2022, 5, 1, 15, 0),
-                tarefa=get_tarefa(id_tarefa, demanda),
-            )
-        ),
+    demanda.fatos.append(
+        Fato(
+            titulo="Tarefa Finalizada",
+            tipo=TipoFatos.TAREFA_FINALIZADA,
+            dados={"tarefa_id": id_tarefa},
+        )
     )
+
+    return demanda

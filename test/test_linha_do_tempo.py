@@ -12,10 +12,9 @@ from typing import (
     runtime_checkable,
 )
 from types import SimpleNamespace
-from pyrsistent.typing import PVector
 
-from sistema.model.entidades.demanda import DemandaPadrao, TipoDemanda
-from sistema.model.entidades.fato import FatoSimples, FatoTarefaFinalizada
+from sistema.model.entidades.demanda import Demanda, TipoDemanda
+from sistema.model.entidades.fato import Fato, TipoFatos
 
 from sistema.model.entidades.tarefa import StatusTarefa, Tarefa
 from sistema.model.entidades.usuario import Usuario
@@ -35,13 +34,13 @@ def inserir_fatos(
 
 
 def test_instanciar_tarefa():
-    Tarefa(titulo="Emitir nota", criacao=datetime.now())
+    Tarefa(titulo="Emitir nota")
 
     Tarefa(
         titulo="Imprimir Arquivo",
-        responsavel=Usuario(),
+        responsavel=Usuario(nome="Leonardo", senha="12345567"),
         arquivos_necessarios=[],
-        criacao=datetime(2022, 4, 2, 9, 3),
+        data_hora=datetime(2022, 4, 2, 9, 3),
         descricao="",
         id_tarefa=None,
         status=StatusTarefa.EM_ABERTO,
@@ -50,21 +49,21 @@ def test_instanciar_tarefa():
 
 def test_adicionar_tarefa_na_demanda():
     class _TemTarefas(Protocol):
-        tarefas: PVector
+        tarefas: MutableSequence
 
     def adicionar_tarefas_na_demanda(
         demanda: _TemTarefas, *tarefas: Any
     ) -> _TemTarefas:
-        tarefas_adicionadas = demanda.tarefas.extend(tarefas)
-        return demanda.set(tarefas=tarefas_adicionadas)
+        demanda.tarefas.extend(tarefas)
+        return demanda
 
-    demanda = DemandaPadrao(
-        data_criacao=datetime.now(),
+    demanda = Demanda(
         tipo=TipoDemanda(id_tipo_demanda=1, nome="Alterar Tabela de Horários"),
+        titulo="Demanda X",
     )
 
-    tarefa1 = 1
-    tarefa2 = 2
+    tarefa1 = Tarefa("Emitir Documento")
+    tarefa2 = Tarefa("Criar Pasta")
 
     demanda = adicionar_tarefas_na_demanda(demanda, tarefa1, tarefa2)
 
@@ -93,13 +92,15 @@ def test_inserir_fato_na_sequencia_de_fatos():
 
 
 def test_insercao_de_fatos_especificos():
-    fato1 = FatoSimples(
+    fato1 = Fato(
+        tipo=TipoFatos.SIMPLES,
         titulo="E-mail pedido",
         data_hora=datetime(2022, 2, 15, 15, 10),
         descricao="Pedido de alteração da empresa x",
     )
 
-    fato2 = FatoSimples(
+    fato2 = Fato(
+        tipo=TipoFatos.SIMPLES,
         titulo="resposta pedido",
         data_hora=datetime(2022, 2, 16, 7, 10),
         descricao="Envio documento de reposta",
@@ -113,19 +114,19 @@ def test_insercao_de_fatos_especificos():
 
 
 def test_finalizar_tarefa_de_uma_demanda():
-    tarefa = Tarefa(id_tarefa=1, titulo="Tarefa 1", criacao=datetime.now())
+    tarefa = Tarefa(id_tarefa=1, titulo="Tarefa 1")
 
-    demanda = DemandaPadrao(
+    demanda = Demanda(
+        titulo="Demanda X",
         tarefas=[
             tarefa,
         ],
-        data_criacao=datetime.now(),
         tipo=TipoDemanda(id_tipo_demanda=1, nome="Alterar Tabela de Horários"),
     )
 
     demanda = finalizar_tarefa_da_demanda(1, demanda)
 
-    assert isinstance(demanda.linha_do_tempo[-1], FatoTarefaFinalizada)
+    assert isinstance(demanda.fatos[-1], Fato)
 
     for t in demanda.tarefas:
         if t.id_tarefa == 1:

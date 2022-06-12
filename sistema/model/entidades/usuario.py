@@ -1,6 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Optional
 
 
 @dataclass
 class Usuario:
-    pass
+    nome: str
+    senha: str
+    id_usuario: Optional[int] = field(default=None)

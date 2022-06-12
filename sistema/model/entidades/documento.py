@@ -1,16 +1,21 @@
+from dataclasses import dataclass, field
 from pathlib import Path
-from pyrsistent import PRecord, field
+from typing import Optional
 
 
-class TipoDocumento(PRecord):
-    id_tipo_documento = field(type=(type(None), int), mandatory=True, initial=None)
-    nome = field(type=str, mandatory=True)
+@dataclass
+class TipoDocumento:
+    nome: str
+    id_tipo_documento: Optional[int] = None
 
 
-class Documento(PRecord):
-    id_documento = field(type=(type(None), int), mandatory=True, initial=None)
-    identificador = field(type=(type(None), str), mandatory=True, initial=None)
-    tipo = field(type=TipoDocumento, mandatory=True)
-    nome = field(str, mandatory=True)
-    descricao = field(type=(type(None), str), mandatory=True, initial=None)
-    arquivo = field(type=(type(None), Path), mandatory=True, initial=None)
+@dataclass
+class Documento:
+    nome: str
+    tipo: TipoDocumento
+    id_documento: Optional[int] = None
+    identificador: Optional[str] = field(default=None)
+    tipo_id: int = field(init=False)
+    descricao: Optional[str] = field(default=None)
+    arquivo: Optional[Path] = field(default=None)
+    demanda_id: int = field(init=False)

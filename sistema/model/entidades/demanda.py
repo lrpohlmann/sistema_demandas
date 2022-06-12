@@ -1,34 +1,31 @@
-from dataclasses import dataclass
+from ctypes import Union
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import MutableSequence, Optional, Sequence
-from pyrsistent import PRecord, field, plist, pvector, pvector_field
-from pyrsistent.typing import PVector
-from sistema.model.entidades.documento import Documento
+from typing import List, MutableSequence, Optional, Sequence
 
+from sistema.model.entidades.documento import Documento
+from sistema.model.entidades.fato import Fato
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
 
 
-class TipoDemanda(PRecord):
-    id_tipo_demanda = field(type=(type(None), int), mandatory=True, initial=None)
-    nome = field(type=str, mandatory=True)
+@dataclass
+class TipoDemanda:
+    nome: str
+    id_tipo_demanda: Optional[int] = field(default=None)
 
 
-class DemandaPadrao(PRecord):
-    linha_do_tempo = field(factory=pvector, initial=pvector(), mandatory=True)
-    tarefas: PVector[Tarefa] = field(factory=pvector, initial=pvector(), mandatory=True)
-    responsavel: Optional[Usuario] = field(
-        initial=None, type=(type(None), Usuario), mandatory=True
-    )
-    id_demanda: Optional[int] = field(
-        initial=None, type=(type(None), int), mandatory=True
-    )
-    documentos: Optional[Sequence[Documento]] = field(
-        type=(type(None), Documento), mandatory=True, initial=None
-    )
-    data_criacao: datetime = field(mandatory=True, type=(datetime,))
-    data_entrega: Optional[datetime] = field(
-        mandatory=True, type=(type(None), datetime), initial=None
-    )
-    tipo: TipoDemanda = field(type=TipoDemanda, mandatory=True)
+@dataclass
+class Demanda:
+    tipo: TipoDemanda
+    titulo: str
+    tipo_id: int = field(init=False)
+    id_demanda: Optional[int] = field(default=None)
+    fatos: List[Fato] = field(default_factory=list)
+    tarefas: List[Tarefa] = field(default_factory=list)
+    responsavel_id: Optional[int] = field(init=False, default=None)
+    responsavel: Optional[Usuario] = field(default=None)
+    documentos: List[Documento] = field(default_factory=list)
+    data_entrega: Optional[datetime] = field(default=None)
+    data_criacao: datetime = field(default_factory=datetime.now)
