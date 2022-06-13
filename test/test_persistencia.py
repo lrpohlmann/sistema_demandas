@@ -1,16 +1,7 @@
-from pydoc import doc
-from tkinter import N
 from sqlalchemy import (
-    Column,
-    ForeignKey,
-    Integer,
     MetaData,
-    String,
-    Table,
     event,
-    DateTime,
     create_engine,
-    JSON,
 )
 from sqlalchemy.orm import registry, relationship, Session
 from sqlalchemy.engine import Engine
@@ -21,6 +12,16 @@ from sistema.model.entidades.documento import TipoDocumento, Documento
 from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
+from sistema.persistencia.orm_mapping import (
+    init_tabela_demanda,
+    init_tabela_documento,
+    init_tabela_fato,
+    init_tabela_tarefa,
+    init_tabela_tipo_demanda,
+    init_tabela_tipo_documento,
+    init_tabela_usuario,
+    mapear,
+)
 
 
 @event.listens_for(Engine, "connect")
@@ -28,91 +29,6 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
-
-
-def init_tabela_tipo_documento(metadata):
-    return Table(
-        "tipo_documento",
-        metadata,
-        Column("id_tipo_documento", Integer, primary_key=True),
-        Column("nome", String, nullable=False),
-    )
-
-
-def init_tabela_documento(metadata):
-    return Table(
-        "documento",
-        metadata,
-        Column("id_documento", Integer, primary_key=True),
-        Column("identificador", String, nullable=True),
-        Column(
-            "tipo_id", ForeignKey("tipo_documento.id_tipo_documento"), nullable=False
-        ),
-        Column("descricao", String, nullable=True),
-        Column("arquivo", String, nullable=True),
-        Column("demanda_id", ForeignKey("demanda.id_demanda")),
-    )
-
-
-def init_tabela_usuario(metadata):
-    return Table(
-        "usuario",
-        metadata,
-        Column("id_usuario", Integer, primary_key=True),
-        Column("nome", String, nullable=False),
-        Column("senha", String, nullable=False),
-    )
-
-
-def init_tabela_tipo_demanda(metadata):
-    return Table(
-        "tipo_demanda",
-        metadata,
-        Column("id_tipo_demanda", Integer, primary_key=True),
-        Column("nome", String, nullable=False),
-    )
-
-
-def init_tabela_demanda(metadata):
-    return Table(
-        "demanda",
-        metadata,
-        Column("id_demanda", Integer, primary_key=True),
-        Column("titulo", String, nullable=True),
-        Column("tipo_id", ForeignKey("tipo_demanda.id_tipo_demanda"), nullable=False),
-        Column("responsavel_id", ForeignKey("usuario.id_usuario"), nullable=True),
-        Column("data_criacao", DateTime, nullable=False),
-        Column("data_entrega", DateTime, nullable=True),
-    )
-
-
-def init_tabela_tarefa(metadata):
-    return Table(
-        "tarefa",
-        metadata,
-        Column("id_tarefa", Integer, primary_key=True),
-        Column("titulo", String, nullable=False),
-        Column("responsavel_id", ForeignKey("usuario.id_usuario"), nullable=True),
-        Column("descricao", String, nullable=True),
-        Column("data_hora", DateTime, nullable=False),
-        Column("data_entrega", DateTime, nullable=True),
-        Column("status", String, nullable=False),
-        Column("demanda_id", ForeignKey("demanda.id_demanda"), nullable=False),
-    )
-
-
-def init_tabela_fato(metadata):
-    return Table(
-        "fato",
-        metadata,
-        Column("id_fato", Integer, primary_key=True),
-        Column("tipo", String, nullable=False),
-        Column("titulo", String, nullable=False),
-        Column("descricao", String),
-        Column("data_hora", DateTime, nullable=False),
-        Column("demanda_id", ForeignKey("demanda.id_demanda"), nullable=False),
-        Column("dados", JSON),
-    )
 
 
 @pytest.fixture(scope="function")
@@ -125,35 +41,8 @@ def _setup_db(_engine):
     metadata = MetaData()
     mapper = registry()
 
-    mapper.map_imperatively(TipoDocumento, init_tabela_tipo_documento(metadata))
-    mapper.map_imperatively(
-        Documento,
-        init_tabela_documento(metadata),
-        properties={"tipo": relationship(TipoDocumento)},
-    )
-    mapper.map_imperatively(Usuario, init_tabela_usuario(metadata))
-    mapper.map_imperatively(
-        Tarefa,
-        init_tabela_tarefa(metadata),
-        properties={
-            "responsavel": relationship(Usuario),
-        },
-    )
-    mapper.map_imperatively(TipoDemanda, init_tabela_tipo_demanda(metadata))
-    mapper.map_imperatively(
-        Demanda,
-        init_tabela_demanda(metadata),
-        properties={
-            "tipo": relationship(TipoDemanda, lazy="immediate"),
-            "tarefas": relationship(Tarefa, backref="demanda", lazy="immediate"),
-            "responsavel": relationship(Usuario, lazy="immediate"),
-            "documentos": relationship(Documento, lazy="immediate"),
-            "fatos": relationship(Fato, backref="demanda", lazy="immediate"),
-        },
-    )
-    mapper.map_imperatively(Fato, init_tabela_fato(metadata))
+    mapear(_engine, metadata, mapper)
 
-    metadata.create_all(_engine)
     yield _engine
     mapper.dispose()
     metadata.clear()
