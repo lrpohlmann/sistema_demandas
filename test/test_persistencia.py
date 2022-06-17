@@ -12,23 +12,7 @@ from sistema.model.entidades.documento import TipoDocumento, Documento
 from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
-from sistema.persistencia.orm_mapping import (
-    init_tabela_demanda,
-    init_tabela_documento,
-    init_tabela_fato,
-    init_tabela_tarefa,
-    init_tabela_tipo_demanda,
-    init_tabela_tipo_documento,
-    init_tabela_usuario,
-    mapear,
-)
-
-
-@event.listens_for(Engine, "connect")
-def set_sqlite_pragma(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
+from sistema.persistencia.orm_mapping import mapear
 
 
 @pytest.fixture(scope="function")
