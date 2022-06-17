@@ -2,6 +2,7 @@ from datetime import datetime
 from types import SimpleNamespace
 from flask import Flask, render_template
 from sqlalchemy.orm import scoped_session
+from sistema.model.entidades.demanda import Demanda
 
 from sistema.persistencia import setup_persistencia
 
@@ -36,20 +37,7 @@ def _setup_app_db(app: Flask):
 def _setup_app_views(app: Flask, db: scoped_session):
     @app.route("/")
     def main():
-        demandas = [
-            SimpleNamespace(
-                titulo="Alterar tabela",
-                tipo="Alteração De Operação da Empresa",
-                responsavel="Leonardo",
-                data=datetime(2022, 5, 12, 15, 0),
-            ),
-            SimpleNamespace(
-                titulo="Responder MP",
-                tipo=None,
-                responsavel="Jayme",
-                data=datetime(2022, 5, 13, 11, 9),
-            ),
-        ]
+        demandas = db.query(Demanda).all()
         return render_template("home.html", demandas=demandas)
 
     @app.route("/demanda/<int:demanda>", methods=["GET", "PUT", "DELETE"])

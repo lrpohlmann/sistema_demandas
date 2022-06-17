@@ -16,9 +16,9 @@
             <td>
                 <a href="{{url_for('demanda')}}">{{d.titulo}}</a>
             </td>
-            <td>{{d.tipo}}</td>
-            <td>{{d.responsavel}}</td>
-            <td><time datetime="2022-05-12">{{d.data}}</time></td>
+            <td>{{d.tipo.nome}}</td>
+            <td>{{d.responsavel.nome}}</td>
+            <td><time datetime="{{d.data_criacao}}">{{d.data_criacao}}</time></td>
         </tr>
         {% endfor %}
     </tbody>
