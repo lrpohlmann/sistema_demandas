@@ -9,7 +9,7 @@ from sistema.persistencia import setup_persistencia
 
 def criar_web_app(test_config=None) -> Flask:
     app = _setup_web_app(test_config)
-    db = _setup_app_db(app)
+    db, mapper, metadata = _setup_app_db(app)
     _setup_app_views(app, db)
     return app
 
@@ -25,13 +25,13 @@ def _setup_web_app(test_config=None):
 
 
 def _setup_app_db(app: Flask):
-    db = setup_persistencia(app.config["DB"])
+    db, mapper, metadata = setup_persistencia(app.config["DB"])
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
         db.remove()
 
-    return db
+    return db, mapper, metadata
 
 
 def _setup_app_views(app: Flask, db: scoped_session):

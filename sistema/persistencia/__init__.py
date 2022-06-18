@@ -1,3 +1,4 @@
+from importlib_metadata import metadata
 from sqlalchemy.orm import scoped_session, sessionmaker, registry
 from sqlalchemy import MetaData, create_engine, event
 from sqlalchemy.engine import Engine
@@ -14,13 +15,19 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 def setup_persistencia(db_path: str):
     engine = create_engine(db_path, future=True, echo=True)
+    mapper = registry()
+    metadata = MetaData()
 
-    mapear(engine, MetaData(), registry())
+    mapear(engine, metadata, mapper)
 
-    return scoped_session(
-        sessionmaker(
-            bind=engine,
-            autocommit=False,
-            autoflush=False,
-        )
+    return (
+        scoped_session(
+            sessionmaker(
+                bind=engine,
+                autocommit=False,
+                autoflush=False,
+            )
+        ),
+        mapper,
+        metadata,
     )

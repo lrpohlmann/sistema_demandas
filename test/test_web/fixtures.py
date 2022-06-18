@@ -16,8 +16,10 @@ TEST_DB_CAMINHO = "sqlite+pysqlite:///:memory:"
 @pytest.fixture
 def web_app():
     app = _setup_web_app({"DB": TEST_DB_CAMINHO, "TESTING": True})
-    db = _setup_app_db(app)
+    db, mapper, metadata = _setup_app_db(app)
     _setup_app_views(app, db)
     client = app.test_client()
 
-    return {"app": app, "db": db, "client": client}
+    yield {"app": app, "db": db, "client": client}
+    mapper.dispose()
+    db.remove()
