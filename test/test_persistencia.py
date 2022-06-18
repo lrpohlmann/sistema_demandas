@@ -77,8 +77,8 @@ def test_db_demanda(_setup_db):
 
         s.add(
             Demanda(
-                TipoDemanda(nome="Alteração"),
-                "Alteração de Domingo",
+                tipo=TipoDemanda(nome="Alteração"),
+                titulo="Alteração de Domingo",
                 documentos=[Documento("1", tipo=tp_doc), Documento("2", tipo=tp_doc)],
                 responsavel=Usuario("Leonardo", "12345678"),
                 tarefas=[Tarefa("1")],
@@ -98,7 +98,12 @@ def test_db_demanda(_setup_db):
 def test_db_tarefa(_setup_db):
     engine = _setup_db
     with Session(engine) as s:
-        s.add(Tarefa("Criar Mapa", demanda=Demanda(TipoDemanda("-"), "PROCESSO")))
+        s.add(
+            Tarefa(
+                titulo="Criar Mapa",
+                demanda=Demanda(tipo=TipoDemanda(nome="-"), titulo="PROCESSO"),
+            )
+        )
         s.commit()
 
     with Session(engine):
@@ -113,9 +118,9 @@ def test_db_fato(_setup_db):
     with Session(engine) as s:
         s.add(
             Fato(
-                "E-mail enviado",
-                TipoFatos.SIMPLES,
-                demanda=Demanda(TipoDemanda("-"), "X"),
+                titulo="E-mail enviado",
+                tipo=TipoFatos.SIMPLES,
+                demanda=Demanda(tipo=TipoDemanda("-"), titulo="X"),
                 dados={},
             )
         )

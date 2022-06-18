@@ -18,13 +18,13 @@ class TipoDemanda:
 
 @dataclass
 class Demanda:
-    tipo: TipoDemanda
     titulo: str
-    tipo_id: int = field(init=False)
+    tipo: TipoDemanda = None
+    tipo_id: int = None
     id_demanda: Optional[int] = field(default=None)
     fatos: List[Fato] = field(default_factory=list)
     tarefas: List[Tarefa] = field(default_factory=list)
-    responsavel_id: Optional[int] = field(init=False, default=None)
+    responsavel_id: Optional[int] = None
     responsavel: Optional[Usuario] = field(default=None)
     documentos: List[Documento] = field(default_factory=list)
     data_entrega: Optional[datetime] = field(default=None)
