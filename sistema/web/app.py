@@ -1,6 +1,6 @@
 from datetime import datetime
 from types import SimpleNamespace
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from sqlalchemy.orm import scoped_session
 from sistema.model.entidades.demanda import Demanda
 
@@ -46,12 +46,14 @@ def _setup_app_views(app: Flask, db: scoped_session):
 
     @app.route(
         "/demanda",
-        methods=[
-            "POST",
-        ],
+        methods=["POST", "GET"],
     )
     def demanda():
-        ...
+        if request.method == "GET":
+            demandas = db.query(Demanda).all()
+            return render_template(
+                "componentes/tabela_demandas.html", demandas=demandas
+            )
 
     @app.route("/tarefa", methods=["POST"])
     def tarefa():
