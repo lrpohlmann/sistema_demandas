@@ -51,9 +51,7 @@ def _setup_app_views(app: Flask, db: scoped_session):
     def demanda():
         if request.method == "GET":
             demandas = db.query(Demanda).all()
-            return render_template(
-                "componentes/tabela_demandas.html", demandas=demandas
-            )
+            return render_template("componentes/demandas.html", demandas=demandas)
 
     @app.route("/tarefa", methods=["POST"])
     def tarefa():

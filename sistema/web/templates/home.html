@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% from "macros/tabela_demandas.html" import tabela_demanda without context%}
 {% block main %}
 <div>
     <h1>Home</h1>
@@ -8,8 +7,8 @@
     <div class="col-12">
         <h2>Demandas</h2>
     </div>
-    <div class="col">
-        {{tabela_demanda(demandas)}}
+    <div class="col" hx-get="{{url_for('demanda')}}" hx-target="this" hx-trigger="load">
+        -
     </div>
     <div class="col-4">
         <div>
