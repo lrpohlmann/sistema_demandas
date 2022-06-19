@@ -21,6 +21,21 @@ def test_get_demandas(web_app):
     assert resposta.status_code == 200
 
 
+def test_get_args_demandas(web_app):
+    db: scoped_session = web_app["db"]
+    db.add(Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Demanda X"))
+    db.commit()
+
+    resposta: Response = web_app["client"].get(
+        "/demanda",
+        query_string={
+            "titulo": "X",
+            "tipo_id": "1",
+        },
+    )
+    assert resposta.status_code == 200
+
+
 def test_post_demandas(web_app):
     db: scoped_session = web_app["db"]
     tp = TipoDemanda("X")

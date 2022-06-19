@@ -1,10 +1,9 @@
 from datetime import datetime
-from types import SimpleNamespace
 from flask import Flask, render_template, request
 from sqlalchemy.orm import scoped_session
+
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
-
 from sistema.persistencia import setup_persistencia
 
 
@@ -51,7 +50,29 @@ def _setup_app_views(app: Flask, db: scoped_session):
     )
     def demanda():
         if request.method == "GET":
-            demandas = db.query(Demanda).all()
+            dados_consulta = dict(**request.args)
+
+            consulta = db.query(Demanda)
+            if dados_consulta.get("titulo"):
+                consulta = consulta.filter(
+                    Demanda.titulo.like("%{}%".format(dados_consulta.get("titulo")))
+                )
+            elif dados_consulta.get("tipo_id"):
+                consulta = consulta.filter(
+                    Demanda.tipo_id == int(dados_consulta.get("tipo_id"))
+                )
+            elif dados_consulta.get("responsavel_id"):
+                consulta = consulta.filter(
+                    Demanda.responsavel_id == int(dados_consulta.get("responsavel_id"))
+                )
+            elif dados_consulta.get("data_criacao"):
+                consulta.filter(
+                    Demanda.data_criacao
+                    == datetime.strptime(
+                        dados_consulta["data_entrega"], "%Y-%m-%d %H:%M:%S"
+                    )
+                )
+            demandas = consulta.all()
             return render_template("componentes/demandas.html", demandas=demandas)
         elif request.method == "POST":
             dados_form = dict(**request.form)
