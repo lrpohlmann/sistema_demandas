@@ -1,0 +1,32 @@
+<form hx-post="{{url_for('demanda')}}" hx-target="#tabela-demanda-target">
+    <div>
+        <legend>Nova Demanda</legend>
+    </div>
+    <div>
+        <label for="titulo">Título</label>
+        <input class="form-control" type="text" name="titulo" id="titulo" />
+    </div>
+    <div>
+        <label for="tipo">Tipo</label>
+        <select class="form-select" type="text" name="tipo_id" id="tipo">
+            <option value="">-</option>
+        </select>
+    </div>
+    <div>
+        <label for="responsavel">Responsável</label>
+        <select class="form-select" name="responsavel_id" id="responsavel">
+            <option value="">-</option>
+            <option value="1">Leonardo</option>
+            <option value="2">Jayme</option>
+        </select>
+    </div>
+    <div>
+        <label for="dia-entrega">Dia Entrega</label>
+        <input class="form-control" type="date" name="dia_entrega" id="dia-entrega">
+        <label for="horario-entrega">Horário Entrega</label>
+        <input class="form-control" type="time" name="horario_entrega" id="horario-entrega">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Criar</button>
+    </div>
+</form>

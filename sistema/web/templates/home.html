@@ -12,29 +12,7 @@
     </div>
     <div class="col-4">
         <div>
-            <form action="">
-                <div>
-                    <legend>Nova Demanda</legend>
-                </div>
-                <div>
-                    <label for="titulo">Título</label>
-                    <input type="text" name="titulo" id="titulo" />
-                </div>
-                <div>
-                    <label for="tipo">Tipo</label>
-                    <input type="text" name="tipo" id="tipo" />
-                </div>
-                <div>
-                    <label for="responsavel">Responsável</label>
-                    <select name="responsavel" id="responsavel">
-                        <option value="1">Leonardo</option>
-                        <option value="2">Jayme</option>
-                    </select>
-                </div>
-                <div>
-                    <button class="btn btn-primary">Criar</button>
-                </div>
-            </form>
+            {% include 'componentes/form_criar_demandas.html' with context %}
         </div>
         <div>
             {% include 'componentes/form_consulta_demandas.html' with context %}
