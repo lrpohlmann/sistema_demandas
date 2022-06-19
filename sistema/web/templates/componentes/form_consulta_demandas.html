@@ -1,0 +1,30 @@
+<form hx-get="{{url_for('demanda')}}" hx-params="*" hx-target="#tabela-demanda-target" hx-swap="innerHTML">
+    <legend>Consulta Demanda</legend>
+    <div>
+        <label for="consulta-titulo">Título</label>
+        <input class="form-control" type="text" name="titulo" id="consulta-titulo">
+    </div>
+    <div>
+        <label for="consulta-responsavel">Responsável</label>
+        <select class="form-select" name="responsavel_id" id="consulta-responsavel">
+            <option value="">-</option>
+            <option value="1">Leonardo</option>
+            <option value="2">Jayme</option>
+        </select>
+    </div>
+    <div>
+        <label for="consulta-tipo">Tipo</label>
+        <select class="form-select" name="tipo_id" id="consulta-tipo">
+            <option value="">-</option>
+            <option value="1">A</option>
+            <option value="2">B</option>
+        </select>
+    </div>
+    <div>
+        <label for="consulta-data-entrada">Data de Entrada</label>
+        <input class="form-control" type="date" name="data_criacao" id="consulta-data-entrada">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Consultar</button>
+    </div>
+</form>
