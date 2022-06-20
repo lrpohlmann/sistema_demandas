@@ -56,3 +56,14 @@ def test_post_demandas(web_app):
     assert resposta.status_code == 201
     x = db.query(Demanda).get(1)
     assert x
+
+
+def test_get_option_tipo_demanda(web_app):
+    web_app["db"].add(TipoDemanda(nome="X"))
+    web_app["db"].commit()
+
+    resposta: Response = web_app["client"].get(
+        "/tipo_demanda", query_string={"formato": "select"}
+    )
+    assert resposta.status_code == 200
+    assert "option" in resposta.data.decode()

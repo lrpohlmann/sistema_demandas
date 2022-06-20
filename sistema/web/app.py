@@ -97,6 +97,17 @@ def _setup_app_views(app: Flask, db: scoped_session):
             db.commit()
             return "", 201
 
+    @app.route("/tipo_demanda", methods=["GET"])
+    def tipo_demanda():
+        tp_demanda = db.query(TipoDemanda).all()
+
+        formato = request.args.get("formato")
+        if request.method == "GET":
+            if formato == "select":
+                return render_template(
+                    "componentes/option_tipo_demanda.html", tipo_demanda=tp_demanda
+                )
+
     @app.route("/tarefa", methods=["POST"])
     def tarefa():
         ...
