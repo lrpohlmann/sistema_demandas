@@ -76,13 +76,21 @@ def _setup_app_views(app: Flask, db: scoped_session):
             return render_template("componentes/demandas.html", demandas=demandas)
         elif request.method == "POST":
             dados_form = dict(**request.form)
-            dados_form["data_entrega"] = datetime.strptime(
-                request.form["data_entrega"], "%Y-%m-%d %H:%M:%S"
-            )
+            if dados_form.get("dia_entrega") and dados_form.get("horario_entrega"):
+                dados_form["data_entrega"] = datetime.strptime(
+                    dados_form["dia_entrega"] + " " + dados_form["horario_entrega"],
+                    "%Y-%m-%d %H:%M",
+                )
+            elif dados_form.get("dia_entrega"):
+                dados_form["data_entrega"] = datetime.strptime(
+                    dados_form["dia_entrega"],
+                    "%Y-%m-%d",
+                )
+
             nova_demanda = Demanda(
                 titulo=dados_form["titulo"],
-                tipo=db.query(TipoDemanda).get(dados_form["tipo_id"]),
-                responsavel=db.query(Usuario).get(dados_form["responsavel_id"]),
+                tipo=db.query(TipoDemanda).get(int(dados_form["tipo_id"])),
+                responsavel=db.query(Usuario).get(int(dados_form["responsavel_id"])),
                 data_entrega=dados_form["data_entrega"],
             )
             db.add(nova_demanda)
