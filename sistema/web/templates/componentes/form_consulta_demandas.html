@@ -14,10 +14,10 @@
     </div>
     <div>
         <label for="consulta-tipo">Tipo</label>
-        <select class="form-select" name="tipo_id" id="consulta-tipo">
+        <select class="form-select" name="" id="">
             <option value="">-</option>
-            <option value="1">A</option>
-            <option value="2">B</option>
+            <span hx-get="{{url_for('tipo_demanda')}}?formato=select" hx-trigger="load" hx-target="this"
+                hx-swap="outerHTML"></span>
         </select>
     </div>
     <div>
