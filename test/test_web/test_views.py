@@ -67,3 +67,14 @@ def test_get_option_tipo_demanda(web_app):
     )
     assert resposta.status_code == 200
     assert "option" in resposta.data.decode()
+
+
+def test_get_option_usuarios(web_app):
+    web_app["db"].add(Usuario("Leonardo", "1234567"))
+    web_app["db"].commit()
+
+    resposta: Response = web_app["client"].get(
+        "/usuario/formato/option", query_string={"formato": "select"}
+    )
+    assert resposta.status_code == 200
+    assert "option" in resposta.data.decode()

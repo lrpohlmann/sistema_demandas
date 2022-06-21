@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import Flask, render_template, request
+from sqlalchemy import select
 from sqlalchemy.orm import scoped_session
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
@@ -107,6 +108,14 @@ def _setup_app_views(app: Flask, db: scoped_session):
                 return render_template(
                     "componentes/option_tipo_demanda.html", tipo_demanda=tp_demanda
                 )
+
+    @app.route("/usuario/formato/<tipo_formato>")
+    def usuario(tipo_formato: str):
+        if tipo_formato == "option":
+            usuarios = db.execute(
+                select(Usuario.id_usuario, Usuario.nome).order_by(Usuario.id_usuario)
+            ).fetchall()
+            return render_template("componentes/option_usuario.html", usuario=usuarios)
 
     @app.route("/tarefa", methods=["POST"])
     def tarefa():
