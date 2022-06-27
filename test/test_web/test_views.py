@@ -78,3 +78,10 @@ def test_get_option_usuarios(web_app):
     )
     assert resposta.status_code == 200
     assert "option" in resposta.data.decode()
+
+
+def test_get_consulta_demanda_form(web_app):
+    resposta: Response = web_app["client"].get(f"/form/consulta_demanda")
+
+    assert resposta.status_code == 200
+    assert "form" in resposta.data.decode()

@@ -14,9 +14,8 @@
         <div>
             {% include 'componentes/form_criar_demandas.html' with context %}
         </div>
-        <div>
-            {% include 'componentes/form_consulta_demandas.html' with context %}
-        </div>
+        <div hx-get="{{url_for('forms', nome='consulta_demanda') }}" hx-target="this" hx-swap="innerHTML"
+            hx-trigger="load"></div>
     </div>
 </div>
 {% endblock %}
