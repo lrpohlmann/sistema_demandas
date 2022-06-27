@@ -53,28 +53,36 @@ def _setup_app_views(app: Flask, db: scoped_session):
     )
     def demanda():
         if request.method == "GET":
-            dados_consulta = dict(**request.args)
-
             consulta = db.query(Demanda)
-            if dados_consulta.get("titulo"):
-                consulta = consulta.filter(
-                    Demanda.titulo.like("%{}%".format(dados_consulta.get("titulo")))
-                )
-            elif dados_consulta.get("tipo_id"):
-                consulta = consulta.filter(
-                    Demanda.tipo_id == int(dados_consulta.get("tipo_id"))
-                )
-            elif dados_consulta.get("responsavel_id"):
-                consulta = consulta.filter(
-                    Demanda.responsavel_id == int(dados_consulta.get("responsavel_id"))
-                )
-            elif dados_consulta.get("data_criacao"):
-                consulta.filter(
-                    Demanda.data_criacao
-                    == datetime.strptime(
-                        dados_consulta["data_entrega"], "%Y-%m-%d %H:%M:%S"
+
+            if request.args:
+                tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
+                responsaveis: Sequence[Usuario] = db.query(Usuario).all()
+
+                form = ConsultaDemandaForm(**request.args)
+
+                form.responsavel_id.choices = [
+                    (r.id_usuario, r.nome) for r in responsaveis
+                ] + [
+                    ("", "-"),
+                ]
+                form.tipo_id.choices = [
+                    (t.id_tipo_demanda, t.nome) for t in tp_demanda
+                ] + [
+                    ("", "-"),
+                ]
+
+                form.validate()
+                if form.titulo.data:
+                    consulta = consulta.filter(Demanda.titulo.like(form.titulo.data))
+                elif form.tipo_id.data:
+                    consulta = consulta.filter(Demanda.tipo_id == form.tipo_id.data)
+                elif form.responsavel_id.data:
+                    consulta = consulta.filter(
+                        Demanda.responsavel_id == form.responsavel_id.data
                     )
-                )
+                elif form.data_criacao.data:
+                    consulta.filter(Demanda.data_criacao == form.data_criacao.data)
             demandas = consulta.all()
             return render_template("componentes/demandas.html", demandas=demandas)
         elif request.method == "POST":
@@ -133,9 +141,13 @@ def _setup_app_views(app: Flask, db: scoped_session):
             form_consulta_demanda = ConsultaDemandaForm()
             form_consulta_demanda.responsavel_id.choices = [
                 (r.id_usuario, r.nome) for r in responsaveis
+            ] + [
+                ("", "-"),
             ]
             form_consulta_demanda.tipo_id.choices = [
                 (t.id_tipo_demanda, t.nome) for t in tp_demanda
+            ] + [
+                ("", "-"),
             ]
             return render_template(
                 "componentes/forms/form_consulta_demandas.html",
