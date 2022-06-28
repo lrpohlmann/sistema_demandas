@@ -3,6 +3,7 @@ from typing import Mapping, Optional, Sequence
 from flask import Flask, render_template, request
 from sqlalchemy import select
 from sqlalchemy.orm import scoped_session
+from sqlalchemy.exc import NoResultFound
 from pathlib import Path
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
@@ -51,9 +52,13 @@ def _setup_app_views(app: Flask, db: scoped_session):
         demandas = db.query(Demanda).all()
         return render_template("home.html", demandas=demandas)
 
-    @app.route("/demanda/<int:demanda>", methods=["GET", "PUT", "DELETE"])
-    def demanda_view():
-        return render_template("demanda_view.html")
+    @app.route("/demanda/<int:demanda_id>", methods=["GET", "PUT", "DELETE"])
+    def demanda_view(demanda_id: int):
+        demanda = db.get(Demanda, demanda_id)
+        if demanda:
+            return render_template("demanda_view.html", demanda=demanda)
+        else:
+            return "", 404
 
     @app.route(
         "/demanda",

@@ -2,17 +2,18 @@
 
 {% block main %}
 <div>
-    <h1>Demanda X</h1>
+    <h1>{{demanda.titulo}}</h1>
 </div>
 <div class="row">
     <div class="col-12">
         <ul class="list-group">
-            <li class="list-group-item"><span>id: </span><span>1</span></li>
-            <li class="list-group-item"><span>Status: </span><span>Em Aberto</span></li>
-            <li class="list-group-item"><span>Responsável: </span><span>Leonardo</span></li>
+            <li class="list-group-item"><span>id: </span><span>{{demanda.id_demanda}}</span></li>
+            <li class="list-group-item"><span>Responsável: </span><span>{{demanda.responsavel}}</span></li>
             <li class="list-group-item">
-                <span>Descrição: </span>
-                <div>-</div>
+                <span>Documentos: </span>
+                {% for d in demanda.documentos %}
+                <div>{{d.nome}}</div>
+                {% endfor %}
             </li>
         </ul>
     </div>

@@ -91,3 +91,23 @@ def test_get_criar_demanda_form(web_app):
 
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()
+
+
+def test_get_demanda_por_id(web_app):
+    titulo = "Alteração de Cadastro"
+    web_app["db"].add(
+        d := Demanda(
+            titulo=titulo,
+            tipo=TipoDemanda(nome="Alteração"),
+        )
+    )
+    web_app["db"].commit()
+
+    resposta: Response = web_app["client"].get(f"/demanda/{d.id_demanda}")
+    assert resposta.status_code == 200
+    assert titulo in resposta.data.decode()
+
+
+def test_get_demanda_por_id_404(web_app):
+    resposta: Response = web_app["client"].get(f"/demanda/{1}")
+    assert resposta.status_code == 404
