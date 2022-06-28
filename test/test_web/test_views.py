@@ -47,10 +47,9 @@ def test_post_demandas(web_app):
         "/demanda",
         data={
             "titulo": "Alterações",
-            "tipo_id": 1,
-            "responsavel_id": 1,
-            "dia_entrega": "2022-06-22",
-            "horario_entrega": "",
+            "tipo_id": "1",
+            "responsavel_id": "1",
+            "data_entrega": "2022-06-01 16:00:00",
         },
     )
     assert resposta.status_code == 201
@@ -82,6 +81,13 @@ def test_get_option_usuarios(web_app):
 
 def test_get_consulta_demanda_form(web_app):
     resposta: Response = web_app["client"].get(f"/form/consulta_demanda")
+
+    assert resposta.status_code == 200
+    assert "form" in resposta.data.decode()
+
+
+def test_get_criar_demanda_form(web_app):
+    resposta: Response = web_app["client"].get(f"/form/criar_demanda")
 
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()

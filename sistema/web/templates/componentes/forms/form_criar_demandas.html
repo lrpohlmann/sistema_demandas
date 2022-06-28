@@ -1,0 +1,25 @@
+<form hx-post="{{url_for('demanda')}}" hx-target="#tabela-demanda-target">
+    <div>
+        <legend>Nova Demanda</legend>
+        {{form_criar_demanda.csfr_token}}
+    </div>
+    <div>
+        {{form_criar_demanda.titulo.label}}
+        {{form_criar_demanda.titulo(class_='form-control')}}
+    </div>
+    <div>
+        {{form_criar_demanda.tipo_id.label}}
+        {{form_criar_demanda.tipo_id(class_='form-select')}}
+    </div>
+    <div>
+        {{form_criar_demanda.responsavel_id.label}}
+        {{form_criar_demanda.responsavel_id(class_='form-select')}}
+    </div>
+    <div>
+        {{form_criar_demanda.data_entrega.label}}
+        {{form_criar_demanda.data_entrega(class_='form-select')}}
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Criar</button>
+    </div>
+</form>

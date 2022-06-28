@@ -1,13 +1,18 @@
 from datetime import datetime
-from typing import Sequence
+from typing import Mapping, Optional, Sequence
 from flask import Flask, render_template, request
 from sqlalchemy import select
 from sqlalchemy.orm import scoped_session
+from pathlib import Path
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
 from sistema.persistencia import setup_persistencia
 from sistema.web.forms.consulta_demanda import ConsultaDemandaForm
+from sistema.web.forms.criar_demanda import CriarDemandaForm
+
+
+CONFIG_TEST_FILE = Path(__file__).parent / "configs" / "config_teste.py"
 
 
 def criar_web_app(test_config=None) -> Flask:
@@ -17,12 +22,15 @@ def criar_web_app(test_config=None) -> Flask:
     return app
 
 
-def _setup_web_app(test_config=None):
+def _setup_web_app(test_config=False, mapping_config: Optional[Mapping] = None):
     app = Flask(__name__)
     if test_config:
-        app.config.from_mapping(test_config)
+        app.config.from_pyfile(str(CONFIG_TEST_FILE))
     else:
         pass
+
+    if mapping_config:
+        app.config.from_mapping(mapping_config)
 
     return app
 
@@ -86,27 +94,36 @@ def _setup_app_views(app: Flask, db: scoped_session):
             demandas = consulta.all()
             return render_template("componentes/demandas.html", demandas=demandas)
         elif request.method == "POST":
-            dados_form = dict(**request.form)
-            if dados_form.get("dia_entrega") and dados_form.get("horario_entrega"):
-                dados_form["data_entrega"] = datetime.strptime(
-                    dados_form["dia_entrega"] + " " + dados_form["horario_entrega"],
-                    "%Y-%m-%d %H:%M",
-                )
-            elif dados_form.get("dia_entrega"):
-                dados_form["data_entrega"] = datetime.strptime(
-                    dados_form["dia_entrega"],
-                    "%Y-%m-%d",
+            tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
+            responsaveis: Sequence[Usuario] = db.query(Usuario).all()
+
+            form_criar_demanda = CriarDemandaForm(**request.form)
+            form_criar_demanda.responsavel_id.choices = [
+                (r.id_usuario, r.nome) for r in responsaveis
+            ] + [
+                ("", "-"),
+            ]
+            form_criar_demanda.tipo_id.choices = [
+                (t.id_tipo_demanda, t.nome) for t in tp_demanda
+            ] + [
+                ("", "-"),
+            ]
+            if form_criar_demanda.validate():
+                nova_demanda = Demanda(
+                    titulo=form_criar_demanda.titulo.data,
+                    tipo=db.query(TipoDemanda).get(form_criar_demanda.tipo_id.data),
+                    responsavel=db.query(Usuario).get(
+                        form_criar_demanda.responsavel_id.data
+                    ),
+                    data_entrega=form_criar_demanda.data_entrega.data,
                 )
 
-            nova_demanda = Demanda(
-                titulo=dados_form["titulo"],
-                tipo=db.query(TipoDemanda).get(int(dados_form["tipo_id"])),
-                responsavel=db.query(Usuario).get(int(dados_form["responsavel_id"])),
-                data_entrega=dados_form["data_entrega"],
-            )
-            db.add(nova_demanda)
-            db.commit()
-            return "", 201
+                db.add(nova_demanda)
+                db.commit()
+                return "", 201
+
+            else:
+                form_criar_demanda.errors
 
     @app.route("/tipo_demanda", methods=["GET"])
     def tipo_demanda():
@@ -152,6 +169,27 @@ def _setup_app_views(app: Flask, db: scoped_session):
             return render_template(
                 "componentes/forms/form_consulta_demandas.html",
                 form_consulta_demanda=form_consulta_demanda,
+            )
+        elif nome == "criar_demanda":
+            tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
+            responsaveis: Sequence[Usuario] = db.query(Usuario).all()
+
+            form_criar_demanda = CriarDemandaForm()
+
+            form_criar_demanda.responsavel_id.choices = [
+                (r.id_usuario, r.nome) for r in responsaveis
+            ] + [
+                ("", "-"),
+            ]
+            form_criar_demanda.tipo_id.choices = [
+                (t.id_tipo_demanda, t.nome) for t in tp_demanda
+            ] + [
+                ("", "-"),
+            ]
+
+            return render_template(
+                "componentes/forms/form_criar_demandas.html",
+                form_criar_demanda=form_criar_demanda,
             )
 
     @app.route("/tarefa", methods=["POST"])
