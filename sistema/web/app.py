@@ -17,8 +17,8 @@ from sistema.web.views import setup_todas_views
 CONFIG_TEST_FILE = Path(__file__).parent / "configs" / "config_teste.py"
 
 
-def criar_web_app(test_config=None) -> Flask:
-    app = _setup_web_app(test_config)
+def criar_web_app(test_config=None, mapping_config: Optional[Mapping] = None) -> Flask:
+    app = _setup_web_app(test_config, mapping_config)
     db, mapper, metadata = _setup_app_db(app)
     setup_todas_views(app, db)
     return app
