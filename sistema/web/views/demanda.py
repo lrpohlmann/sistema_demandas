@@ -1,5 +1,5 @@
 from typing import Sequence
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
@@ -81,10 +81,15 @@ def setup_views(app, db):
 
                 db.add(nova_demanda)
                 db.commit()
-                return "", 201
+                return redirect(
+                    url_for("demanda_view", demanda_id=nova_demanda.id_demanda)
+                )
 
             else:
-                form_criar_demanda.errors
+                return render_template(
+                    "componentes/forms/form_criar_demandas.html",
+                    form_criar_demanda=form_criar_demanda,
+                )
 
     @app.route("/tipo_demanda", methods=["GET"])
     def tipo_demanda():

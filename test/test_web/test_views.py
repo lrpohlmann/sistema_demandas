@@ -52,7 +52,7 @@ def test_post_demandas(web_app):
             "data_entrega": "2022-06-01 16:00:00",
         },
     )
-    assert resposta.status_code == 201
+    assert resposta.status_code == 302
     x = db.query(Demanda).get(1)
     assert x
 

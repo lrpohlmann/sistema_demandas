@@ -1,4 +1,4 @@
-<form hx-post="{{url_for('demanda')}}" hx-target="#tabela-demanda-target">
+<form hx-post="{{url_for('demanda')}}" hx-target="this">
     <div>
         <legend>Nova Demanda</legend>
         {{form_criar_demanda.csfr_token}}
@@ -6,18 +6,46 @@
     <div>
         {{form_criar_demanda.titulo.label}}
         {{form_criar_demanda.titulo(class_='form-control')}}
+        {% if form_criar_demanda.titulo.errors %}
+        <ul>
+            {% for e in form_criar_demanda.titulo.errors %}
+            <li>{{e}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
     <div>
         {{form_criar_demanda.tipo_id.label}}
         {{form_criar_demanda.tipo_id(class_='form-select')}}
+        {% if form_criar_demanda.tipo_id.errors %}
+        <ul>
+            {% for e in form_criar_demanda.tipo_id.errors %}
+            <li>{{e}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
     <div>
         {{form_criar_demanda.responsavel_id.label}}
         {{form_criar_demanda.responsavel_id(class_='form-select')}}
+        {% if form_criar_demanda.responsavel_id.errors %}
+        <ul>
+            {% for e in form_criar_demanda.responsavel_id.errors %}
+            <li>{{e}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
     <div>
         {{form_criar_demanda.data_entrega.label}}
         {{form_criar_demanda.data_entrega(class_='form-select')}}
+        {% if form_criar_demanda.data_entrega.errors %}
+        <ul>
+            {% for e in form_criar_demanda.data_entrega.errors %}
+            <li>{{e}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Criar</button>
