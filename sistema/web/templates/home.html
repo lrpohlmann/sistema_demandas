@@ -11,10 +11,9 @@
         -
     </div>
     <div class="col-4">
-        <div hx-get="{{url_for('forms', nome='criar_demanda') }}" hx-target="this" hx-swap="innerHTML"
-            hx-trigger="load"></div>
-        <div hx-get="{{url_for('forms', nome='consulta_demanda') }}" hx-target="this" hx-swap="innerHTML"
-            hx-trigger="load"></div>
+        <div>
+            {% include 'componentes/forms/form_criar_demandas.html' %}
+        </div>
     </div>
 </div>
 {% endblock %}

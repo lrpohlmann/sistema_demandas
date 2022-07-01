@@ -44,7 +44,7 @@ def test_post_demandas(web_app):
     db.commit()
 
     resposta: Response = web_app["client"].post(
-        "/demanda",
+        "/",
         data={
             "titulo": "Alterações",
             "tipo_id": "1",
