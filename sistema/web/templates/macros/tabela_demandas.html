@@ -14,7 +14,7 @@
         <tr>
 
             <td>
-                <a href="{{url_for('demanda')}}">{{d.titulo}}</a>
+                <a href="{{url_for('demanda_view', demanda_id=d.id_demanda)}}">{{d.titulo}}</a>
             </td>
             <td>{{d.tipo.nome}}</td>
             <td>{{d.responsavel.nome}}</td>
