@@ -22,7 +22,8 @@
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="ultimas-demandas" hx-get="{{url_for('demanda')}}"
-                hx-target="this" hx-trigger="load" role="tabpanel" aria-labelledby="pills-ultimas-demandas"></div>
+                hx-target="this" hx-trigger="load, every 20s" role="tabpanel" aria-labelledby="pills-ultimas-demandas">
+            </div>
             <div class="tab-pane fade" id="consulta-demandas" role="tabpanel" ,
                 aria-labelledby="pills-consulta-demandas">
                 {% include 'componentes/forms/form_consulta_demandas.html' %}
