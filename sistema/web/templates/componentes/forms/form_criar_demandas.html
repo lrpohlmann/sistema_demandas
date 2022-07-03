@@ -38,7 +38,7 @@
     </div>
     <div>
         {{form_criar_demanda.data_entrega.label}}
-        {{form_criar_demanda.data_entrega(class_='form-select')}}
+        {{form_criar_demanda.data_entrega(class_='form-control')}}
         {% if form_criar_demanda.data_entrega.errors %}
         <ul>
             {% for e in form_criar_demanda.data_entrega.errors %}
