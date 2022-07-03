@@ -30,8 +30,6 @@ def setup_views(app, db):
         ]
         form_criar_demanda.tipo_id.choices = [
             (t.id_tipo_demanda, t.nome) for t in tipos_demanda
-        ] + [
-            ("", "-"),
         ]
         demandas = db.query(Demanda).all()
         if request.method == "GET":
