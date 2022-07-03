@@ -11,4 +11,3 @@ class CriarDemandaForm(FlaskForm):
     responsavel_id = SelectField(
         label="Responsável", coerce=lambda x: int(x) if x else None
     )
-    data_entrega = DateTimeField("Data de Entrega")

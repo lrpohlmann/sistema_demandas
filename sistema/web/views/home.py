@@ -20,8 +20,6 @@ def setup_views(app, db):
         ]
         form_consulta_demanda.tipo_id.choices = [
             (t.id_tipo_demanda, t.nome) for t in tipos_demanda
-        ] + [
-            ("", "-"),
         ]
 
         form_criar_demanda = CriarDemandaForm()
@@ -51,7 +49,6 @@ def setup_views(app, db):
                     responsavel=db.query(Usuario).get(
                         form_criar_demanda.responsavel_id.data
                     ),
-                    data_entrega=form_criar_demanda.data_entrega.data,
                 )
 
                 db.add(nova_demanda)

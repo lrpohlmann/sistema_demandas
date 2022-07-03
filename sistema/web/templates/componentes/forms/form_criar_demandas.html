@@ -37,17 +37,6 @@
         {% endif %}
     </div>
     <div>
-        {{form_criar_demanda.data_entrega.label}}
-        {{form_criar_demanda.data_entrega(class_='form-control')}}
-        {% if form_criar_demanda.data_entrega.errors %}
-        <ul>
-            {% for e in form_criar_demanda.data_entrega.errors %}
-            <li>{{e}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-    </div>
-    <div>
         <button type="submit" class="btn btn-primary">Criar</button>
     </div>
 </form>
