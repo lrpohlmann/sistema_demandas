@@ -14,7 +14,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 
 def setup_persistencia(db_path: str):
-    engine = create_engine(db_path, future=True, echo=True)
+    engine = create_engine(db_path, future=True)
     mapper = registry()
     metadata = MetaData()
 
