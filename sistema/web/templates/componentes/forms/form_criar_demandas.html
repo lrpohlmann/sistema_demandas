@@ -1,7 +1,7 @@
 <form action="{{url_for('main')}}" method="post">
     <div>
         <legend>Nova Demanda</legend>
-        {{form_criar_demanda.csfr_token}}
+        {{form_criar_demanda.csrf_token}}
     </div>
     <div>
         {{form_criar_demanda.titulo.label}}

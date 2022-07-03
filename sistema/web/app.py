@@ -1,16 +1,10 @@
 from datetime import datetime
 from typing import Mapping, Optional, Sequence
-from flask import Flask, render_template, request
-from sqlalchemy import select
-from sqlalchemy.orm import scoped_session
-from sqlalchemy.exc import NoResultFound
+from flask import Flask
+from flask_wtf.csrf import CSRFProtect
 from pathlib import Path
 
-from sistema.model.entidades.demanda import Demanda, TipoDemanda
-from sistema.model.entidades.usuario import Usuario
 from sistema.persistencia import setup_persistencia
-from sistema.web.forms.consulta_demanda import ConsultaDemandaForm
-from sistema.web.forms.criar_demanda import CriarDemandaForm
 from sistema.web.views import setup_todas_views
 
 
@@ -26,6 +20,8 @@ def criar_web_app(test_config=None, mapping_config: Optional[Mapping] = None) ->
 
 def _setup_web_app(test_config=False, mapping_config: Optional[Mapping] = None):
     app = Flask(__name__)
+    CSRFProtect(app)
+
     if test_config:
         app.config.from_pyfile(str(CONFIG_TEST_FILE))
     else:
