@@ -8,7 +8,7 @@
     <div class="col-12">
         <ul class="list-group">
             <li class="list-group-item"><span>id: </span><span>{{demanda.id_demanda}}</span></li>
-            <li class="list-group-item"><span>Responsável: </span><span>{{demanda.responsavel}}</span></li>
+            <li class="list-group-item"><span>Responsável: </span><span>{{demanda.responsavel.nome}}</span></li>
             <li class="list-group-item">
                 <span>Documentos: </span>
                 {% for d in demanda.documentos %}
