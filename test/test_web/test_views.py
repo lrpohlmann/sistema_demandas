@@ -110,3 +110,18 @@ def test_get_demanda_por_id(web_app):
 def test_get_demanda_por_id_404(web_app):
     resposta: Response = web_app["client"].get(f"/demanda/{1}")
     assert resposta.status_code == 404
+
+
+def test_get_editar_demanda_form(web_app):
+    web_app["db"].add(
+        Demanda(
+            "Escrever Documento",
+            tipo=TipoDemanda("ADMINISTRATIVO"),
+            responsavel=Usuario("Leonardo", "123456"),
+        )
+    )
+    web_app["db"].commit()
+
+    resposta: Response = web_app["client"].get("/demanda/editar/form/1")
+    assert resposta.status_code == 200
+    assert "form" in resposta.data.decode()

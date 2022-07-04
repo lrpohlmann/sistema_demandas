@@ -1,13 +1,15 @@
 from typing import Sequence
-from flask import render_template, request, redirect, url_for
+from flask import render_template, render_template_string, request, redirect, url_for
+from sqlalchemy.orm import scoped_session
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
 from sistema.web.forms.consulta_demanda import ConsultaDemandaForm
 from sistema.web.forms.criar_demanda import CriarDemandaForm
+from sistema.web.forms import editar_dados_demanda
 
 
-def setup_views(app, db):
+def setup_views(app, db: scoped_session):
     @app.route("/demanda/<int:demanda_id>", methods=["GET", "PUT", "DELETE"])
     def demanda_view(demanda_id: int):
         demanda = db.get(Demanda, demanda_id)
@@ -15,6 +17,27 @@ def setup_views(app, db):
             return render_template("demanda_view.html", demanda=demanda)
         else:
             return "", 404
+
+    @app.route(
+        "/demanda/editar/form/<int:demanda_id>",
+        methods=[
+            "GET",
+        ],
+    )
+    def editar_demanda_form(demanda_id: int):
+        tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
+        responsaveis: Sequence[Usuario] = db.query(Usuario).all()
+        form = editar_dados_demanda.criar_form(
+            escolhas_responsavel=[(r.id_usuario, r.nome) for r in responsaveis]
+            + [
+                ("", "-"),
+            ],
+            escolhas_tipo=[(t.id_tipo_demanda, t.nome) for t in tp_demanda],
+        )
+        return render_template_string(
+            "{% from 'macros/demanda/editar_dados_demanda.html' import editar_dados_demanda %} {{editar_dados_demanda(form)}}",
+            form=form,
+        )
 
     @app.route(
         "/demanda",
