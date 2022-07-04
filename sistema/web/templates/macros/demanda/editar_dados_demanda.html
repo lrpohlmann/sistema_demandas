@@ -1,0 +1,23 @@
+{% macro editar_dados_demanda(form) -%}
+<form hx-put="" hx-swap="outerHTML" hx-target="this" enctype="multipart/form-data">
+    <legend>
+        Editar Demanda
+    </legend>
+    {{form.csrf}}
+    <div>
+        {{form.responsavel_id.label}}
+        {{form.responsavel_id(class_="form-select")}}
+    </div>
+    <div>
+        {{form.tipo_id.label}}
+        {{form.tipo_id(class_="form-select")}}
+    </div>
+    <div>
+        {{form.documentos.label}}
+        {{form.documentos(class_="form-control")}}
+    </div>
+    <div>
+        <button type="submit">Salvar</button>
+    </div>
+</form>
+{%- endmacro %}
