@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from 'macros/demanda/lista_dados_demanda.html' import lista_dados_demanda %}
 
 {% block main %}
 <div>
@@ -6,16 +7,7 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <ul class="list-group">
-            <li class="list-group-item"><span>id: </span><span>{{demanda.id_demanda}}</span></li>
-            <li class="list-group-item"><span>Responsável: </span><span>{{demanda.responsavel.nome}}</span></li>
-            <li class="list-group-item">
-                <span>Documentos: </span>
-                {% for d in demanda.documentos %}
-                <div>{{d.nome}}</div>
-                {% endfor %}
-            </li>
-        </ul>
+        {{lista_dados_demanda(demanda)}}
     </div>
     <div class="col">
         <div class="row">
