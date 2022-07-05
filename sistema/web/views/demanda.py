@@ -39,6 +39,34 @@ def setup_views(app, db: scoped_session):
             form=form,
         )
 
+    @app.route("/demanda/editar/salvar/<int:demanda_id>", methods=["PUT"])
+    def salvar_edicao_demanda(demanda_id: int):
+        form = editar_dados_demanda.criar_form(
+            escolhas_tipo=[(r.id_usuario, r.nome) for r in db.query(Usuario).all()],
+            escolhas_responsavel=[
+                (t.id_tipo_demanda, t.nome) for t in db.query(TipoDemanda).all()
+            ],
+            **request.form
+        )
+        if form.validate():
+            demanda: Demanda = db.get(Demanda, demanda_id)
+            demanda.tipo = db.get(TipoDemanda, form.tipo_id.data)
+            demanda.responsavel_id = (
+                db.get(Usuario, form.tipo_id.data) if form.tipo_id.data else None
+            )
+            db.add(demanda)
+            db.commit()
+
+            return render_template_string(
+                "{% from 'macros/demanda/lista_dados_demanda.html' import lista_dados_demanda %} {{lista_dados_demanda(demanda)}}",
+                demanda=demanda,
+            )
+        else:
+            return render_template_string(
+                "{% from 'macros/demanda/editar_dados_demanda.html' import editar_dados_demanda %} {{editar_dados_demanda(form)}}",
+                form=form,
+            )
+
     @app.route(
         "/demanda",
         methods=["POST", "GET"],

@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import Response
+from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
@@ -123,5 +124,53 @@ def test_get_editar_demanda_form(web_app):
     web_app["db"].commit()
 
     resposta: Response = web_app["client"].get("/demanda/editar/form/1")
+    assert resposta.status_code == 200
+    assert "form" in resposta.data.decode()
+
+
+def test_put_editar_demanda(web_app):
+    l = Usuario("Leonardo", "123456")
+    j = Usuario("João", "456798")
+    web_app["db"].add_all([l, j])
+
+    web_app["db"].add(
+        Demanda(
+            "Escrever Documento",
+            tipo=TipoDemanda("ADMINISTRATIVO"),
+            responsavel=l,
+        )
+    )
+    web_app["db"].commit()
+    client: FlaskClient = web_app["client"]
+
+    resposta: Response = client.put(
+        "/demanda/editar/salvar/1",
+        data={
+            "tipo_id": "1",
+            "responsavel_id": "2",
+        },
+    )
+    assert resposta.status_code == 200
+    assert "ul" in resposta.data.decode()
+
+
+def test_put_editar_demanda_falha_validacao(web_app):
+    web_app["db"].add(
+        Demanda(
+            "Escrever Documento",
+            tipo=TipoDemanda("ADMINISTRATIVO"),
+            responsavel=Usuario("Leonardo", "1234567"),
+        )
+    )
+    web_app["db"].commit()
+    client: FlaskClient = web_app["client"]
+
+    resposta: Response = client.put(
+        "/demanda/editar/salvar/1",
+        data={
+            "tipo_id": None,
+            "responsavel_id": "2",
+        },
+    )
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()
