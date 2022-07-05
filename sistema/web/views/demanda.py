@@ -56,9 +56,10 @@ def setup_views(app, db: scoped_session):
             demanda: Demanda = db.get(Demanda, demanda_id)
             demanda.tipo = db.get(TipoDemanda, form.tipo_id.data)
             demanda.responsavel = (
-                db.get(Usuario, form.tipo_id.data) if form.tipo_id.data else None
+                db.get(Usuario, form.responsavel_id.data)
+                if form.responsavel_id.data
+                else None
             )
-            db.add(demanda)
             db.commit()
 
             return render_template_string(

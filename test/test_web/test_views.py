@@ -132,26 +132,30 @@ def test_put_editar_demanda(web_app):
     l = Usuario("Leonardo", "123456")
     j = Usuario("João", "456798")
     web_app["db"].add_all([l, j])
+    web_app["db"].commit()
+    id_usuario_inicial = l.id_usuario
+    id_usuario_troca = j.id_usuario
 
     web_app["db"].add(
-        Demanda(
+        d := Demanda(
             "Escrever Documento",
             tipo=TipoDemanda("ADMINISTRATIVO"),
             responsavel=l,
         )
     )
+
     web_app["db"].commit()
     client: FlaskClient = web_app["client"]
 
     resposta: Response = client.put(
         "/demanda/editar/salvar/1",
-        data={
-            "tipo_id": "1",
-            "responsavel_id": "2",
-        },
+        data={"tipo_id": "1", "responsavel_id": str(id_usuario_troca)},
     )
     assert resposta.status_code == 200
     assert "</ul>" in resposta.data.decode()
+    assert web_app["db"].get(Demanda, 1).responsavel == web_app["db"].get(
+        Usuario, id_usuario_troca
+    )
 
 
 def test_put_editar_demanda_falha_validacao(web_app):
