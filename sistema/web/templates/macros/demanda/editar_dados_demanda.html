@@ -1,5 +1,6 @@
-{% macro editar_dados_demanda(form) -%}
-<form hx-put="" hx-swap="outerHTML" hx-target="this" enctype="multipart/form-data">
+{% macro editar_dados_demanda(form, demanda_id) -%}
+<form hx-put="{{url_for('salvar_edicao_demanda', demanda_id=demanda_id)}}" hx-swap="outerHTML" hx-target="this"
+    enctype="multipart/form-data">
     <legend>
         Editar Demanda
     </legend>

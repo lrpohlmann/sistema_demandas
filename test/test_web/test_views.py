@@ -151,7 +151,7 @@ def test_put_editar_demanda(web_app):
         },
     )
     assert resposta.status_code == 200
-    assert "ul" in resposta.data.decode()
+    assert "</ul>" in resposta.data.decode()
 
 
 def test_put_editar_demanda_falha_validacao(web_app):

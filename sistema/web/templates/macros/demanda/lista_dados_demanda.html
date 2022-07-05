@@ -1,14 +1,18 @@
-{% macro lista_dados_demanda(demanda) -%}
-<ul class="list-group">
-    <li class="list-group-item"><span>id: </span><span>{{demanda.id_demanda}}</span></li>
-    <li class="list-group-item"><span>Responsável: </span><span>{{demanda.responsavel.nome}}</span></li>
-    {% if demanda.documentos %}
-    <li class="list-group-item">
-        <span>Documentos: </span>
-        {% for d in demanda.documentos %}
-        <div>{{d.nome}}</div>
-        {% endfor %}
-    </li>
-    {% endif %}
-</ul>
+{% macro lista_dados_demanda(demanda, demanda_id) -%}
+<div id="lista-dados-demanda">
+    <ul class="list-group">
+        <li class="list-group-item"><span>id: </span><span>{{demanda.id_demanda}}</span></li>
+        <li class="list-group-item"><span>Responsável: </span><span>{{demanda.responsavel.nome}}</span></li>
+        {% if demanda.documentos %}
+        <li class="list-group-item">
+            <span>Documentos: </span>
+            {% for d in demanda.documentos %}
+            <div>{{d.nome}}</div>
+            {% endfor %}
+        </li>
+        {% endif %}
+    </ul>
+    <button hx-get="{{url_for('editar_demanda_form', demanda_id=demanda_id)}}" hx-target="#lista-dados-demanda"
+        hx-swap="outerHTML" type="button">Editar</button>
+</div>
 {%- endmacro %}
