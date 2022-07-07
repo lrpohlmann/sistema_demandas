@@ -1,0 +1,21 @@
+{% macro tarefa_card(tarefa) -%}
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">{{tarefa.titulo}}</div>
+        <div>
+            <ul>
+                <li>Responsável: {{tarefa.responsavel}}</li>
+                <li>Status: {{tarefa.status}}</li>
+                {% if tarefa.data_entrega %}
+                <li>Data de Entrega: {{tarefa.data_entrega}}</li>
+                {% endif %}
+                {% if tarefa.descricao %}
+                <li>
+                    <p>{{tarefa.descricao}}</p>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
