@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% from 'macros/demanda/lista_dados_demanda.html' import lista_dados_demanda %}
 {% from 'macros/tarefa/tarefa_card.html' import tarefa_card %}
+{% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %}
 
 {% block main %}
 <div>
@@ -25,20 +26,7 @@
                 </div>
             </div>
             <div class="col-6">
-                <form action="">
-                    <legend>Nova Tarefa</legend>
-                    <div>
-                        <label for="tarefa-titulo">Título</label>
-                        <input type="text" name="titulo" id="tarefa-titulo">
-                    </div>
-                    <div>
-                        <label for="tarefa-responsavel">Responsável</label>
-                        <select name="responsavel" id="tarefa-responsavel">
-                            <option value="1">Leonardo</option>
-                            <option value="2">Jayme</option>
-                        </select>
-                    </div>
-                </form>
+                {{criar_tarefa(criar_tarefa_form)}}
             </div>
         </div>
     </div>

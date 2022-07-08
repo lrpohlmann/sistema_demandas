@@ -1,20 +1,30 @@
 from typing import Sequence
 from flask import render_template, render_template_string, request, redirect, url_for
 from sqlalchemy.orm import scoped_session
+import sqlalchemy
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
 from sistema.web.forms.consulta_demanda import ConsultaDemandaForm
 from sistema.web.forms.criar_demanda import CriarDemandaForm
-from sistema.web.forms import editar_dados_demanda
+from sistema.web.forms import editar_dados_demanda, criar_tarefa
 
 
 def setup_views(app, db: scoped_session):
-    @app.route("/demanda/<int:demanda_id>", methods=["GET", "PUT", "DELETE"])
+    @app.route("/demanda/<int:demanda_id>", methods=["GET"])
     def demanda_view(demanda_id: int):
         demanda = db.get(Demanda, demanda_id)
+        criar_tarefa_form = criar_tarefa.criar_form(
+            escolhas_responsavel=db.execute(
+                sqlalchemy.select(Usuario.id_usuario, Usuario.nome)
+            ).fetchall()
+        )
         if demanda:
-            return render_template("demanda_view.html", demanda=demanda)
+            return render_template(
+                "demanda_view.html",
+                demanda=demanda,
+                criar_tarefa_form=criar_tarefa_form,
+            )
         else:
             return "", 404
 
