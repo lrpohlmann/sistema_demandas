@@ -8,12 +8,6 @@ from sistema.model.entidades.usuario import Usuario
 from test.test_web.fixtures import web_app
 
 
-def test_get_option_usuarios(web_app):
-    web_app["db"].add(Usuario("Leonardo", "1234567"))
-    web_app["db"].commit()
-
-    resposta: Response = web_app["client"].get(
-        "/usuario/formato/option", query_string={"formato": "select"}
-    )
+def test_main_view_status(web_app):
+    resposta: Response = web_app["client"].get("/")
     assert resposta.status_code == 200
-    assert "option" in resposta.data.decode()
