@@ -16,9 +16,9 @@ def setup_views(app, db: scoped_session):
     def demanda_view(demanda_id: int):
         demanda = db.get(Demanda, demanda_id)
         criar_tarefa_form = criar_tarefa.criar_form(
-            escolhas_responsavel=db.execute(
-                sqlalchemy.select(Usuario.id_usuario, Usuario.nome)
-            ).fetchall()
+            escolhas_responsavel=[
+                (u.id_usuario, u.nome) for u in db.query(Usuario).all()
+            ]
         )
         if demanda:
             return render_template(
