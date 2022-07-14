@@ -4,6 +4,7 @@ from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
+from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
 from test.test_web.fixtures import web_app
 
@@ -183,5 +184,20 @@ def test_criar_tarefa(web_app):
         },
     )
 
+    assert resposta.status_code == 202
+
+
+def test_get_tarefa_cards(web_app):
+    web_app["db"].add(
+        Demanda(
+            "AAAAA",
+            tipo=TipoDemanda("XXXXX"),
+            responsavel=Usuario("IIIIII", "12348665"),
+            tarefas=[Tarefa("Tarefa 1"), Tarefa("Tarefa 2")],
+        )
+    )
+    web_app["db"].commit()
+
+    resposta = web_app["client"].get("/demanda/1/tarefas/cards")
+
     assert resposta.status_code == 200
-    assert "card" in resposta.data.decode()

@@ -19,3 +19,9 @@
     </div>
 </div>
 {%- endmacro %}
+
+{% macro sequencia_tarefa_card(tarefas) -%}
+{% for t in tarefas %}
+{{tarefa_card(t)}}
+{% endfor %}
+{%- endmacro %}

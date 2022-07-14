@@ -171,6 +171,18 @@ def setup_views(app, db: scoped_session):
                     "componentes/option_tipo_demanda.html", tipo_demanda=tp_demanda
                 )
 
+    @app.route("/demanda/<int:demanda_id>/tarefas/cards", methods=["GET"])
+    def tarefa_card_view(demanda_id: int):
+        tarefas = (
+            db.query(Tarefa)
+            .filter(Tarefa.demanda_id == demanda_id)
+            .order_by(Tarefa.data_hora)
+        )
+        return render_template_string(
+            "{% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_card %} {{sequencia_tarefa_card(tarefas)}}",
+            tarefas=tarefas,
+        )
+
     @app.route("/demanda/<int:demanda_id>/tarefas/criar", methods=["POST"])
     def criar_tarefa_view(demanda_id: int):
         demanda: Demanda = db.get(Demanda, demanda_id)
@@ -197,14 +209,19 @@ def setup_views(app, db: scoped_session):
             db.add(tarefa_criada)
             db.commit()
 
-            return render_template_string(
-                "{% from 'macros/tarefa/tarefa_card.html' import tarefa_card %} {{tarefa_card(tarefa)}}",
-                tarefa=tarefa_criada,
+            return (
+                render_template_string(
+                    "{% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %} {{criar_tarefa(form, id_demanda)}}",
+                    form=form,
+                    id_demanda=demanda_id,
+                ),
+                202,
             )
-        else:
-            return render_template_string(
-                "{% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %} {{criar_tarefa(form)}}",
-                form=form,
-            )
+
+        return render_template_string(
+            "{% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %} {{criar_tarefa(form, id_demanda)}}",
+            form=form,
+            id_demanda=demanda_id,
+        )
 
     return app, db

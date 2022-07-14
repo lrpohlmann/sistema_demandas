@@ -1,6 +1,7 @@
-{% macro criar_tarefa(form) -%}
-<div>
-    <form>
+{% macro criar_tarefa(form, id_demanda) -%}
+<div id="criar-tarefa-form-container">
+    <form id="form-criar-tarefa" hx-post="{{url_for('criar_tarefa_view', demanda_id=id_demanda)}}"
+        hx-target="#criar-tarefa-form-container" hx-swap="outerHTML">
         <legend>Criar Tarefa</legend>
         {{form.csrf_token}}
         <div>
