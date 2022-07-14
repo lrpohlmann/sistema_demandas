@@ -8,7 +8,13 @@ class CriarTarefaForm(FlaskForm):
         "título", validators=[validators.DataRequired("Campo necessário.")]
     )
     responsavel_id = SelectField("Responsável", coerce=lambda x: int(x) if x else None)
-    data_entrega = DateTimeField("Data de Entrega")
+    data_entrega = DateTimeField(
+        "Data de Entrega",
+        format=["%Y-%m-%d %H:%M:%S", ""],
+        filters=[
+            lambda x: x if x else None,
+        ],
+    )
     descricao = TextAreaField("Descrição")
 
 

@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Response
+from flask import Response, url_for
 from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
 
@@ -162,3 +162,26 @@ def test_put_editar_demanda_falha_validacao(web_app):
     )
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()
+
+
+def test_criar_tarefa(web_app):
+    web_app["db"].add(
+        Demanda(
+            "AAAAA",
+            tipo=TipoDemanda("XXXXX"),
+            responsavel=Usuario("IIIIII", "12348665"),
+        )
+    )
+    web_app["db"].commit()
+
+    resposta = web_app["client"].post(
+        "/demanda/1/tarefas/criar",
+        data={
+            "titulo": "Título Tarefa",
+            "responsavel_id": "1",
+            "descricao": "",
+        },
+    )
+
+    assert resposta.status_code == 200
+    assert "card" in resposta.data.decode()

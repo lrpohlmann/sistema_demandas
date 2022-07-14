@@ -4,6 +4,7 @@ from sqlalchemy.orm import scoped_session
 import sqlalchemy
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
+from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
 from sistema.web.forms.consulta_demanda import ConsultaDemandaForm
 from sistema.web.forms.criar_demanda import CriarDemandaForm
@@ -169,5 +170,41 @@ def setup_views(app, db: scoped_session):
                 return render_template(
                     "componentes/option_tipo_demanda.html", tipo_demanda=tp_demanda
                 )
+
+    @app.route("/demanda/<int:demanda_id>/tarefas/criar", methods=["POST"])
+    def criar_tarefa_view(demanda_id: int):
+        demanda: Demanda = db.get(Demanda, demanda_id)
+        if not demanda:
+            return "", 404
+
+        form = criar_tarefa.criar_form(
+            escolhas_responsavel=[
+                (u.id_usuario, u.nome) for u in db.query(Usuario).all()
+            ]
+            + [("", "-")],
+            **request.form
+        )
+        if form.validate():
+            tarefa_criada = Tarefa(
+                responsavel=db.get(Usuario, form.responsavel_id.data),
+                titulo=form.titulo.data,
+                data_entrega=form.data_entrega.data,
+                descricao=form.descricao.data,
+            )
+            demanda.tarefas.append(
+                tarefa_criada,
+            )
+            db.add(tarefa_criada)
+            db.commit()
+
+            return render_template_string(
+                "{% from 'macros/tarefa/tarefa_card.html' import tarefa_card %} {{tarefa_card(tarefa)}}",
+                tarefa=tarefa_criada,
+            )
+        else:
+            return render_template_string(
+                "{% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %} {{criar_tarefa(form)}}",
+                form=form,
+            )
 
     return app, db

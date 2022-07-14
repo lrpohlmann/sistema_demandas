@@ -6,18 +6,46 @@
         <div>
             {{form.titulo.label}}
             {{form.titulo(class_='form-control')}}
+            {% if form.titulo.errors %}
+            <ul>
+                {% for erro in form.titulo.errors %}
+                <li>{{erro}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div>
             {{form.responsavel_id.label}}
             {{form.responsavel_id(class_='form-select')}}
+            {% if form.responsavel_id.errors %}
+            <ul>
+                {% for erro in form.responsavel_id.errors %}
+                <li>{{erro}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div>
             {{form.data_entrega.label}}
             {{form.data_entrega(class_='form-control')}}
+            {% if form.data_entrega.errors %}
+            <ul>
+                {% for erro in form.data_entrega.errors %}
+                <li>{{erro}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div>
             {{form.descricao.label}}
             {{form.descricao(class_='form-control')}}
+            {% if form.descricao.errors %}
+            <ul>
+                {% for erro in form.descricao.errors %}
+                <li>{{erro}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div>
             <button type="submit">Criar</button>
