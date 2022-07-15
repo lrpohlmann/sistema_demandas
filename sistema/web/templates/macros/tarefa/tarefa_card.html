@@ -4,7 +4,9 @@
         <div class="card-title">{{tarefa.titulo}}</div>
         <div>
             <ul>
-                <li>Responsável: {{tarefa.responsavel}}</li>
+                {% if tarefa.responsavel %}
+                <li>Responsável: {{tarefa.responsavel.nome}}</li>
+                {% endif %}
                 <li>Status: {{tarefa.status}}</li>
                 {% if tarefa.data_entrega %}
                 <li>Data de Entrega: {{tarefa.data_entrega}}</li>
