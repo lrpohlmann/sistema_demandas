@@ -1,6 +1,5 @@
 from flask import Flask
 from sqlalchemy.orm import scoped_session
-import sqlalchemy
 
 from sistema.model.entidades.tarefa import Tarefa
 

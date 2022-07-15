@@ -1,5 +1,5 @@
 {% macro tarefa_card(tarefa) -%}
-<div class="card">
+<div class="card" id="tarefa-card-{{tarefa.id_tarefa}}">
     <div class="card-body">
         <div class="card-title">{{tarefa.titulo}}</div>
         <div>
@@ -17,6 +17,11 @@
                 </li>
                 {% endif %}
             </ul>
+        </div>
+        <div>
+            <button type="button" class="btn btn-danger"
+                hx-delete="{{url_for('deletar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}"
+                hx-target="#tarefa-card-{{tarefa.id_tarefa}}" hx-trigger="click" hx-swap="delete">Deletar</button>
         </div>
     </div>
 </div>

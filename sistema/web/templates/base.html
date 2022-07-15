@@ -23,5 +23,10 @@
     </main>
     <script src="{{url_for('static', filename = 'bootstrap.bundle.min.js')}}"></script>
 </body>
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers["X-CSRFToken"] = "{{csrf_token()}}"
+    })
+</script>
 
 </html>
