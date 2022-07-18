@@ -199,7 +199,9 @@ def setup_views(app, db: scoped_session):
         if criar_tarefa.e_valido(form):
             dados = criar_tarefa.obter_dados(form)
             tarefa_criada = Tarefa(
-                responsavel=db.get(Usuario, dados.get("responsavel_id")),
+                responsavel=db.get(Usuario, dados.get("responsavel_id"))
+                if dados.get("responsavel_id")
+                else None,
                 titulo=dados.get("titulo"),
                 data_entrega=dados.get("data_entrega"),
                 descricao=dados.get("descricao"),
