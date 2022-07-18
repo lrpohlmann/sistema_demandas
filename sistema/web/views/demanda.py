@@ -219,6 +219,7 @@ def setup_views(app, db: scoped_session):
                     id_demanda=demanda_id,
                 ),
                 202,
+                {"HX-Trigger": "tarefaCriada"},
             )
 
         return render_template_string(
