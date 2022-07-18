@@ -1,4 +1,5 @@
-from typing import Any, Sequence, Tuple
+from datetime import datetime
+from typing import Any, Mapping, Sequence, Tuple
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, DateTimeField, TextAreaField, validators
 
@@ -24,3 +25,15 @@ def criar_form(
     form = CriarTarefaForm(**dados)
     form.responsavel_id.choices = escolhas_responsavel
     return form
+
+
+def e_valido(form, **kwargs) -> bool:
+    return form.validate(**kwargs)
+
+
+def obter_dados(form) -> Mapping:
+    dados = dict(form.data)
+    if dados["data_entrega"] == datetime(1900, 1, 1, 0, 0):
+        dados["data_entrega"] = None
+
+    return dados

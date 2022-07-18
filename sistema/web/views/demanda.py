@@ -196,12 +196,13 @@ def setup_views(app, db: scoped_session):
             + [("", "-")],
             **request.form
         )
-        if form.validate():
+        if criar_tarefa.e_valido(form):
+            dados = criar_tarefa.obter_dados(form)
             tarefa_criada = Tarefa(
-                responsavel=db.get(Usuario, form.responsavel_id.data),
-                titulo=form.titulo.data,
-                data_entrega=form.data_entrega.data,
-                descricao=form.descricao.data,
+                responsavel=db.get(Usuario, dados.get("responsavel_id")),
+                titulo=dados.get("titulo"),
+                data_entrega=dados.get("data_entrega"),
+                descricao=dados.get("descricao"),
             )
             demanda.tarefas.append(
                 tarefa_criada,

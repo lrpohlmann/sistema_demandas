@@ -181,6 +181,7 @@ def test_criar_tarefa(web_app):
             "titulo": "Título Tarefa",
             "responsavel_id": "1",
             "descricao": "",
+            "data_entrega": "",
         },
     )
 
