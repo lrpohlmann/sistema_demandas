@@ -149,14 +149,19 @@ def setup_views(app, db: scoped_session):
                 **request.form
             )
 
-            if form_criar_demanda.validate():
+            if criar_demanda.e_valido(form):
+                dados_nova_demanda = criar_demanda.obter_dados(form)
                 nova_demanda = Demanda(
-                    titulo=form_criar_demanda.titulo.data,
-                    tipo=db.query(TipoDemanda).get(form_criar_demanda.tipo_id.data),
+                    titulo=dados_nova_demanda.get("titulo"),
+                    tipo=db.query(TipoDemanda).get(dados_nova_demanda.get("tipo_id"))
+                    if dados_nova_demanda.get("tipo_id")
+                    else None,
                     responsavel=db.query(Usuario).get(
-                        form_criar_demanda.responsavel_id.data
-                    ),
-                    data_entrega=form_criar_demanda.data_entrega.data,
+                        dados_nova_demanda.get("responsavel_id")
+                    )
+                    if dados_nova_demanda.get("responsavel_id")
+                    else None,
+                    data_entrega=dados_nova_demanda.get("data_entrega"),
                 )
 
                 db.add(nova_demanda)

@@ -46,6 +46,7 @@ def test_post_demandas(web_app):
             "titulo": "Alterações",
             "tipo_id": "1",
             "responsavel_id": "1",
+            "data_entrega": "",
         },
     )
     assert resposta.status_code == 302
