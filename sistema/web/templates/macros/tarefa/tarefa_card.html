@@ -7,7 +7,11 @@
                 {% if tarefa.responsavel %}
                 <li>Responsável: {{tarefa.responsavel.nome}}</li>
                 {% endif %}
-                <li>Status: {{tarefa.status}}</li>
+                <li>
+                    <div>
+                        Status: <span>{{tarefa.status}}</span>
+                    </div>
+                </li>
                 {% if tarefa.data_entrega %}
                 <li>Data de Entrega: {{tarefa.data_entrega}}</li>
                 {% endif %}
