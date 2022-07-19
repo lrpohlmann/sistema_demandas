@@ -1,0 +1,9 @@
+{% macro status_tarefa_pill(status) %}
+{% if status == 'EM ABERTO' %}
+<span class="border border-warning rounded bg-warning">{{status}}</span>
+{% elif status == 'FINALIZADA' %}
+<span class="border border-success rounded bg-success">{{status}}</span>
+{% else %}
+<span class="border border-white rounded bg-white">{{status}}</span>
+{% endif %}
+{% endmacro %}
