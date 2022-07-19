@@ -6,7 +6,7 @@ import sqlalchemy
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
-from sistema.web.forms.consulta_demanda import ConsultaDemandaForm
+from sistema.web.forms import consulta_demanda
 from sistema.web.forms.criar_demanda import CriarDemandaForm
 from sistema.web.forms import editar_dados_demanda, criar_tarefa
 
@@ -97,18 +97,17 @@ def setup_views(app, db: scoped_session):
                 tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
                 responsaveis: Sequence[Usuario] = db.query(Usuario).all()
 
-                form = ConsultaDemandaForm(**request.args)
-
-                form.responsavel_id.choices = [
-                    (r.id_usuario, r.nome) for r in responsaveis
-                ] + [
-                    ("", "-"),
-                ]
-                form.tipo_id.choices = [
-                    (t.id_tipo_demanda, t.nome) for t in tp_demanda
-                ] + [
-                    ("", "-"),
-                ]
+                form = consulta_demanda.criar_form(
+                    opcoes_responsavel_id=[(r.id_usuario, r.nome) for r in responsaveis]
+                    + [
+                        ("", "-"),
+                    ],
+                    opcoes_tipo_id=[(r.id_usuario, r.nome) for r in responsaveis]
+                    + [
+                        ("", "-"),
+                    ],
+                    **request.args
+                )
 
                 form.validate()
                 if form.titulo.data:
