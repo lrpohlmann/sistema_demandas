@@ -17,3 +17,7 @@ def criar_form(
     form.responsavel_id.choices = opcoes_responsavel_id
     form.tipo_id.choices = opcoes_tipo_id
     return form
+
+
+def e_valido(form) -> bool:
+    return form.validate()

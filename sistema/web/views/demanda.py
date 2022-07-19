@@ -109,7 +109,7 @@ def setup_views(app, db: scoped_session):
                     **request.args
                 )
 
-                form.validate()
+                consulta_demanda.e_valido(form)
                 if form.titulo.data:
                     consulta = consulta.filter(Demanda.titulo.like(form.titulo.data))
                 elif form.tipo_id.data:
