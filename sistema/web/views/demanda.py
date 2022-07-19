@@ -110,16 +110,24 @@ def setup_views(app, db: scoped_session):
                 )
 
                 consulta_demanda.e_valido(form)
-                if form.titulo.data:
-                    consulta = consulta.filter(Demanda.titulo.like(form.titulo.data))
-                elif form.tipo_id.data:
-                    consulta = consulta.filter(Demanda.tipo_id == form.tipo_id.data)
-                elif form.responsavel_id.data:
+                dados_consulta_form = consulta_demanda.obter_dados(form)
+                if dados_consulta_form.get("titulo"):
                     consulta = consulta.filter(
-                        Demanda.responsavel_id == form.responsavel_id.data
+                        Demanda.titulo.like(dados_consulta_form.get("titulo"))
                     )
-                elif form.data_criacao.data:
-                    consulta.filter(Demanda.data_criacao == form.data_criacao.data)
+                elif dados_consulta_form.get("tipo_id"):
+                    consulta = consulta.filter(
+                        Demanda.tipo_id == dados_consulta_form.get("titulo")
+                    )
+                elif dados_consulta_form.get("responsavel_id"):
+                    consulta = consulta.filter(
+                        Demanda.responsavel_id
+                        == dados_consulta_form.get("responsavel_id")
+                    )
+                elif dados_consulta_form.get("data_criacao"):
+                    consulta.filter(
+                        Demanda.data_criacao == dados_consulta_form.get("data_criacao")
+                    )
             demandas = consulta.all()
             return render_template("componentes/demandas.html", demandas=demandas)
         elif request.method == "POST":
