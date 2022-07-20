@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template_string
 from sqlalchemy.orm import scoped_session
 
 from sistema.model.entidades.tarefa import Tarefa, StatusTarefa
@@ -22,6 +22,12 @@ def setup_views(app: Flask, db: scoped_session):
         if tarefa:
             set_status(tarefa, StatusTarefa.FINALIZADA)
             db.commit()
-            return "", 200
+            return (
+                render_template_string(
+                    "{% from 'macros/tarefa/status_tarefa_pill.html' import status_tarefa_pill %} <div>Status: {{status_tarefa_pill(status)}}</div>",
+                    status=StatusTarefa.FINALIZADA,
+                ),
+                200,
+            )
         else:
             return "", 404

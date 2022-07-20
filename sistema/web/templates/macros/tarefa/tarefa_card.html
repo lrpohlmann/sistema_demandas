@@ -9,7 +9,7 @@
                 {% if tarefa.responsavel %}
                 <li>Responsável: {{tarefa.responsavel.nome}}</li>
                 {% endif %}
-                <li>
+                <li id="tarefa-card-status-item-{{tarefa.id_tarefa}}">
                     <div>
                         Status: {{status_tarefa_pill(tarefa.status)}}
                     </div>
@@ -25,6 +25,9 @@
             </ul>
         </div>
         <div>
+            <button class="btn btn-sm btn-success"
+                hx-put="{{url_for('finalizar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}" hx-swap="innerHTML"
+                hx-target="#tarefa-card-status-item-{{tarefa.id_tarefa}}">Finalizar</button>
             <button type="button" class="btn btn-danger"
                 hx-delete="{{url_for('deletar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}"
                 hx-target="#tarefa-card-{{tarefa.id_tarefa}}" hx-trigger="click" hx-swap="delete">Deletar</button>
