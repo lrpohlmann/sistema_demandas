@@ -19,24 +19,7 @@ from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.entidades.tarefa import StatusTarefa, Tarefa
 from sistema.model.entidades.usuario import Usuario
 from sistema.model.operacoes.demanda import finalizar_tarefa_da_demanda
-
-
-@runtime_checkable
-class FatoProtocol(Protocol):
-    data_hora: datetime
-    tipo: str
-
-
-@runtime_checkable
-class _TemSequenciaDeFatos(Protocol):
-    fatos: Sequence[FatoProtocol]
-
-
-def inserir_fatos(
-    tem_fatos: _TemSequenciaDeFatos, *fatos: FatoProtocol
-) -> _TemSequenciaDeFatos:
-    tem_fatos.fatos = sorted([*tem_fatos.fatos, *fatos], key=lambda f: f.data_hora)
-    return tem_fatos
+from sistema.model.operacoes.tarefa import inserir_fatos
 
 
 def test_instanciar_tarefa():
