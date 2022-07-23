@@ -31,3 +31,5 @@ def setup_views(app: Flask, db: scoped_session):
             )
         else:
             return "", 404
+
+    return app, db
