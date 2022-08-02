@@ -1,10 +1,15 @@
-{% macro linha_do_tempo(fatos) %}
+{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %}
+
+{% macro linha_do_tempo(fatos, form) %}
 <div class="offcanvas offcanvas-start" tabindex="-1" id="linha-do-tempo-offcanvas" aria-labelledby="offcanvasLabel">
     <div class="offcanvas-header">
         <h2 class="offcanvas-title" id="offcanvasLabel">Linha do Tempo</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="linha-do-tempo-offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body row">
+        <div class="col-12">
+            {{fato_simples_form(form)}}
+        </div>
         {% for f in fatos %}
         <div class="col-12">
             <div class="card">
