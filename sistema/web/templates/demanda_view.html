@@ -2,14 +2,20 @@
 {% from 'macros/demanda/lista_dados_demanda.html' import lista_dados_demanda %}
 {% from 'macros/tarefa/tarefa_card.html' import tarefa_card %}
 {% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %}
+{% from 'macros/demanda/linha_do_tempo_offcanvas.html' import linha_do_tempo %}
+
 
 {% block main %}
 <div>
     <h1>{{demanda.titulo}}</h1>
 </div>
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
         {{lista_dados_demanda(demanda, demanda.id_demanda)}}
+    </div>
+    <div class="col-6">
+        <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
+            data-bs-target="#linha-do-tempo-offcanvas">Linha do Tempo</button>
     </div>
     <div class="col">
         <div class="row">
@@ -28,42 +34,6 @@
             </div>
         </div>
     </div>
-    <div class="col">
-        <div>
-            <h2>Linha do Tempo</h2>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <time datetime="2022-05-12 14:03">12/05/2022 14:03</time>
-                        </div>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <div>Tipo</div>
-                                <div>Registro da Demanda</div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <time datetime="2022-05-13 09:30">13/05/2022 09:30</time>
-                        </div>
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <div>Tipo</div>
-                                <div>Abertura Processo</div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{linha_do_tempo(demanda.fatos)}}
 </div>
 {% endblock %}
