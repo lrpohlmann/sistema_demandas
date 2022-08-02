@@ -1,4 +1,4 @@
-from flask import request
+from flask import render_template_string, request
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.web.forms import criar_fato_simples_form
@@ -14,7 +14,13 @@ def setup_views(app, db):
             dados = criar_fato_simples_form.obter_dados(form)
             demanda: Demanda = db.get(Demanda, dados["demanda_id"])
             if not demanda:
-                return "", 404
+                return (
+                    render_template_string(
+                        "{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %} {{fato_simples_form(form)}}",
+                        form=form,
+                    ),
+                    404,
+                )
             demanda_com_fato_novo = inserir_fatos(
                 demanda,
                 Fato(
@@ -24,7 +30,19 @@ def setup_views(app, db):
                 ),
             )
             db.commit()
-            return "", 202
-        return "", 404
+            return (
+                render_template_string(
+                    "{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %} {{fato_simples_form(form)}}",
+                    form=form,
+                ),
+                202,
+            )
+        return (
+            render_template_string(
+                "{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %} {{fato_simples_form(form)}}",
+                form=form,
+            ),
+            404,
+        )
 
     return app, db

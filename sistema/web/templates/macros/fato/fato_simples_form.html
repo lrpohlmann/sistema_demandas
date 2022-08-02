@@ -1,21 +1,23 @@
 {% macro fato_simples_form(form) %}
-<form action="">
-    <div>
-        <legend>Postar Fato</legend>
-    </div>
-    <div>
-        {{form.demanda_id(readonly="true")}}
-    </div>
-    <div>
-        {{form.titulo.label}}
-        {{form.titulo(class_="form-control")}}
-    </div>
-    <div>
-        {{form.descricao.label}}
-        {{form.descricao(class_="form-control")}}
-    </div>
-    <div>
-        <button type="submit" class="btn btn-primary">Postar</button>
-    </div>
-</form>
+<div id="fato-simples-form">
+    <form hx-post="{{url_for('criar_fato_simples_view')}}" hx-target="#fato-simples-form">
+        <div>
+            <legend>Postar Fato</legend>
+        </div>
+        <div>
+            {{form.demanda_id(readonly="true")}}
+        </div>
+        <div>
+            {{form.titulo.label}}
+            {{form.titulo(class_="form-control")}}
+        </div>
+        <div>
+            {{form.descricao.label}}
+            {{form.descricao(class_="form-control")}}
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Postar</button>
+        </div>
+    </form>
+</div>
 {% endmacro %}
