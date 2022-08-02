@@ -1,0 +1,46 @@
+{% macro linha_do_tempo(fatos) %}
+<div class="offcanvas offcanvas-start" tabindex="-1" id="linha-do-tempo-offcanvas" aria-labelledby="offcanvasLabel">
+    <div class="offcanvas-header">
+        <h2 class="offcanvas-title" id="offcanvasLabel">Linha do Tempo</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="linha-do-tempo-offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body row">
+        {% for f in fatos %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <time datetime="{{f.data_hora}}">{{f.data_hora}}</time>
+                        <h3>{{f.titulo}}</h3>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div><span>Tipo: </span><span>{{f.tipo}}</span></div>
+                        </li>
+                        {% if f.descricao %}
+                        <li class="list-group-item">
+                            <div>
+                                <span>Descrição: </span>
+                                <span>{{f.descricao}}</span>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% if f.dados %}
+                        <li class="list-group-item">
+                            <div>
+                                <ul>
+                                    {% for k, v in f.dados.items() %}
+                                    <li><span>{{k}}: </span><span>{{v}}</span></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endmacro %}
