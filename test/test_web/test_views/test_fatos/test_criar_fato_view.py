@@ -13,3 +13,15 @@ def test_criar_fato_view(web_app):
 
     assert resposta.status_code == 202
     assert len(web_app["db"].get(Demanda, 1).fatos) == 1
+
+
+def test_criar_fato_view_404(web_app):
+    web_app["db"].add(Demanda("Titulo 1", tipo=TipoDemanda("PROCESSO")))
+    web_app["db"].commit()
+
+    resposta = web_app["client"].post(
+        "/fato/criar/simples",
+        data={"demanda_id": 2, "titulo": "fato 1", "descricao": "Lorem Ipsum"},
+    )
+
+    assert resposta.status_code == 404
