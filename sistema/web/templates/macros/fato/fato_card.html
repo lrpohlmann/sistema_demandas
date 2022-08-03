@@ -1,0 +1,42 @@
+{% macro fato_card(fato) %}
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            <time datetime="{{fato.data_hora}}">{{fato.data_hora}}</time>
+            <h3>{{fato.titulo}}</h3>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div><span>Tipo: </span><span>{{fato.tipo}}</span></div>
+            </li>
+            {% if fato.descricao %}
+            <li class="list-group-item">
+                <div>
+                    <span>Descrição: </span>
+                    <span>{{fato.descricao}}</span>
+                </div>
+            </li>
+            {% endif %}
+            {% if fato.dados %}
+            <li class="list-group-item">
+                <div>
+                    <ul>
+                        {% for k, v in fato.dados.items() %}
+                        <li><span>{{k}}: </span><span>{{v}}</span></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro fato_card_list(fatos, container_css_class="col-12") %}
+{% for f in fatos %}
+<div class="{{container_css_class}}">
+    {{fato_card(f)}}
+</div>
+{% endfor %}
+{% endmacro %}

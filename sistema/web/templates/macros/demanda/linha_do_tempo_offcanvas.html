@@ -1,4 +1,5 @@
 {% from 'macros/fato/fato_simples_form.html' import fato_simples_form %}
+{% from 'macros/fato/fato_card.html' import fato_card_list %}
 
 {% macro linha_do_tempo(fatos, form) %}
 <div class="offcanvas offcanvas-start" tabindex="-1" id="linha-do-tempo-offcanvas" aria-labelledby="offcanvasLabel">
@@ -10,42 +11,7 @@
         <div class="col-12">
             {{fato_simples_form(form)}}
         </div>
-        {% for f in fatos %}
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <time datetime="{{f.data_hora}}">{{f.data_hora}}</time>
-                        <h3>{{f.titulo}}</h3>
-                    </div>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <div><span>Tipo: </span><span>{{f.tipo}}</span></div>
-                        </li>
-                        {% if f.descricao %}
-                        <li class="list-group-item">
-                            <div>
-                                <span>Descrição: </span>
-                                <span>{{f.descricao}}</span>
-                            </div>
-                        </li>
-                        {% endif %}
-                        {% if f.dados %}
-                        <li class="list-group-item">
-                            <div>
-                                <ul>
-                                    {% for k, v in f.dados.items() %}
-                                    <li><span>{{k}}: </span><span>{{v}}</span></li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+        {{fato_card_list(fatos)}}
     </div>
 </div>
 {% endmacro %}
