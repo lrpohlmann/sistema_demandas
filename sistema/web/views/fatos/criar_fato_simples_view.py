@@ -36,6 +36,7 @@ def setup_views(app, db):
                     form=form,
                 ),
                 202,
+                {"HX-Trigger": "fatoCriado"},
             )
         return (
             render_template_string(
