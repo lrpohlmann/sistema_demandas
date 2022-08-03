@@ -1,0 +1,9 @@
+{% macro erros_campo(campo) %}
+{% if campo.errors %}
+<ul>
+    {% for e in campo.errors %}
+    <li>{{e}}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endmacro %}
