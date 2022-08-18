@@ -248,3 +248,21 @@ def test_inserir_documento_post(web_app):
     assert resposta.status_code == 201
 
     assert web_app["db"].get(Documento, 1)
+
+
+def test_obter_documentos_view(web_app):
+    web_app["db"].add(
+        Demanda(
+            "Demanda1",
+            tipo=TipoDemanda("TpDemanda1"),
+            documentos=[
+                Documento("Doc1", tipo=TipoDocumento("TpDoc1"), arquivo="/xxxx/a.docx"),
+                Documento("Doc2", tipo=TipoDocumento("TpDoc2"), arquivo="/yyyy/b.xlsx"),
+            ],
+        )
+    )
+    web_app["db"].commit()
+
+    resposta = web_app["client"].get("/demanda/obter/documentos/1")
+
+    assert resposta.status_code == 200
