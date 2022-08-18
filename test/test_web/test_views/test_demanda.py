@@ -1,9 +1,11 @@
-from datetime import datetime
+import io
 from flask import Response, url_for
 from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
+import sqlalchemy
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
+from sistema.model.entidades.documento import Documento, TipoDocumento
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
 from test.test_web.fixtures import web_app
@@ -219,3 +221,30 @@ def test_inserir_documento_get(web_app):
     resposta = web_app["client"].get("/demanda/editar/inserir_documento/1")
 
     assert resposta.status_code == 200
+
+
+def test_inserir_documento_post(web_app):
+    web_app["db"].add_all(
+        [
+            Demanda(
+                "Demanda1",
+                tipo=TipoDemanda("Tp1"),
+            ),
+            tp := TipoDocumento("Tipo1"),
+        ]
+    )
+    web_app["db"].commit()
+
+    resposta = web_app["client"].post(
+        "/demanda/editar/inserir_documento/1",
+        content_type="multipart/form-data",
+        data={
+            "nome": "Doc1",
+            "tipo": 1,
+            "arquivo": (io.BytesIO(b"Lorem Ipsum"), "arquivo.docx"),
+        },
+    )
+
+    assert resposta.status_code == 201
+
+    assert web_app["db"].get(Documento, 1)

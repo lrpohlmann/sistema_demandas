@@ -17,5 +17,5 @@ class Documento:
     identificador: Optional[str] = field(default=None)
     tipo_id: int = field(init=False)
     descricao: Optional[str] = field(default=None)
-    arquivo: Optional[Path] = field(default=None)
+    arquivo: Optional[str] = field(default=None)
     demanda_id: int = field(init=False)

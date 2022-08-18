@@ -13,6 +13,7 @@ class UploadDocumentoForm(FlaskForm):
     )
     tipo = SelectField(
         "Tipo",
+        coerce=int,
         validators=[
             validators.DataRequired(),
         ],
@@ -50,7 +51,7 @@ def criar_form(escolhas_tipo_documento: Sequence, **dados) -> UploadDocumentoFor
 
 
 def e_valido(form) -> bool:
-    return form.validade()
+    return form.validate()
 
 
 def obter_dados(form) -> Dict:
