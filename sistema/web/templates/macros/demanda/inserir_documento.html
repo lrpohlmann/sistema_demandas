@@ -1,0 +1,10 @@
+{% macro inserir_documento(form) %}
+<form>
+    {% for field in form.fields %}
+    <div>
+        {{field.label}}
+        {{field}}
+    </div>
+    {% endfor %}
+</form>
+{% endmacro %}

@@ -203,3 +203,19 @@ def test_get_tarefa_cards(web_app):
     resposta = web_app["client"].get("/demanda/1/tarefas/cards")
 
     assert resposta.status_code == 200
+
+
+def test_inserir_documento_get(web_app):
+    web_app["db"].add(
+        Demanda(
+            "AAAAA",
+            tipo=TipoDemanda("XXXXX"),
+            responsavel=Usuario("IIIIII", "12348665"),
+            tarefas=[Tarefa("Tarefa 1"), Tarefa("Tarefa 2")],
+        )
+    )
+    web_app["db"].commit()
+
+    resposta = web_app["client"].get("/demanda/editar/inserir_documento/1")
+
+    assert resposta.status_code == 200
