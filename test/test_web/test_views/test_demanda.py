@@ -266,3 +266,23 @@ def test_obter_documentos_view(web_app):
     resposta = web_app["client"].get("/demanda/obter/documentos/1")
 
     assert resposta.status_code == 200
+
+
+def test_deletar_documentos_view(web_app):
+    web_app["db"].add(
+        Demanda(
+            "Demanda1",
+            tipo=TipoDemanda("TpDemanda1"),
+            documentos=[
+                Documento("Doc1", tipo=TipoDocumento("TpDoc1"), arquivo="/xxxx/a.docx"),
+            ],
+        )
+    )
+    web_app["db"].commit()
+
+    resposta = web_app["client"].delete("/documento/deletar/1")
+
+    assert resposta.status_code == 200
+
+    demanda = web_app["db"].get(Demanda, 1)
+    assert len(demanda.documentos) == 0
