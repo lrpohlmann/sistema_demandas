@@ -4,7 +4,6 @@
 {% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %}
 {% from 'macros/demanda/linha_do_tempo_offcanvas.html' import linha_do_tempo %}
 
-
 {% block main %}
 <div>
     <h1>{{demanda.titulo}}</h1>
@@ -17,6 +16,25 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
             data-bs-target="#linha-do-tempo-offcanvas">Linha do Tempo</button>
     </div>
+    <div class="col-6">
+        {% if demanda.documentos %}
+        <div>
+            <ul>
+                {% for doc in demanda.documentos %}
+                <li>
+                    <div><a href="{{url_for('download_arquivo_view', nome_arquivo=doc.arquivo)}}"
+                            download="">{{doc.nome}}</a></div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <div hx-get="{{url_for('inserir_documento_view', demanda_id=demanda.id_demanda)}}" hx-swap="outerHTML"
+            hx-trigger="load">
+        </div>
+    </div>
+</div>
+<div>
     <div class="col">
         <div class="row">
             <div class="col-12">

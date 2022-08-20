@@ -22,8 +22,11 @@ def setup_views(app, db):
         ]
         if request.method == "GET":
             return render_template_string(
-                "{% from 'macros/demanda/inserir_documento.html' import inserir_documento %} {{inserir_documento(form)}}",
-                form=upload_documento_form.criar_form(escolhas_tipo_documento=escolhas),
+                "{% from 'macros/demanda/inserir_documento.html' import inserir_documento %} {{inserir_documento(form, demanda_id)}}",
+                form=upload_documento_form.criar_form(
+                    escolhas_tipo_documento=escolhas,
+                ),
+                demanda_id=demanda_id,
             )
 
         elif request.method == "POST":
@@ -48,16 +51,18 @@ def setup_views(app, db):
 
                 return (
                     render_template_string(
-                        "{% from 'macros/demanda/inserir_documento.html' import inserir_documento %} {{inserir_documento(form)}}",
+                        "{% from 'macros/demanda/inserir_documento.html' import inserir_documento %} {{inserir_documento(form, demanda_id)}}",
                         form=form,
+                        demanda_id=demanda_id,
                     ),
                     201,
                 )
             else:
                 return (
                     render_template_string(
-                        "{% from 'macros/demanda/inserir_documento.html' import inserir_documento %} {{inserir_documento(form)}}",
+                        "{% from 'macros/demanda/inserir_documento.html' import inserir_documento %} {{inserir_documento(form, demanda_id)}}",
                         form=form,
+                        demanda_id=demanda_id,
                     ),
                     200,
                 )

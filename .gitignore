@@ -155,3 +155,4 @@ cython_debug/
 .vscode
 
 db.sqlite
+pasta_documentos_teste_manual/

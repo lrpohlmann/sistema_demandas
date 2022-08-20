@@ -8,4 +8,4 @@ def salvar(app: Flask, arquivo: FileStorage) -> str:
     nome_seguro = secure_filename(arquivo.filename)
     caminho_completo = app.config["UPLOAD_FOLDER"] / nome_seguro
     arquivo.save(str(caminho_completo))
-    return str(caminho_completo)
+    return str(nome_seguro)
