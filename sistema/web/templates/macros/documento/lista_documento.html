@@ -1,0 +1,43 @@
+{% macro lista_documento(documentos) %}
+<div>
+    <div>
+        <h2>Documentos</h2>
+    </div>
+    <div>
+        <table class="table">
+            <thead>
+                <th scope="col">Nome</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Identificador</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Opções</th>
+            </thead>
+            <tbody>
+                {% for doc in documentos %}
+                <tr>
+
+                    <td>{{doc.nome}}</td>
+                    <td>{{doc.tipo.nome}}</td>
+                    <td>{{doc.identificador}}</td>
+                    <td>{{doc.descricao}}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Opções
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item"
+                                        href="{{url_for('download_arquivo_view', nome_arquivo=doc.arquivo)}}"
+                                        download="">Baixar</a></li>
+                                <li><a class="dropdown-item" hx-confirm="Apagar Arquivo?">Apagar</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

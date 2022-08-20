@@ -3,6 +3,7 @@
 {% from 'macros/tarefa/tarefa_card.html' import tarefa_card %}
 {% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %}
 {% from 'macros/demanda/linha_do_tempo_offcanvas.html' import linha_do_tempo %}
+{% from 'macros/documento/lista_documento.html' import lista_documento %}
 
 {% block main %}
 <div>
@@ -18,16 +19,7 @@
     </div>
     <div class="col-6">
         {% if demanda.documentos %}
-        <div>
-            <ul>
-                {% for doc in demanda.documentos %}
-                <li>
-                    <div><a href="{{url_for('download_arquivo_view', nome_arquivo=doc.arquivo)}}"
-                            download="">{{doc.nome}}</a></div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+        {{lista_documento(demanda.documentos)}}
         {% endif %}
         <div hx-get="{{url_for('inserir_documento_view', demanda_id=demanda.id_demanda)}}" hx-swap="outerHTML"
             hx-trigger="load">
