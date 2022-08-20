@@ -30,7 +30,10 @@
                                 <li><a class="dropdown-item"
                                         href="{{url_for('download_arquivo_view', nome_arquivo=doc.arquivo)}}"
                                         download="">Baixar</a></li>
-                                <li><a class="dropdown-item" hx-confirm="Apagar Arquivo?">Apagar</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        hx-delete="{{url_for('deletar_documento_view', documento_id=doc.id_documento)}}"
+                                        hx-confirm="Apagar Arquivo?" hx-target="closest tr" hx-swap="delete">Apagar</a>
+                                </li>
                             </ul>
                         </div>
                     </td>
