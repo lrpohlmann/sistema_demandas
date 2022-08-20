@@ -1,7 +1,10 @@
 import io
+import os
+from pathlib import Path
 from flask import Response, url_for
 from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
+import tempfile
 import sqlalchemy
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
@@ -269,20 +272,29 @@ def test_obter_documentos_view(web_app):
 
 
 def test_deletar_documentos_view(web_app):
+    nome_arquivo = "arquivo.docx"
+    arquivo = web_app["app"].config["UPLOAD_FOLDER"] / nome_arquivo
+    arquivo.touch()
+
     web_app["db"].add(
         Demanda(
             "Demanda1",
             tipo=TipoDemanda("TpDemanda1"),
             documentos=[
-                Documento("Doc1", tipo=TipoDocumento("TpDoc1"), arquivo="/xxxx/a.docx"),
+                Documento("Doc1", tipo=TipoDocumento("TpDoc1"), arquivo=nome_arquivo),
             ],
         )
     )
     web_app["db"].commit()
+    try:
 
-    resposta = web_app["client"].delete("/documento/deletar/1")
+        resposta = web_app["client"].delete("/documento/deletar/1")
+        assert resposta.status_code == 200
 
-    assert resposta.status_code == 200
-
-    demanda = web_app["db"].get(Demanda, 1)
-    assert len(demanda.documentos) == 0
+        demanda = web_app["db"].get(Demanda, 1)
+        assert len(demanda.documentos) == 0
+    except Exception as e:
+        raise e
+    finally:
+        if arquivo.exists():
+            os.remove(str(arquivo))

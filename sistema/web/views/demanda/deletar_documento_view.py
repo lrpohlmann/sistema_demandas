@@ -3,6 +3,7 @@ import sqlalchemy
 
 from sistema.model.entidades.demanda import Demanda
 from sistema.model.entidades.documento import Documento
+from sistema.web import upload_arquivo
 
 
 def setup_views(app, db):
@@ -27,6 +28,7 @@ def setup_views(app, db):
 
             demanda.documentos.remove(documento)
             db.commit()
+            upload_arquivo.deletar(app, documento.arquivo)
             return "", 200
         else:
             return "", 404
