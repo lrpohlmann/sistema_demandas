@@ -298,3 +298,13 @@ def test_deletar_documentos_view(web_app):
     finally:
         if arquivo.exists():
             os.remove(str(arquivo))
+
+
+def test_deletar_demanda(web_app):
+    web_app["db"].add(Demanda("Demanda1", tipo=TipoDemanda("TpDemanda1")))
+    web_app["db"].commit()
+
+    resposta = web_app["client"].delete("/demanda/deletar/1")
+    assert resposta.status_code == 302
+
+    assert not web_app["db"].get(Demanda, 1)

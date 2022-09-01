@@ -9,6 +9,7 @@ from sistema.web.views.demanda import (
     inserir_documento_view,
     obter_documentos_view,
     deletar_documento_view,
+    deletar_demanda_view,
 )
 
 
@@ -24,6 +25,7 @@ def setup_views(app, db):
         inserir_documento_view,
         obter_documentos_view,
         deletar_documento_view,
+        deletar_demanda_view,
     ]:
         app, db = v.setup_views(app, db)
 
