@@ -52,3 +52,10 @@ def renderizar_criar_fato_simples_form(form) -> str:
         "{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %} {{fato_simples_form(form)}}",
         form=form,
     )
+
+
+def renderizar_lista_fato_card(fatos) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/fato/fato_card.html' import fato_card_list %} {{fato_card_list(fatos)}}",
+        fatos=fatos,
+    )

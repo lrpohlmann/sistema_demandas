@@ -2,6 +2,7 @@ from flask import render_template_string
 import sqlalchemy
 
 from sistema.model.entidades.fato import Fato
+from ... import renderizacao
 
 
 def setup_views(app, db):
@@ -10,9 +11,6 @@ def setup_views(app, db):
         fatos = db.execute(
             sqlalchemy.select(Fato).where(Fato.demanda_id == demanda_id)
         ).scalars()
-        return render_template_string(
-            "{% from 'macros/fato/fato_card.html' import fato_card_list %} {{fato_card_list(fatos)}}",
-            fatos=fatos,
-        )
+        return renderizacao.renderizar_lista_fato_card(fatos)
 
     return app, db
