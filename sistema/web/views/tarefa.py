@@ -3,6 +3,7 @@ from sqlalchemy.orm import scoped_session
 
 from sistema.model.entidades.tarefa import Tarefa, StatusTarefa
 from sistema.model.operacoes.tarefa import set_status
+from .. import renderizacao
 
 
 def setup_views(app: Flask, db: scoped_session):
@@ -23,10 +24,7 @@ def setup_views(app: Flask, db: scoped_session):
             set_status(tarefa, StatusTarefa.FINALIZADA)
             db.commit()
             return (
-                render_template_string(
-                    "{% from 'macros/tarefa/status_tarefa_pill.html' import status_tarefa_pill %} <div>Status: {{status_tarefa_pill(status)}}</div>",
-                    status=StatusTarefa.FINALIZADA,
-                ),
+                renderizacao.renderizar_status_tarefa_html(StatusTarefa.FINALIZADA),
                 200,
             )
         else:
