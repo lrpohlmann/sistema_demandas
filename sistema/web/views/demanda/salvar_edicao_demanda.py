@@ -1,6 +1,7 @@
 from flask import render_template_string, request
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
+from sistema.web import renderizacao
 from sistema.web.forms import editar_dados_demanda
 
 
@@ -27,16 +28,8 @@ def setup_views(app, db):
             )
             db.commit()
 
-            return render_template_string(
-                "{% from 'macros/demanda/lista_dados_demanda.html' import lista_dados_demanda %} {{lista_dados_demanda(demanda, demanda_id)}}",
-                demanda=demanda,
-                demanda_id=demanda_id,
-            )
+            return renderizacao.rendereizar_lista_dados_demanda(demanda, demanda_id)
         else:
-            return render_template_string(
-                "{% from 'macros/demanda/editar_dados_demanda.html' import editar_dados_demanda %} {{editar_dados_demanda(form, demanda_id)}}",
-                form=form,
-                demanda_id=demanda_id,
-            )
+            return renderizacao.renderizar_editar_demanda_form(form, demanda_id)
 
     return app, db

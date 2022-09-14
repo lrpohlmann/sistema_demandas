@@ -30,3 +30,11 @@ def renderizar_inserir_documento_form(form, demanda_id) -> str:
         form=form,
         demanda_id=demanda_id,
     )
+
+
+def rendereizar_lista_dados_demanda(demanda, demanda_id) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/demanda/lista_dados_demanda.html' import lista_dados_demanda %} {{lista_dados_demanda(demanda, demanda_id)}}",
+        demanda=demanda,
+        demanda_id=demanda_id,
+    )
