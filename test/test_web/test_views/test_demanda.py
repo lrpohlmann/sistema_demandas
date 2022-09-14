@@ -14,12 +14,26 @@ from sistema.model.entidades.usuario import Usuario
 from test.test_web.fixtures import web_app
 
 
+def test_get_demandas_vazio(web_app):
+    resposta: Response = web_app["client"].get("/demanda", query_string={"pagina": "1"})
+    assert resposta.status_code == 200
+
+
 def test_get_demandas(web_app):
     db: scoped_session = web_app["db"]
     db.add(Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Entregar Documento"))
     db.commit()
 
     resposta: Response = web_app["client"].get("/demanda")
+    assert resposta.status_code == 200
+
+
+def test_get_demandas_pagina(web_app):
+    db: scoped_session = web_app["db"]
+    db.add(Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Entregar Documento"))
+    db.commit()
+
+    resposta: Response = web_app["client"].get("/demanda", query_string={"pagina": "1"})
     assert resposta.status_code == 200
 
 

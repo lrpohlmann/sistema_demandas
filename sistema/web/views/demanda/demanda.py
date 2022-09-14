@@ -4,6 +4,7 @@ from flask import redirect, render_template, request, url_for
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
 from sistema.web.forms import consulta_demanda, criar_demanda
+from sistema import servicos
 
 
 def setup_views(app, db):
@@ -50,7 +51,24 @@ def setup_views(app, db):
                         Demanda.data_criacao == dados_consulta_form.get("data_criacao")
                     )
             demandas = consulta.all()
-            return render_template("componentes/demandas.html", demandas=demandas)
+
+            paginas = servicos.paginar(demandas, 10)
+
+            pagina_requerida = (
+                int(request.args.get("pagina")) if request.args.get("pagina") else 1
+            )
+            if pagina_requerida == 1 or (
+                pagina_requerida < 1 or pagina_requerida > paginas["numero_paginas"]
+            ):
+                return render_template(
+                    "componentes/demandas.html", demandas=paginas["paginador"](1)
+                )
+            else:
+                return render_template(
+                    "componentes/demandas.html",
+                    demandas=paginas["paginador"](pagina_requerida),
+                )
+
         elif request.method == "POST":
             tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
             responsaveis: Sequence[Usuario] = db.query(Usuario).all()
