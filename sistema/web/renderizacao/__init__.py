@@ -22,3 +22,11 @@ def renderizar_editar_demanda_form(form, demanda_id) -> str:
         form=form,
         demanda_id=demanda_id,
     )
+
+
+def renderizar_inserir_documento_form(form, demanda_id) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/demanda/inserir_documento.html' import inserir_documento %} {{inserir_documento(form, demanda_id)}}",
+        form=form,
+        demanda_id=demanda_id,
+    )
