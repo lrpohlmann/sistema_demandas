@@ -4,6 +4,7 @@ from flask import render_template_string
 
 from sistema.model.entidades.demanda import TipoDemanda
 from sistema.model.entidades.usuario import Usuario
+from sistema.web import renderizacao
 from sistema.web.forms import editar_dados_demanda
 
 
@@ -24,10 +25,6 @@ def setup_views(app, db):
             ],
             escolhas_tipo=[(t.id_tipo_demanda, t.nome) for t in tp_demanda],
         )
-        return render_template_string(
-            "{% from 'macros/demanda/editar_dados_demanda.html' import editar_dados_demanda %} {{editar_dados_demanda(form, demanda_id)}}",
-            form=form,
-            demanda_id=demanda_id,
-        )
+        return renderizacao.renderizar_editar_demanda_form(form, demanda_id)
 
     return app, db

@@ -14,3 +14,11 @@ def renderizar_criar_tarefa_form(form, demanda_id) -> str:
         form=form,
         id_demanda=demanda_id,
     )
+
+
+def renderizar_editar_demanda_form(form, demanda_id) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/demanda/editar_dados_demanda.html' import editar_dados_demanda %} {{editar_dados_demanda(form, demanda_id)}}",
+        form=form,
+        demanda_id=demanda_id,
+    )
