@@ -42,10 +42,6 @@ def setup_views(app, db):
                 {"HX-Trigger": "tarefaCriada"},
             )
 
-        return render_template_string(
-            "{% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %} {{criar_tarefa(form, id_demanda)}}",
-            form=form,
-            id_demanda=demanda_id,
-        )
+        return renderizacao.renderizar_criar_tarefa_form(form, demanda_id)
 
     return app, db
