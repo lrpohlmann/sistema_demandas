@@ -1,5 +1,6 @@
 from flask import render_template_string
 from sistema.model.entidades.tarefa import Tarefa
+from sistema.web import renderizacao
 
 
 def setup_views(app, db):
@@ -10,9 +11,6 @@ def setup_views(app, db):
             .filter(Tarefa.demanda_id == demanda_id)
             .order_by(Tarefa.data_hora)
         )
-        return render_template_string(
-            "{% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_card %} {{sequencia_tarefa_card(tarefas)}}",
-            tarefas=tarefas,
-        )
+        return renderizacao.renderizar_sequencia_tarefas_card(tarefas)
 
     return app, db

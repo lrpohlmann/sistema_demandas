@@ -38,3 +38,10 @@ def rendereizar_lista_dados_demanda(demanda, demanda_id) -> str:
         demanda=demanda,
         demanda_id=demanda_id,
     )
+
+
+def renderizar_sequencia_tarefas_card(tarefas) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_card %} {{sequencia_tarefa_card(tarefas)}}",
+        tarefas=tarefas,
+    )
