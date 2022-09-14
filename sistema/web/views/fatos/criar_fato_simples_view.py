@@ -1,6 +1,7 @@
 from flask import render_template_string, request
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
+from sistema.web import renderizacao
 from sistema.web.forms import criar_fato_simples_form
 from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.operacoes.tarefa import inserir_fatos
@@ -15,10 +16,7 @@ def setup_views(app, db):
             demanda: Demanda = db.get(Demanda, dados["demanda_id"])
             if not demanda:
                 return (
-                    render_template_string(
-                        "{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %} {{fato_simples_form(form)}}",
-                        form=form,
-                    ),
+                    renderizacao.renderizar_criar_fato_simples_form(form),
                     404,
                 )
             demanda_com_fato_novo = inserir_fatos(
@@ -31,18 +29,12 @@ def setup_views(app, db):
             )
             db.commit()
             return (
-                render_template_string(
-                    "{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %} {{fato_simples_form(form)}}",
-                    form=form,
-                ),
+                renderizacao.renderizar_criar_fato_simples_form(form),
                 202,
                 {"HX-Trigger": "fatoCriado"},
             )
         return (
-            render_template_string(
-                "{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %} {{fato_simples_form(form)}}",
-                form=form,
-            ),
+            renderizacao.renderizar_criar_fato_simples_form(form),
             404,
         )
 

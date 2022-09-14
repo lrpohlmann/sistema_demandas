@@ -45,3 +45,10 @@ def renderizar_sequencia_tarefas_card(tarefas) -> str:
         "{% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_card %} {{sequencia_tarefa_card(tarefas)}}",
         tarefas=tarefas,
     )
+
+
+def renderizar_criar_fato_simples_form(form) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/fato/fato_simples_form.html' import fato_simples_form %} {{fato_simples_form(form)}}",
+        form=form,
+    )
