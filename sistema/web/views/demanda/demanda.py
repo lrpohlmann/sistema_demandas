@@ -5,6 +5,7 @@ from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
 from sistema.web.forms import consulta_demanda, criar_demanda
 from sistema import servicos
+from ... import renderizacao
 
 
 def setup_views(app, db):
@@ -60,12 +61,11 @@ def setup_views(app, db):
             if pagina_requerida == 1 or (
                 pagina_requerida < 1 or pagina_requerida > paginas["numero_paginas"]
             ):
-                return render_template(
-                    "componentes/demandas.html", demandas=paginas["paginador"](1)
+                return renderizacao.renderizar_tabela_de_demandas(
+                    demandas=paginas["paginador"](1)
                 )
             else:
-                return render_template(
-                    "componentes/demandas.html",
+                return renderizacao.renderizar_tabela_de_demandas(
                     demandas=paginas["paginador"](pagina_requerida),
                 )
 

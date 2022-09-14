@@ -59,3 +59,10 @@ def renderizar_lista_fato_card(fatos) -> str:
         "{% from 'macros/fato/fato_card.html' import fato_card_list %} {{fato_card_list(fatos)}}",
         fatos=fatos,
     )
+
+
+def renderizar_tabela_de_demandas(demandas) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/tabela_demandas.html' import tabela_demanda %} {{tabela_demanda(demandas)}}",
+        demandas=demandas,
+    )
