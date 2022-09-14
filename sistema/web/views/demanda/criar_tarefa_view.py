@@ -2,6 +2,7 @@ from flask import render_template_string, request
 from sistema.model.entidades.demanda import Demanda
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
+from sistema.web import renderizacao
 from sistema.web.forms import criar_tarefa
 
 
@@ -36,11 +37,7 @@ def setup_views(app, db):
             db.commit()
 
             return (
-                render_template_string(
-                    "{% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %} {{criar_tarefa(form, id_demanda)}}",
-                    form=form,
-                    id_demanda=demanda_id,
-                ),
+                renderizacao.renderizar_criar_tarefa_form(form, demanda_id),
                 202,
                 {"HX-Trigger": "tarefaCriada"},
             )
