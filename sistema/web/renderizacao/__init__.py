@@ -61,8 +61,13 @@ def renderizar_lista_fato_card(fatos) -> str:
     )
 
 
-def renderizar_tabela_de_demandas(demandas) -> str:
+def renderizar_tabela_de_demandas(
+    demandas, numero_paginas=1, pagina_atual=1, id_html="tabela-demanda"
+) -> str:
     return flask.render_template_string(
-        "{% from 'macros/tabela_demandas.html' import tabela_demanda %} {{tabela_demanda(demandas)}}",
+        "{% from 'macros/tabela_demandas.html' import tabela_demanda %} {{tabela_demanda(demandas, numero_paginas, pagina_atual, id_html)}}",
         demandas=demandas,
+        numero_paginas=numero_paginas,
+        pagina_atual=pagina_atual,
+        id_html=id_html,
     )

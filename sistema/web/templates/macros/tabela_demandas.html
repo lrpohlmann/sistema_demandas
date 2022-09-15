@@ -1,26 +1,34 @@
-{% macro tabela_demanda(demandas) -%}
+{% macro tabela_demanda(demandas, numero_paginas=1, pagina_atual=1, id_html='tabela-demanda') -%}
 
-<table class="table table-striped table-hover border-primary">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Tipo Específico Demanda</th>
-            <th>Responsável</th>
-            <th>Data Entrada</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for d in demandas %}
-        <tr>
+<div id="{{id_html}}">
+    <table class="table table-striped table-hover border-primary">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Tipo Específico Demanda</th>
+                <th>Responsável</th>
+                <th>Data Entrada</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in demandas %}
+            <tr>
 
-            <td>
-                <a href="{{url_for('demanda_view', demanda_id=d.id_demanda)}}">{{d.titulo}}</a>
-            </td>
-            <td>{{d.tipo.nome}}</td>
-            <td>{{d.responsavel.nome}}</td>
-            <td><time datetime="{{d.data_criacao}}">{{d.data_criacao}}</time></td>
-        </tr>
+                <td>
+                    <a href="{{url_for('demanda_view', demanda_id=d.id_demanda)}}">{{d.titulo}}</a>
+                </td>
+                <td>{{d.tipo.nome}}</td>
+                <td>{{d.responsavel.nome}}</td>
+                <td><time datetime="{{d.data_criacao}}">{{d.data_criacao}}</time></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        {% for n in range(1, numero_paginas+1) %}
+        <button type="button" hx-trigger="click" hx-get="{{url_for('demanda', pagina=n)}}" hx-params="*"
+            hx-target="#{{id_html}}" hx-swap="outerHTML">{{n}}</button>
         {% endfor %}
-    </tbody>
-</table>
+    </div>
+</div>
 {%- endmacro %}

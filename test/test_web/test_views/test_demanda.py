@@ -4,8 +4,7 @@ from pathlib import Path
 from flask import Response, url_for
 from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
-import tempfile
-import sqlalchemy
+import random
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.documento import Documento, TipoDocumento
@@ -30,7 +29,12 @@ def test_get_demandas(web_app):
 
 def test_get_demandas_pagina(web_app):
     db: scoped_session = web_app["db"]
-    db.add(Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Entregar Documento"))
+    db.add(tp_demanda := TipoDemanda("PROCESSO"))
+    db.commit()
+
+    for n in range(1, 21):
+        db.add(Demanda(tipo=tp_demanda, titulo=str(random.randint(1, 100))))
+
     db.commit()
 
     resposta: Response = web_app["client"].get("/demanda", query_string={"pagina": "1"})

@@ -62,11 +62,17 @@ def setup_views(app, db):
                 pagina_requerida < 1 or pagina_requerida > paginas["numero_paginas"]
             ):
                 return renderizacao.renderizar_tabela_de_demandas(
-                    demandas=paginas["paginador"](1)
+                    demandas=paginas["paginador"](1),
+                    numero_paginas=paginas["numero_paginas"],
+                    pagina_atual=1,
+                    id_html="tabela-demanda",
                 )
             else:
                 return renderizacao.renderizar_tabela_de_demandas(
                     demandas=paginas["paginador"](pagina_requerida),
+                    numero_paginas=paginas["numero_paginas"],
+                    pagina_atual=pagina_requerida,
+                    id_html="tabela-demanda",
                 )
 
         elif request.method == "POST":
