@@ -5,6 +5,7 @@ from flask import Response, url_for
 from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
 import random
+from sistema import web
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.documento import Documento, TipoDocumento
@@ -326,3 +327,8 @@ def test_deletar_demanda(web_app):
     assert resposta.status_code == 302
 
     assert not web_app["db"].get(Demanda, 1)
+
+
+def test_consulta_demanda(web_app):
+    resposta = web_app["client"].get("/demanda/consulta", query_string={})
+    assert resposta.status_code == 200
