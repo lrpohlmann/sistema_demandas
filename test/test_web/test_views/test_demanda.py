@@ -331,18 +331,25 @@ def test_deletar_demanda(web_app):
 
 
 def test_consulta_demanda(web_app):
+    web_app["db"].add(
+        Demanda(
+            titulo="11111",
+            tipo=TipoDemanda(nome="xxxxxxxx"),
+            responsavel=Usuario(nome="lllll", senha="123456"),
+        )
+    )
+    web_app["db"].commit()
+
     consultas = [
         {
             "tipo_id": "1",
             "responsavel_id": "1",
             "titulo": "xxxxxx",
-            "data_criacao": datetime.now(),
         },
         {
             "tipo_id": 1,
             "responsavel_id": 1,
         },
-        {},
     ]
 
     for c in consultas:
