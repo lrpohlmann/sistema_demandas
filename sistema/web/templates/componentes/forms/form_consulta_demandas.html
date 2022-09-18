@@ -1,5 +1,6 @@
-<form hx-get="{{url_for('demanda')}}" hx-params="*" hx-target="#consulta-demandas-alvo" hx-swap="innerHTML">
+<form hx-get="{{url_for('consulta_demanda')}}" hx-params="*" hx-target="#consulta-demandas-alvo" hx-swap="innerHTML">
     <legend>Consulta Demanda</legend>
+    {{form_consulta_demanda.csrf_token}}
     <div>
         {{form_consulta_demanda.titulo.label}}
         {{form_consulta_demanda.titulo(class_="form-control")}}

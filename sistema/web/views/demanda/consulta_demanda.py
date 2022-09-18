@@ -31,7 +31,7 @@ def setup_views(app, db):
             ],
             **flask.request.args,
         )
-
+        print(obter_dados(form_consulta_demanda))
         if e_valido(form_consulta_demanda):
             dados = obter_dados(form_consulta_demanda)
             if dados.get("titulo"):
@@ -65,6 +65,7 @@ def setup_views(app, db):
                 id_html="tabela-consulta-demanda",
                 numero_paginas=demandas_paginadas["numero_paginas"],
                 pagina_atual=pagina_requerida,
+                url_get="consulta_demanda",
             )
         else:
             return "", 400

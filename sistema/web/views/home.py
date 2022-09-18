@@ -1,9 +1,10 @@
 from flask import redirect, render_template, request, url_for
+import sqlalchemy
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
 from sistema.web.forms.consulta_demanda import ConsultaDemandaForm
-from sistema.web.forms import criar_demanda
+from sistema.web.forms import criar_demanda, consulta_demanda
 
 
 def setup_views(app, db):
@@ -13,15 +14,21 @@ def setup_views(app, db):
         responsaveis = db.query(Usuario).all()
         tipos_demanda = db.query(TipoDemanda).all()
 
-        form_consulta_demanda = ConsultaDemandaForm()
-        form_consulta_demanda.responsavel_id.choices = [
-            (r.id_usuario, r.nome) for r in responsaveis
-        ] + [
-            ("", "-"),
-        ]
-        form_consulta_demanda.tipo_id.choices = [
-            (t.id_tipo_demanda, t.nome) for t in tipos_demanda
-        ] + [("", "-")]
+        form_consulta_demanda = consulta_demanda.criar_form(
+            [
+                (r[0], r[1])
+                for r in db.execute(
+                    sqlalchemy.select(Usuario.id_usuario, Usuario.nome)
+                ).fetchall()
+            ],
+            [
+                (r[0], r[1])
+                for r in db.execute(
+                    sqlalchemy.select(TipoDemanda.id_tipo_demanda, TipoDemanda.nome)
+                ).fetchall()
+            ],
+            **request.args,
+        )
 
         form_criar_demanda = criar_demanda.criar_form(
             tipo_id_escolhas=[(t.id_tipo_demanda, t.nome) for t in tipos_demanda],

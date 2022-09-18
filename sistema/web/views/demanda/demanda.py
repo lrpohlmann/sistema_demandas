@@ -66,6 +66,7 @@ def setup_views(app, db):
                     numero_paginas=paginas["numero_paginas"],
                     pagina_atual=1,
                     id_html="tabela-demanda",
+                    url_get="demanda",
                 )
             else:
                 return renderizacao.renderizar_tabela_de_demandas(
@@ -73,6 +74,7 @@ def setup_views(app, db):
                     numero_paginas=paginas["numero_paginas"],
                     pagina_atual=pagina_requerida,
                     id_html="tabela-demanda",
+                    url_get="demanda",
                 )
 
         elif request.method == "POST":
