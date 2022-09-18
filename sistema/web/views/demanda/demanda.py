@@ -17,41 +17,11 @@ def setup_views(app, db):
         if request.method == "GET":
             consulta = db.query(Demanda)
 
-            if request.args:
-                tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
-                responsaveis: Sequence[Usuario] = db.query(Usuario).all()
-                form = consulta_demanda.criar_form(
-                    opcoes_responsavel_id=[(r.id_usuario, r.nome) for r in responsaveis]
-                    + [
-                        ("", "-"),
-                    ],
-                    opcoes_tipo_id=[(r.id_usuario, r.nome) for r in responsaveis]
-                    + [
-                        ("", "-"),
-                    ],
-                    **request.args
-                )
-
-                consulta_demanda.e_valido(form)
-                dados_consulta_form = consulta_demanda.obter_dados(form)
-                if dados_consulta_form.get("titulo"):
-                    consulta = consulta.filter(
-                        Demanda.titulo.like(dados_consulta_form.get("titulo"))
-                    )
-                elif dados_consulta_form.get("tipo_id"):
-                    consulta = consulta.filter(
-                        Demanda.tipo_id == dados_consulta_form.get("titulo")
-                    )
-                elif dados_consulta_form.get("responsavel_id"):
-                    consulta = consulta.filter(
-                        Demanda.responsavel_id
-                        == dados_consulta_form.get("responsavel_id")
-                    )
-                elif dados_consulta_form.get("data_criacao"):
-                    consulta.filter(
-                        Demanda.data_criacao == dados_consulta_form.get("data_criacao")
-                    )
-            demandas = consulta.all()
+            demandas = (
+                consulta.filter(Demanda.status == "PENDENTE")
+                .order_by(Demanda.data_criacao.desc())
+                .all()
+            )
 
             paginas = servicos.paginar(demandas, 10)
 
