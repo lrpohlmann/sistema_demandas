@@ -21,7 +21,7 @@ def setup_views(app, db):
         ]
         form_consulta_demanda.tipo_id.choices = [
             (t.id_tipo_demanda, t.nome) for t in tipos_demanda
-        ]
+        ] + [("", "-")]
 
         form_criar_demanda = criar_demanda.criar_form(
             tipo_id_escolhas=[(t.id_tipo_demanda, t.nome) for t in tipos_demanda],
