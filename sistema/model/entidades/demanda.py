@@ -2,7 +2,7 @@ from ctypes import Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import List, MutableSequence, Optional, Sequence
+from typing import List, Literal, MutableSequence, Optional, Sequence
 
 from sistema.model.entidades.documento import Documento
 from sistema.model.entidades.fato import Fato
@@ -21,6 +21,7 @@ class Demanda:
     titulo: str
     tipo: TipoDemanda = None
     tipo_id: int = None
+    status: Literal["PENDENTE", "RESOLVIDO"] = "PENDENTE"
     id_demanda: Optional[int] = field(default=None)
     fatos: List[Fato] = field(default_factory=list)
     tarefas: List[Tarefa] = field(default_factory=list)

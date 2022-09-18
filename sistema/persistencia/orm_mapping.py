@@ -48,6 +48,7 @@ def mapear(engine: Engine, metadata: MetaData, mapper) -> MetaData:
     mapper.map_imperatively(Fato, init_tabela_fato(metadata))
 
     metadata.create_all(engine)
+    return metadata
 
 
 def init_tabela_tipo_documento(metadata):
@@ -104,6 +105,7 @@ def init_tabela_demanda(metadata):
         Column("responsavel_id", ForeignKey("usuario.id_usuario"), nullable=True),
         Column("data_criacao", DateTime, nullable=False),
         Column("data_entrega", DateTime, nullable=True),
+        Column("status", String, nullable=False),
     )
 
 
