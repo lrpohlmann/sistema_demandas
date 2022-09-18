@@ -24,11 +24,15 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if numero_paginas > 1%}
     <div>
-        {% for n in range(1, numero_paginas+1) %}
-        <button type="button" hx-trigger="click" hx-get="{{url_for(url_get, pagina=n)}}" hx-params="*"
-            hx-target="#{{id_html}}" hx-swap="outerHTML">{{n}}</button>
-        {% endfor %}
+        <select name="">
+            {% for n in range(1, numero_paginas+1) %}
+            <option hx-trigger="click" hx-get="{{url_for(url_get, pagina=n)}}" hx-params="*" hx-target="#{{id_html}}"
+                hx-swap="outerHTML" value="{{n}}">{{n}}</option>
+            {% endfor %}
+        </select>
     </div>
+    {% endif %}
 </div>
 {%- endmacro %}
