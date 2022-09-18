@@ -36,8 +36,9 @@ def popular_db(db: Session, fake=fake):
                 tipo=random.choice(colecao_tipo_demanda),
                 responsavel=random.choice(colecao_usuarios),
                 data_entrega=random.choice([fake.date_between(), None]),
+                status=random.choice(["PENDENTE", "RESOLVIDO"]),
             )
-            for _ in range(0, 21)
+            for _ in range(0, 31)
         ]
     )
 
