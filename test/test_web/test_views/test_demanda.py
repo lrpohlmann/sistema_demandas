@@ -1,3 +1,4 @@
+from datetime import datetime
 import io
 import os
 from pathlib import Path
@@ -5,7 +6,7 @@ from flask import Response, url_for
 from flask.testing import FlaskClient
 from sqlalchemy.orm import scoped_session
 import random
-from sistema import web
+import faker
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.documento import Documento, TipoDocumento
@@ -330,5 +331,20 @@ def test_deletar_demanda(web_app):
 
 
 def test_consulta_demanda(web_app):
-    resposta = web_app["client"].get("/demanda/consulta", query_string={})
-    assert resposta.status_code == 200
+    consultas = [
+        {
+            "tipo_id": "1",
+            "responsavel_id": "1",
+            "titulo": "xxxxxx",
+            "data_criacao": datetime.now(),
+        },
+        {
+            "tipo_id": 1,
+            "responsavel_id": 1,
+        },
+        {},
+    ]
+
+    for c in consultas:
+        resposta = web_app["client"].get("/demanda/consulta", query_string=c)
+        assert resposta.status_code == 200
