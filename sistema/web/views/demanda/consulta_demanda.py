@@ -53,18 +53,12 @@ def setup_views(app, db):
                 )
 
             demandas = db.execute(consulta).scalars().all()
-            demandas_paginadas = servicos.paginar(demandas, 10)
 
-            pagina_requerida = (
-                int(flask.request.args.get("pagina"))
-                if flask.request.args.get("pagina")
-                else 1
-            )
             return renderizacao.renderizar_tabela_de_demandas(
-                demandas=demandas_paginadas["paginador"](pagina_requerida),
+                demandas=demandas,
                 id_html="tabela-consulta-demanda",
-                numero_paginas=demandas_paginadas["numero_paginas"],
-                pagina_atual=pagina_requerida,
+                numero_paginas=1,
+                pagina_atual=1,
                 url_get="consulta_demanda",
             )
         else:
