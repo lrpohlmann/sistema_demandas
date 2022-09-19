@@ -10,12 +10,12 @@ class TarefaNaoEncontradaException(Exception):
     pass
 
 
-class _Tarefa(Protocol):
+class _TemStatus(Protocol):
     status: str
 
 
 class _TemTarefas(Protocol):
-    tarefas: MutableSequence[_Tarefa]
+    tarefas: MutableSequence[_TemStatus]
 
 
 class _TemFatos(Protocol):
@@ -34,13 +34,13 @@ def get_tarefa(id_tarefa: int, demanda: _TemTarefas):
     raise TarefaNaoEncontradaException()
 
 
-def remover_tarefa(tarefa: _Tarefa, demanda: _TemTarefas):
+def remover_tarefa(tarefa: _TemStatus, demanda: _TemTarefas):
     demanda.tarefas.remove(tarefa)
     return demanda
 
 
 def atualizar_tarefa_por_id(
-    id_tarefa, demanda: _TemTarefas, atualizacao: Callable[[_Tarefa], _Tarefa]
+    id_tarefa, demanda: _TemTarefas, atualizacao: Callable[[_TemStatus], _TemStatus]
 ):
     t = get_tarefa(id_tarefa, demanda)
     atualizacao(t)
@@ -60,4 +60,14 @@ def finalizar_tarefa_da_demanda(id_tarefa: int, demanda: _TarefaEFatos):
         )
     )
 
+    return demanda
+
+
+def tornar_demanda_realizada(demanda: _TemStatus) -> _TemStatus:
+    demanda.status = "REALIZADA"
+    return demanda
+
+
+def tornar_demanda_pendente(demanda: _TemStatus) -> _TemStatus:
+    demanda.status = "PENDENTE"
     return demanda

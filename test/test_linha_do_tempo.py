@@ -18,7 +18,11 @@ from sistema.model.entidades.fato import Fato, TipoFatos
 
 from sistema.model.entidades.tarefa import StatusTarefa, Tarefa
 from sistema.model.entidades.usuario import Usuario
-from sistema.model.operacoes.demanda import finalizar_tarefa_da_demanda
+from sistema.model.operacoes.demanda import (
+    finalizar_tarefa_da_demanda,
+    tornar_demanda_pendente,
+    tornar_demanda_realizada,
+)
 from sistema.model.operacoes.tarefa import inserir_fatos
 
 
@@ -99,3 +103,14 @@ def test_finalizar_tarefa_de_uma_demanda():
     for t in demanda.tarefas:
         if t.id_tarefa == 1:
             assert t.status == StatusTarefa.FINALIZADA
+
+
+def test_mudar_status_demanda():
+    demanda = Demanda("Demanda 1", tipo=TipoDemanda("1"), status="PENDENTE")
+    demanda = tornar_demanda_realizada(demanda)
+
+    assert demanda.status == "REALIZADA"
+
+    demanda = tornar_demanda_pendente(demanda)
+
+    assert demanda.status == "PENDENTE"
