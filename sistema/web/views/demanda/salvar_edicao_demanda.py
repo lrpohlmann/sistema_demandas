@@ -1,4 +1,9 @@
 from flask import render_template_string, request
+
+from sistema.model.operacoes.demanda import (
+    tornar_demanda_pendente,
+    tornar_demanda_realizada,
+)
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
 from sistema.web import renderizacao
@@ -27,6 +32,10 @@ def setup_views(app, db):
                 if form.responsavel_id.data
                 else None
             )
+            if form.status == "PENDENTE":
+                tornar_demanda_pendente(demanda)
+            else:
+                tornar_demanda_realizada(demanda)
             db.commit()
 
             return renderizacao.rendereizar_lista_dados_demanda(demanda, demanda_id)
