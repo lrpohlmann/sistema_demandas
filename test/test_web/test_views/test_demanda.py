@@ -355,3 +355,14 @@ def test_consulta_demanda(web_app):
     for c in consultas:
         resposta = web_app["client"].get("/demanda/consulta", query_string=c)
         assert resposta.status_code == 200
+
+
+def test_atualizar_status_demanda(web_app):
+    web_app["db"].add(Demanda("1", TipoDemanda("x")))
+    web_app["db"].commit()
+
+    resposta = web_app["client"].post("/demanda/atualizar_status/realizada/1")
+
+    assert resposta.status_code == 200
+
+    assert web_app["db"].get(Demanda, 1).status == "REALIZADA"
