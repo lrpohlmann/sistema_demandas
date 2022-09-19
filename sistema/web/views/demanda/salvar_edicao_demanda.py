@@ -16,7 +16,8 @@ def setup_views(app, db):
             escolhas_tipo=[
                 (t.id_tipo_demanda, t.nome) for t in db.query(TipoDemanda).all()
             ],
-            **request.form
+            escolhas_status=[("PENDENTE", "Pendente"), ("REALIZADA", "realizada")],
+            **request.form,
         )
         if form.validate():
             demanda: Demanda = db.get(Demanda, demanda_id)

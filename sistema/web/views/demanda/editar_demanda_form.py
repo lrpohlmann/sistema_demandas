@@ -24,6 +24,7 @@ def setup_views(app, db):
                 ("", "-"),
             ],
             escolhas_tipo=[(t.id_tipo_demanda, t.nome) for t in tp_demanda],
+            escolhas_status=[("PENDENTE", "Pendente"), ("REALIZADA", "realizada")],
         )
         return renderizacao.renderizar_editar_demanda_form(form, demanda_id)
 

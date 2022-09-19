@@ -160,7 +160,11 @@ def test_put_editar_demanda(web_app):
 
     resposta: Response = client.put(
         "/demanda/editar/salvar/1",
-        data={"tipo_id": "1", "responsavel_id": str(id_usuario_troca)},
+        data={
+            "tipo_id": "1",
+            "responsavel_id": str(id_usuario_troca),
+            "status": "REALIZADA",
+        },
     )
     assert resposta.status_code == 200
     assert "</ul>" in resposta.data.decode()
@@ -182,10 +186,7 @@ def test_put_editar_demanda_falha_validacao(web_app):
 
     resposta: Response = client.put(
         "/demanda/editar/salvar/1",
-        data={
-            "tipo_id": None,
-            "responsavel_id": "2",
-        },
+        data={"tipo_id": None, "responsavel_id": "2", "status": "REALIZADA"},
     )
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()
