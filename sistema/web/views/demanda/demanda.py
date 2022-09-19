@@ -63,8 +63,8 @@ def setup_views(app, db):
                 **request.form
             )
 
-            if criar_demanda.e_valido(form):
-                dados_nova_demanda = criar_demanda.obter_dados(form)
+            if criar_demanda.e_valido(form_criar_demanda):
+                dados_nova_demanda = criar_demanda.obter_dados(form_criar_demanda)
                 nova_demanda = Demanda(
                     titulo=dados_nova_demanda.get("titulo"),
                     tipo=db.query(TipoDemanda).get(dados_nova_demanda.get("tipo_id"))
