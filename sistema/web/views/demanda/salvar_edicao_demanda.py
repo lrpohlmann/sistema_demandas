@@ -32,7 +32,7 @@ def setup_views(app, db):
                 if form.responsavel_id.data
                 else None
             )
-            if form.status == "PENDENTE":
+            if form.status.data == "PENDENTE":
                 tornar_demanda_pendente(demanda)
             else:
                 tornar_demanda_realizada(demanda)

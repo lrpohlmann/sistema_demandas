@@ -166,11 +166,25 @@ def test_put_editar_demanda(web_app):
             "status": "REALIZADA",
         },
     )
+
+    demanda_alterada = web_app["db"].get(Demanda, 1)
+
     assert resposta.status_code == 200
     assert "</ul>" in resposta.data.decode()
-    assert web_app["db"].get(Demanda, 1).responsavel == web_app["db"].get(
-        Usuario, id_usuario_troca
+    assert demanda_alterada.responsavel == web_app["db"].get(Usuario, id_usuario_troca)
+    assert demanda_alterada.status == "REALIZADA"
+
+    resposta: Response = client.put(
+        "/demanda/editar/salvar/1",
+        data={
+            "tipo_id": "1",
+            "responsavel_id": str(id_usuario_troca),
+            "status": "PENDENTE",
+        },
     )
+
+    demanda_realterada = web_app["db"].get(Demanda, 1)
+    assert demanda_realterada.status == "PENDENTE"
 
 
 def test_put_editar_demanda_falha_validacao(web_app):
