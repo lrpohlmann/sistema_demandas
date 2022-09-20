@@ -7,28 +7,6 @@ class EditarDadosDemandaForm(FlaskForm):
     responsavel_id = SelectField("Responsável", coerce=lambda x: int(x) if x else None)
     tipo_id = SelectField("Tipo", coerce=int, validators=[validators.InputRequired()])
     status = SelectField("Status")
-    documentos = FileField(
-        "Documentos",
-        validators=[
-            FileAllowed(
-                [
-                    "pdf",
-                    "doc",
-                    "docx",
-                    "xls",
-                    "xlsx",
-                    "shp",
-                    "shx",
-                    "dbf",
-                    "cpg",
-                    "prj",
-                    "rar",
-                    "zip",
-                ],
-                "Extensão inválida.",
-            )
-        ],
-    )
 
 
 def criar_form(
