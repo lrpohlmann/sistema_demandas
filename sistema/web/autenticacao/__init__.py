@@ -1,0 +1,1 @@
+from .load_user_factory import carregar_usuario_factory
