@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from 'macros/form_utils/erros_campo.html' import erros_campo%}
+
+
+{% block main %}
+<div>
+    <div>
+        <h1>Login</h1>
+    </div>
+    <form action="{{url_for('login')}}" method="post">
+        <div>
+            {{form_login.csrf_token}}
+        </div>
+        <div>
+            {{form_login.nome.label}}
+            {{form_login.nome(class_="form-control")}}
+            {{erros_campo(form_login.nome)}}
+        </div>
+        <div>
+            {{form_login.senha.label}}
+            {{form_login.senha(class_="form-control")}}
+            {{erros_campo(form_login.senha)}}
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success">Logar</button>
+        </div>
+    </form>
+    <div>
+        <small>Problemas para fazer login? Contate o administrador.</small>
+    </div>
+</div>
+{% endblock %}
