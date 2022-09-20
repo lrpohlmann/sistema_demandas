@@ -6,7 +6,7 @@ import flask_login
 @dataclass
 class Usuario(flask_login.UserMixin):
     nome: str
-    senha: str
+    senha: Optional[str] = field(default=None)
     id_usuario: Optional[int] = field(default=None)
 
     def get_id(self):
