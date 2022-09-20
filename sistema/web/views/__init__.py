@@ -4,7 +4,15 @@ from typing import Tuple
 from flask import Flask
 from sqlalchemy.orm import scoped_session
 
-from sistema.web.views import demanda, forms, home, tarefa, fatos, download_arquivos
+from sistema.web.views import (
+    demanda,
+    forms,
+    home,
+    tarefa,
+    fatos,
+    download_arquivos,
+    login,
+)
 
 
 def setup_todas_views(app: Flask, db: scoped_session) -> Tuple[Flask, scoped_session]:
@@ -17,6 +25,7 @@ def setup_todas_views(app: Flask, db: scoped_session) -> Tuple[Flask, scoped_ses
             tarefa.setup_views,
             fatos.setup_views,
             download_arquivos.setup_views,
+            login.setup_views,
         ],
         (app, db),
     )

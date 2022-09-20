@@ -1,4 +1,5 @@
 import flask
+from .paginas import renderizar_pagina_login
 
 
 def renderizar_status_tarefa_html(status) -> str:
