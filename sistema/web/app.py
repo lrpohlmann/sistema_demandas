@@ -29,9 +29,9 @@ class WebAppContextoRuntime:
 
 
 def web_app_factory(
-    test_config=False, mapping_config: Optional[Mapping] = None
+    config_obj, mapping_config: Optional[Mapping] = None
 ) -> WebAppContextoRuntime:
-    app = _setup_web_app(test_config, mapping_config)
+    app = _setup_web_app(config_obj, mapping_config)
     db = ContextoDb(*_setup_app_db(app))
     web_app_contexto = WebAppContextoRuntime(app=app, persistencia=db)
 
@@ -41,14 +41,11 @@ def web_app_factory(
     return web_app_contexto
 
 
-def _setup_web_app(test_config=False, mapping_config: Optional[Mapping] = None):
+def _setup_web_app(config_obj, mapping_config: Optional[Mapping] = None):
     app = Flask(__name__)
     CSRFProtect(app)
 
-    if test_config:
-        app.config.from_pyfile(str(CONFIG_TEST_FILE))
-    else:
-        pass
+    app.config.from_object(config_obj)
 
     if mapping_config:
         app.config.from_mapping(mapping_config)
