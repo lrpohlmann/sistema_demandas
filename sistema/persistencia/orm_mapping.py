@@ -81,7 +81,7 @@ def init_tabela_usuario(metadata):
         "usuario",
         metadata,
         Column("id_usuario", Integer, primary_key=True),
-        Column("nome", String, nullable=False),
+        Column("nome", String, nullable=False, unique=True),
         Column("senha", String, nullable=False),
     )
 
