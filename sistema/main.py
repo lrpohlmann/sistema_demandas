@@ -1,6 +1,6 @@
 from pathlib import Path
 import tempfile
-from sistema.web.app import criar_web_app
+from sistema.web.app import web_app_factory
 
 
 if __name__ == "__main__":
@@ -10,7 +10,7 @@ if __name__ == "__main__":
     if not _UPLOAD_FOLDER_OBJECT.exists():
         _UPLOAD_FOLDER_OBJECT.mkdir()
 
-    app = criar_web_app(
+    app_contexto_runtime = web_app_factory(
         mapping_config={
             "TESTING": True,
             "DB": "sqlite+pysqlite:///db.sqlite",
@@ -19,4 +19,4 @@ if __name__ == "__main__":
             "MAX_CONTENT_LENGTH": 20 * 1024 * 1024,
         }
     )
-    app.run(debug=True)
+    app_contexto_runtime.app.run(debug=True)
