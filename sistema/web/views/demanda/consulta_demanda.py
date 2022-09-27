@@ -1,5 +1,6 @@
 import flask
 import sqlalchemy
+from flask_login import login_required
 
 from sistema.model.entidades import demanda, documento, fato, tarefa, usuario
 from sistema import servicos
@@ -9,6 +10,7 @@ from sistema.web.forms.consulta_demanda import criar_form, e_valido, obter_dados
 
 def setup_views(app, db):
     @app.route("/demanda/consulta", methods=["GET"])
+    @login_required
     def consulta_demanda():
         consulta = sqlalchemy.select(demanda.Demanda).order_by(
             demanda.Demanda.data_criacao

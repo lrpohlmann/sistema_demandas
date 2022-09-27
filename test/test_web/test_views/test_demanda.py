@@ -352,31 +352,34 @@ def test_deletar_demanda(web_app):
     assert not web_app["db"].get(Demanda, 1)
 
 
-def test_consulta_demanda(web_app):
-    web_app["db"].add(
+def test_consulta_demanda(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    usuario = gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    web_app_com_autenticacao.db.add(
         Demanda(
             titulo="11111",
             tipo=TipoDemanda(nome="xxxxxxxx"),
             responsavel=Usuario(nome="lllll", senha="123456"),
         )
     )
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.commit()
 
-    consultas = [
-        {
-            "tipo_id": "1",
-            "responsavel_id": "1",
-            "titulo": "xxxxxx",
-        },
-        {
-            "tipo_id": 1,
-            "responsavel_id": 1,
-        },
-    ]
+    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
 
-    for c in consultas:
-        resposta = web_app["client"].get("/demanda/consulta", query_string=c)
-        assert resposta.status_code == 200
+        consultas = [
+            {
+                "tipo_id": "1",
+                "responsavel_id": "1",
+                "titulo": "xxxxxx",
+            },
+            {
+                "tipo_id": 1,
+                "responsavel_id": 1,
+            },
+        ]
+
+        for c in consultas:
+            resposta = client.get("/demanda/consulta", query_string=c)
+            assert resposta.status_code == 200
 
 
 def test_atualizar_status_demanda(
