@@ -111,23 +111,32 @@ def test_get_criar_demanda_form(web_app):
     assert "form" in resposta.data.decode()
 
 
-def test_get_demanda_por_id(web_app):
+def test_get_demanda_por_id(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
     titulo = "Alteração de Cadastro"
-    web_app["db"].add(
-        d := Demanda(
+
+    web_app_com_autenticacao.db.add(
+        Demanda(
             titulo=titulo,
             tipo=TipoDemanda(nome="Alteração"),
         )
     )
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.commit()
 
-    resposta: Response = web_app["client"].get(f"/demanda/{d.id_demanda}")
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get(f"/demanda/1")
+
     assert resposta.status_code == 200
     assert titulo in resposta.data.decode()
 
 
-def test_get_demanda_por_id_404(web_app):
-    resposta: Response = web_app["client"].get(f"/demanda/{1}")
+def test_get_demanda_por_id_404(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get(f"/demanda/{1}")
+
     assert resposta.status_code == 404
 
 
