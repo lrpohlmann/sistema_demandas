@@ -1,5 +1,6 @@
 from pydoc import Doc
 import sqlalchemy
+from flask_login import login_required
 
 from sistema.model.entidades.demanda import Demanda
 from sistema.model.entidades.documento import Documento
@@ -13,6 +14,7 @@ def setup_views(app, db):
             "DELETE",
         ],
     )
+    @login_required
     def deletar_documento_view(documento_id: int):
         documento = db.get(Documento, documento_id)
         if documento:

@@ -315,12 +315,14 @@ def test_obter_documentos_view(web_app):
     assert resposta.status_code == 200
 
 
-def test_deletar_documentos_view(web_app):
+def test_deletar_documentos_view(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario
+):
     nome_arquivo = "arquivo.docx"
-    arquivo = web_app["app"].config["UPLOAD_FOLDER"] / nome_arquivo
+    arquivo = web_app_com_autenticacao.app.config["UPLOAD_FOLDER"] / nome_arquivo
     arquivo.touch()
 
-    web_app["db"].add(
+    web_app_com_autenticacao.db.add(
         Demanda(
             "Demanda1",
             tipo=TipoDemanda("TpDemanda1"),
@@ -329,19 +331,22 @@ def test_deletar_documentos_view(web_app):
             ],
         )
     )
-    web_app["db"].commit()
-    try:
+    web_app_com_autenticacao.db.commit()
 
-        resposta = web_app["client"].delete("/documento/deletar/1")
-        assert resposta.status_code == 200
+    usuario = gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
+        try:
 
-        demanda = web_app["db"].get(Demanda, 1)
-        assert len(demanda.documentos) == 0
-    except Exception as e:
-        raise e
-    finally:
-        if arquivo.exists():
-            os.remove(str(arquivo))
+            resposta = client.delete("/documento/deletar/1")
+            assert resposta.status_code == 200
+
+            demanda = web_app_com_autenticacao.db.get(Demanda, 1)
+            assert len(demanda.documentos) == 0
+        except Exception as e:
+            raise e
+        finally:
+            if arquivo.exists():
+                os.remove(str(arquivo))
 
 
 def test_deletar_demanda(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
