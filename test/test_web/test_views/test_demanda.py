@@ -12,7 +12,12 @@ from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.documento import Documento, TipoDocumento
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
-from test.test_web.fixtures import web_app, web_app_com_autenticacao, WebAppFixture
+from test.test_web.fixtures import (
+    web_app,
+    web_app_com_autenticacao,
+    WebAppFixture,
+    gerar_usuario,
+)
 
 
 def test_get_demandas_vazio(web_app):
@@ -374,12 +379,17 @@ def test_consulta_demanda(web_app):
         assert resposta.status_code == 200
 
 
-def test_atualizar_status_demanda(web_app):
-    web_app["db"].add(Demanda("1", TipoDemanda("x")))
-    web_app["db"].commit()
+def test_atualizar_status_demanda(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario
+):
+    usuario = gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
 
-    resposta = web_app["client"].post("/demanda/atualizar_status/realizada/1")
+    web_app_com_autenticacao.db.add(Demanda("1", TipoDemanda("x")))
+    web_app_com_autenticacao.db.commit()
+
+    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
+        resposta = client.post("/demanda/atualizar_status/realizada/1")
 
     assert resposta.status_code == 200
 
-    assert web_app["db"].get(Demanda, 1).status == "REALIZADA"
+    assert web_app_com_autenticacao.db.get(Demanda, 1).status == "REALIZADA"

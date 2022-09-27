@@ -1,4 +1,5 @@
 from typing import Literal
+from flask_login import login_required
 
 from sistema.model.entidades.demanda import Demanda
 from sistema.model.operacoes.demanda import (
@@ -9,6 +10,7 @@ from sistema.model.operacoes.demanda import (
 
 def setup_views(app, db):
     @app.route("/demanda/atualizar_status/<status>/<int:demanda_id>", methods=["POST"])
+    @login_required
     def atualizar_status(status: Literal["pendente", "realizada"], demanda_id: int):
         demanda = db.get(Demanda, demanda_id)
         if not demanda:
