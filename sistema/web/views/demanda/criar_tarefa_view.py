@@ -1,4 +1,6 @@
-from flask import render_template_string, request
+from flask import request
+from flask_login import login_required
+
 from sistema.model.entidades.demanda import Demanda
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
@@ -8,6 +10,7 @@ from sistema.web.forms import criar_tarefa
 
 def setup_views(app, db):
     @app.route("/demanda/<int:demanda_id>/tarefas/criar", methods=["POST"])
+    @login_required
     def criar_tarefa_view(demanda_id: int):
         demanda: Demanda = db.get(Demanda, demanda_id)
         if not demanda:

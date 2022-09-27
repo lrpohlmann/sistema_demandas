@@ -213,25 +213,27 @@ def test_put_editar_demanda_falha_validacao(web_app):
     assert "form" in resposta.data.decode()
 
 
-def test_criar_tarefa(web_app):
-    web_app["db"].add(
+def test_criar_tarefa(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    usuario = gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    web_app_com_autenticacao.db.add(
         Demanda(
             "AAAAA",
             tipo=TipoDemanda("XXXXX"),
             responsavel=Usuario("IIIIII", "12348665"),
         )
     )
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.commit()
 
-    resposta = web_app["client"].post(
-        "/demanda/1/tarefas/criar",
-        data={
-            "titulo": "Título Tarefa",
-            "responsavel_id": "1",
-            "descricao": "",
-            "data_entrega": "",
-        },
-    )
+    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
+        resposta = client.post(
+            "/demanda/1/tarefas/criar",
+            data={
+                "titulo": "Título Tarefa",
+                "responsavel_id": "1",
+                "descricao": "",
+                "data_entrega": "",
+            },
+        )
 
     assert resposta.status_code == 202
 
