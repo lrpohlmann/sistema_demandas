@@ -7,6 +7,7 @@ import tempfile
 import shutil
 
 from sqlalchemy.orm import scoped_session
+from sistema.model.entidades.usuario import Usuario
 
 from sistema.web.app import (
     web_app_factory,
@@ -53,3 +54,16 @@ def web_app_com_autenticacao():
     app_contexto_runtime.persistencia.mapper.dispose()
     app_contexto_runtime.persistencia.db.remove()
     shutil.rmtree(diretorio_temporario_documentos)
+
+
+@pytest.fixture
+def gerar_usuario():
+    def _(db, nome, senha=None):
+        if not senha:
+            senha = "12345567"
+
+        db.add(Usuario(nome, senha))
+        db.commit()
+        return db.get(Usuario, 1)
+
+    return _
