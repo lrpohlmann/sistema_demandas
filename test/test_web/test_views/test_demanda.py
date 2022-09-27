@@ -12,7 +12,7 @@ from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.documento import Documento, TipoDocumento
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
-from test.test_web.fixtures import web_app
+from test.test_web.fixtures import web_app, web_app_com_autenticacao, WebAppFixture
 
 
 def test_get_demandas_vazio(web_app):
@@ -58,24 +58,26 @@ def test_get_args_demandas(web_app):
     assert resposta.status_code == 200
 
 
-def test_post_demandas(web_app):
-    db: scoped_session = web_app["db"]
-    tp = TipoDemanda("X")
-    u = Usuario("Leonardo", "123456")
-    db.add_all([tp, u])
-    db.commit()
-
-    resposta: Response = web_app["client"].post(
-        "/",
-        data={
-            "titulo": "Alterações",
-            "tipo_id": "1",
-            "responsavel_id": "1",
-            "data_entrega": "",
-        },
+def test_post_demandas(web_app_com_autenticacao: WebAppFixture):
+    web_app_com_autenticacao.db.add_all(
+        [Usuario("Leonardo", "123456"), TipoDemanda("xxxxx")]
     )
+    web_app_com_autenticacao.db.commit()
+    usuario = web_app_com_autenticacao.db.get(Usuario, 1)
+
+    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
+        resposta = client.post(
+            "/",
+            data={
+                "titulo": "Alterações",
+                "tipo_id": "1",
+                "responsavel_id": "1",
+                "data_entrega": "",
+            },
+        )
+
     assert resposta.status_code == 302
-    x = db.query(Demanda).get(1)
+    x = web_app_com_autenticacao.db.query(Demanda).get(1)
     assert x
 
 
