@@ -344,14 +344,18 @@ def test_deletar_documentos_view(web_app):
             os.remove(str(arquivo))
 
 
-def test_deletar_demanda(web_app):
-    web_app["db"].add(Demanda("Demanda1", tipo=TipoDemanda("TpDemanda1")))
-    web_app["db"].commit()
+def test_deletar_demanda(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    usuario = gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
 
-    resposta = web_app["client"].delete("/demanda/deletar/1")
+    web_app_com_autenticacao.db.add(Demanda("Demanda1", tipo=TipoDemanda("TpDemanda1")))
+    web_app_com_autenticacao.db.commit()
+
+    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
+        resposta = client.delete("/demanda/deletar/1")
+
     assert resposta.status_code == 302
 
-    assert not web_app["db"].get(Demanda, 1)
+    assert not web_app_com_autenticacao.db.get(Demanda, 1)
 
 
 def test_consulta_demanda(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
