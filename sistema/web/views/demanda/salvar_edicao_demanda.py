@@ -1,4 +1,5 @@
 from flask import render_template_string, request
+from flask_login import login_required
 
 from sistema.model.operacoes.demanda import (
     tornar_demanda_pendente,
@@ -12,6 +13,7 @@ from sistema.web.forms import editar_dados_demanda
 
 def setup_views(app, db):
     @app.route("/demanda/editar/salvar/<int:demanda_id>", methods=["PUT"])
+    @login_required
     def salvar_edicao_demanda(demanda_id: int):
         form = editar_dados_demanda.criar_form(
             escolhas_responsavel=[

@@ -1,5 +1,6 @@
 from typing import Sequence
 from flask import redirect, render_template, request, url_for
+from flask_login import login_required
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
@@ -13,6 +14,7 @@ def setup_views(app, db):
         "/demanda",
         methods=["POST", "GET"],
     )
+    @login_required
     def demanda():
         if request.method == "GET":
             consulta = db.query(Demanda)

@@ -20,46 +20,63 @@ from test.test_web.fixtures import (
 )
 
 
-def test_get_demandas_vazio(web_app):
-    resposta: Response = web_app["client"].get("/demanda", query_string={"pagina": "1"})
+def test_get_demandas_vazio(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/demanda", query_string={"pagina": "1"})
     assert resposta.status_code == 200
 
 
-def test_get_demandas(web_app):
-    db: scoped_session = web_app["db"]
-    db.add(Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Entregar Documento"))
-    db.commit()
+def test_get_demandas(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    web_app_com_autenticacao.db.add(
+        Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Entregar Documento")
+    )
+    web_app_com_autenticacao.db.commit()
 
-    resposta: Response = web_app["client"].get("/demanda")
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/demanda")
+
     assert resposta.status_code == 200
 
 
-def test_get_demandas_pagina(web_app):
-    db: scoped_session = web_app["db"]
-    db.add(tp_demanda := TipoDemanda("PROCESSO"))
-    db.commit()
+def test_get_demandas_pagina(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    web_app_com_autenticacao.db.add(tp_demanda := TipoDemanda("PROCESSO"))
+    web_app_com_autenticacao.db.commit()
 
     for n in range(1, 21):
-        db.add(Demanda(tipo=tp_demanda, titulo=str(random.randint(1, 100))))
+        web_app_com_autenticacao.db.add(
+            Demanda(tipo=tp_demanda, titulo=str(random.randint(1, 100)))
+        )
 
-    db.commit()
+    web_app_com_autenticacao.db.commit()
 
-    resposta: Response = web_app["client"].get("/demanda", query_string={"pagina": "1"})
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/demanda", query_string={"pagina": "1"})
     assert resposta.status_code == 200
 
 
-def test_get_args_demandas(web_app):
-    db: scoped_session = web_app["db"]
-    db.add(Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Demanda X"))
-    db.commit()
-
-    resposta: Response = web_app["client"].get(
-        "/demanda",
-        query_string={
-            "titulo": "X",
-            "tipo_id": "1",
-        },
+def test_get_args_demandas(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    web_app_com_autenticacao.db.add(
+        Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Demanda X")
     )
+    web_app_com_autenticacao.db.commit()
+
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get(
+            "/demanda",
+            query_string={
+                "titulo": "X",
+                "tipo_id": "1",
+            },
+        )
+
     assert resposta.status_code == 200
 
 
@@ -86,13 +103,16 @@ def test_post_demandas(web_app_com_autenticacao: WebAppFixture):
     assert x
 
 
-def test_get_option_tipo_demanda(web_app):
-    web_app["db"].add(TipoDemanda(nome="X"))
-    web_app["db"].commit()
+def test_get_option_tipo_demanda(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario
+):
+    web_app_com_autenticacao.db.add(TipoDemanda(nome="X"))
+    web_app_com_autenticacao.db.commit()
 
-    resposta: Response = web_app["client"].get(
-        "/tipo_demanda", query_string={"formato": "select"}
-    )
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/tipo_demanda", query_string={"formato": "select"})
     assert resposta.status_code == 200
     assert "option" in resposta.data.decode()
 
@@ -140,30 +160,35 @@ def test_get_demanda_por_id_404(web_app_com_autenticacao: WebAppFixture, gerar_u
     assert resposta.status_code == 404
 
 
-def test_get_editar_demanda_form(web_app):
-    web_app["db"].add(
+def test_get_editar_demanda_form(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario
+):
+    web_app_com_autenticacao.db.add(
         Demanda(
             "Escrever Documento",
             tipo=TipoDemanda("ADMINISTRATIVO"),
             responsavel=Usuario("Leonardo", "123456"),
         )
     )
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.commit()
 
-    resposta: Response = web_app["client"].get("/demanda/editar/form/1")
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
+    ) as client:
+        resposta = client.get("/demanda/editar/form/1")
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()
 
 
-def test_put_editar_demanda(web_app):
+def test_put_editar_demanda(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
     l = Usuario("Leonardo", "123456")
     j = Usuario("João", "456798")
-    web_app["db"].add_all([l, j])
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.add_all([l, j])
+    web_app_com_autenticacao.db.commit()
     id_usuario_inicial = l.id_usuario
     id_usuario_troca = j.id_usuario
 
-    web_app["db"].add(
+    web_app_com_autenticacao.db.add(
         d := Demanda(
             "Escrever Documento",
             tipo=TipoDemanda("ADMINISTRATIVO"),
@@ -171,26 +196,30 @@ def test_put_editar_demanda(web_app):
         )
     )
 
-    web_app["db"].commit()
-    client: FlaskClient = web_app["client"]
+    web_app_com_autenticacao.db.commit()
 
-    resposta: Response = client.put(
-        "/demanda/editar/salvar/1",
-        data={
-            "tipo_id": "1",
-            "responsavel_id": str(id_usuario_troca),
-            "status": "REALIZADA",
-        },
-    )
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
+    ) as client:
+        resposta = client.put(
+            "/demanda/editar/salvar/1",
+            data={
+                "tipo_id": "1",
+                "responsavel_id": str(id_usuario_troca),
+                "status": "REALIZADA",
+            },
+        )
 
-    demanda_alterada = web_app["db"].get(Demanda, 1)
+    demanda_alterada = web_app_com_autenticacao.db.get(Demanda, 1)
 
     assert resposta.status_code == 200
     assert "</ul>" in resposta.data.decode()
-    assert demanda_alterada.responsavel == web_app["db"].get(Usuario, id_usuario_troca)
+    assert demanda_alterada.responsavel == web_app_com_autenticacao.db.get(
+        Usuario, id_usuario_troca
+    )
     assert demanda_alterada.status == "REALIZADA"
 
-    resposta: Response = client.put(
+    resposta = client.put(
         "/demanda/editar/salvar/1",
         data={
             "tipo_id": "1",
@@ -199,25 +228,29 @@ def test_put_editar_demanda(web_app):
         },
     )
 
-    demanda_realterada = web_app["db"].get(Demanda, 1)
+    demanda_realterada = web_app_com_autenticacao.db.get(Demanda, 1)
     assert demanda_realterada.status == "PENDENTE"
 
 
-def test_put_editar_demanda_falha_validacao(web_app):
-    web_app["db"].add(
+def test_put_editar_demanda_falha_validacao(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario
+):
+    web_app_com_autenticacao.db.add(
         Demanda(
             "Escrever Documento",
             tipo=TipoDemanda("ADMINISTRATIVO"),
             responsavel=Usuario("Leonardo", "1234567"),
         )
     )
-    web_app["db"].commit()
-    client: FlaskClient = web_app["client"]
+    web_app_com_autenticacao.db.commit()
 
-    resposta: Response = client.put(
-        "/demanda/editar/salvar/1",
-        data={"tipo_id": None, "responsavel_id": "2", "status": "REALIZADA"},
-    )
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
+    ) as client:
+        resposta = client.put(
+            "/demanda/editar/salvar/1",
+            data={"tipo_id": None, "responsavel_id": "2", "status": "REALIZADA"},
+        )
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()
 
@@ -247,8 +280,8 @@ def test_criar_tarefa(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
     assert resposta.status_code == 202
 
 
-def test_get_tarefa_cards(web_app):
-    web_app["db"].add(
+def test_get_tarefa_cards(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    web_app_com_autenticacao.db.add(
         Demanda(
             "AAAAA",
             tipo=TipoDemanda("XXXXX"),
@@ -256,15 +289,18 @@ def test_get_tarefa_cards(web_app):
             tarefas=[Tarefa("Tarefa 1"), Tarefa("Tarefa 2")],
         )
     )
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.commit()
 
-    resposta = web_app["client"].get("/demanda/1/tarefas/cards")
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
+    ) as client:
+        resposta = client.get("/demanda/1/tarefas/cards")
 
     assert resposta.status_code == 200
 
 
-def test_inserir_documento_get(web_app):
-    web_app["db"].add(
+def test_inserir_documento_get(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    web_app_com_autenticacao.db.add(
         Demanda(
             "AAAAA",
             tipo=TipoDemanda("XXXXX"),
@@ -272,15 +308,18 @@ def test_inserir_documento_get(web_app):
             tarefas=[Tarefa("Tarefa 1"), Tarefa("Tarefa 2")],
         )
     )
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.commit()
 
-    resposta = web_app["client"].get("/demanda/editar/inserir_documento/1")
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
+    ) as client:
+        resposta = client.get("/demanda/editar/inserir_documento/1")
 
     assert resposta.status_code == 200
 
 
-def test_inserir_documento_post(web_app):
-    web_app["db"].add_all(
+def test_inserir_documento_post(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    web_app_com_autenticacao.db.add_all(
         [
             Demanda(
                 "Demanda1",
@@ -289,25 +328,28 @@ def test_inserir_documento_post(web_app):
             tp := TipoDocumento("Tipo1"),
         ]
     )
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.commit()
 
-    resposta = web_app["client"].post(
-        "/demanda/editar/inserir_documento/1",
-        content_type="multipart/form-data",
-        data={
-            "nome": "Doc1",
-            "tipo": 1,
-            "arquivo": (io.BytesIO(b"Lorem Ipsum"), "arquivo.docx"),
-        },
-    )
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
+    ) as client:
+        resposta = client.post(
+            "/demanda/editar/inserir_documento/1",
+            content_type="multipart/form-data",
+            data={
+                "nome": "Doc1",
+                "tipo": 1,
+                "arquivo": (io.BytesIO(b"Lorem Ipsum"), "arquivo.docx"),
+            },
+        )
 
     assert resposta.status_code == 201
 
-    assert web_app["db"].get(Documento, 1)
+    assert web_app_com_autenticacao.db.get(Documento, 1)
 
 
-def test_obter_documentos_view(web_app):
-    web_app["db"].add(
+def test_obter_documentos_view(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    web_app_com_autenticacao.db.add(
         Demanda(
             "Demanda1",
             tipo=TipoDemanda("TpDemanda1"),
@@ -317,9 +359,12 @@ def test_obter_documentos_view(web_app):
             ],
         )
     )
-    web_app["db"].commit()
+    web_app_com_autenticacao.db.commit()
 
-    resposta = web_app["client"].get("/demanda/obter/documentos/1")
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
+    ) as client:
+        resposta = client.get("/demanda/obter/documentos/1")
 
     assert resposta.status_code == 200
 

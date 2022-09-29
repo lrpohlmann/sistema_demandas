@@ -1,10 +1,13 @@
 from flask import render_template_string
+from flask_login import login_required
+
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.web import renderizacao
 
 
 def setup_views(app, db):
     @app.route("/demanda/<int:demanda_id>/tarefas/cards", methods=["GET"])
+    @login_required
     def tarefa_card_view(demanda_id: int):
         tarefas = (
             db.query(Tarefa)

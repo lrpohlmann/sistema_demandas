@@ -1,5 +1,6 @@
 from flask import request, render_template_string
 import sqlalchemy
+from flask_login import login_required
 
 from sistema.web import renderizacao, upload_arquivo
 from sistema.web.forms import upload_documento_form
@@ -11,6 +12,7 @@ def setup_views(app, db):
     @app.route(
         "/demanda/editar/inserir_documento/<int:demanda_id>", methods=["GET", "POST"]
     )
+    @login_required
     def inserir_documento_view(demanda_id: int):
         demanda = db.get(Demanda, demanda_id)
 

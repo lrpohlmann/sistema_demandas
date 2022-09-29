@@ -1,6 +1,6 @@
 from typing import Sequence
-
 from flask import render_template_string
+from flask_login import login_required
 
 from sistema.model.entidades.demanda import TipoDemanda
 from sistema.model.entidades.usuario import Usuario
@@ -15,6 +15,7 @@ def setup_views(app, db):
             "GET",
         ],
     )
+    @login_required
     def editar_demanda_form(demanda_id: int):
         tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
         responsaveis: Sequence[Usuario] = db.query(Usuario).all()

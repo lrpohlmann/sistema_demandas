@@ -1,9 +1,12 @@
 from flask import render_template, request
+from flask_login import login_required
+
 from sistema.model.entidades.demanda import TipoDemanda
 
 
 def setup_views(app, db):
     @app.route("/tipo_demanda", methods=["GET"])
+    @login_required
     def tipo_demanda():
         tp_demanda = db.query(TipoDemanda).all()
 
