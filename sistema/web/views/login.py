@@ -32,4 +32,14 @@ def setup_views(app, db):
 
         return renderizacao.renderizar_pagina_login(form)
 
+    @app.route("/logout", methods=["POST"])
+    def logout():
+
+        if flask_login.current_user.is_authenticated:
+            flask_login.logout_user()
+            return flask.redirect(flask.url_for("login"))
+
+        else:
+            return flask.abort(404)
+
     return app, db
