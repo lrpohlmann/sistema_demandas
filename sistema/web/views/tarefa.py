@@ -1,5 +1,6 @@
 from flask import Flask, render_template_string
 from sqlalchemy.orm import scoped_session
+from flask_login import login_required
 
 from sistema.model.entidades.tarefa import Tarefa, StatusTarefa
 from sistema.model.operacoes.tarefa import set_status
@@ -8,6 +9,7 @@ from .. import renderizacao
 
 def setup_views(app: Flask, db: scoped_session):
     @app.route("/tarefa/deletar/<int:tarefa_id>", methods=["DELETE"])
+    @login_required
     def deletar_tarefa_view(tarefa_id: int):
         tarefa = db.get(Tarefa, tarefa_id)
         if tarefa:

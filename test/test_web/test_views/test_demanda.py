@@ -117,15 +117,23 @@ def test_get_option_tipo_demanda(
     assert "option" in resposta.data.decode()
 
 
-def test_get_consulta_demanda_form(web_app):
-    resposta: Response = web_app["client"].get(f"/form/consulta_demanda")
+def test_get_consulta_demanda_form(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario
+):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get(f"/form/consulta_demanda")
 
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()
 
 
-def test_get_criar_demanda_form(web_app):
-    resposta: Response = web_app["client"].get(f"/form/criar_demanda")
+def test_get_criar_demanda_form(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get(f"/form/criar_demanda")
 
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()

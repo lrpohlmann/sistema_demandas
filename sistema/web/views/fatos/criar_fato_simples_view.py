@@ -1,4 +1,5 @@
-from flask import render_template_string, request
+from flask import request
+from flask_login import login_required
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.web import renderizacao
@@ -9,6 +10,7 @@ from sistema.model.operacoes.tarefa import inserir_fatos
 
 def setup_views(app, db):
     @app.route("/fato/criar/simples", methods=["POST"])
+    @login_required
     def criar_fato_simples_view():
         form = criar_fato_simples_form.criar_form(**request.form)
         if criar_fato_simples_form.e_valido(form):

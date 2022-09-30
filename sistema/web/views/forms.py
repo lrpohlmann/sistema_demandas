@@ -1,6 +1,7 @@
 from typing import Sequence
 
 from flask import render_template
+from flask_login import login_required
 
 from sistema.model.entidades.demanda import TipoDemanda
 from sistema.model.entidades.usuario import Usuario
@@ -15,6 +16,7 @@ def setup_views(app, db):
             "GET",
         ],
     )
+    @login_required
     def forms(nome: str):
         if nome == "consulta_demanda":
             tp_demanda: Sequence[TipoDemanda] = db.query(TipoDemanda).all()
