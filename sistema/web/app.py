@@ -65,6 +65,7 @@ def _setup_app_db(app: Flask):
 
 def _setup_app_autenticacao(app, db):
     login_manager = flask_login.LoginManager()
+    login_manager.login_view = "/login"
     login_manager.init_app(app)
 
     autenticacao.carregar_usuario_factory(
