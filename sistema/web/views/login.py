@@ -32,7 +32,7 @@ def setup_views(app, db):
 
         return renderizacao.renderizar_pagina_login(form)
 
-    @app.route("/logout", methods=["POST"])
+    @app.route("/logout", methods=["GET", "POST"])
     @flask_login.login_required
     def logout():
         flask_login.logout_user()
