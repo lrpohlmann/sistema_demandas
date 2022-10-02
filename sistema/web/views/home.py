@@ -12,7 +12,6 @@ def setup_views(app, db):
     @app.route("/", methods=["GET", "POST"])
     @login_required
     def main():
-        print("começou")
         responsaveis = db.query(Usuario).all()
         tipos_demanda = db.query(TipoDemanda).all()
 
@@ -48,11 +47,7 @@ def setup_views(app, db):
                 form_consulta_demanda=form_consulta_demanda,
             )
         elif request.method == "POST":
-            print("post")
-            print(form_criar_demanda.data)
-            print(form_criar_demanda.is_submitted())
             if form_criar_demanda.validate_on_submit():
-                print(form_criar_demanda.data)
                 nova_demanda = Demanda(
                     titulo=form_criar_demanda.titulo.data,
                     tipo=db.query(TipoDemanda).get(form_criar_demanda.tipo_id.data),
@@ -63,12 +58,10 @@ def setup_views(app, db):
 
                 db.add(nova_demanda)
                 db.commit()
-                print("criado")
                 return redirect(
                     url_for("demanda_view", demanda_id=nova_demanda.id_demanda)
                 )
             else:
-                print(form_criar_demanda.errors)
                 return render_template(
                     "home.html",
                     demandas=demandas,
