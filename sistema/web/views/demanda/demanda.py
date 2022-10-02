@@ -37,7 +37,6 @@ def setup_views(app, db):
                     demandas=paginas["paginador"](1),
                     numero_paginas=paginas["numero_paginas"],
                     pagina_atual=1,
-                    id_html="tabela-demanda",
                     url_get="demanda",
                 )
             else:
@@ -45,7 +44,6 @@ def setup_views(app, db):
                     demandas=paginas["paginador"](pagina_requerida),
                     numero_paginas=paginas["numero_paginas"],
                     pagina_atual=pagina_requerida,
-                    id_html="tabela-demanda",
                     url_get="demanda",
                 )
 

@@ -58,7 +58,6 @@ def setup_views(app, db):
 
             return renderizacao.renderizar_tabela_de_demandas(
                 demandas=demandas,
-                id_html="tabela-consulta-demanda",
                 numero_paginas=1,
                 pagina_atual=1,
                 url_get="consulta_demanda",
