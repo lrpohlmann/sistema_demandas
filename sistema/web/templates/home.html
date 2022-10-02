@@ -15,6 +15,11 @@
                     aria-selected="true">Ultimas Demandas</button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-minhas-demandas" data-bs-toggle="pill"
+                    data-bs-target="#minhas-demandas" role="tab" aria-controls="minhas-demandas"
+                    aria-selected="false">Minhas Demandas</button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="pills-consulta-demandas" data-bs-toggle="pill"
                     data-bs-target="#consulta-demandas" role="tab" aria-controls="consulta-demandas"
                     aria-selected="false">Consulta Demandas</button>
@@ -24,6 +29,8 @@
             <div class="tab-pane fade show active" id="ultimas-demandas" hx-get="{{url_for('demanda')}}"
                 hx-target="this" hx-trigger="load" role="tabpanel" aria-labelledby="pills-ultimas-demandas">
             </div>
+            <div class="tab-pane fade" id="minhas-demandas" role="tabpanel" , aria-labelledby="pills-minhas-demandas"
+                hx-get="{{url_for('minhas_demandas')}}" hx-trigger="load" hx-trigger="this"></div>
             <div class="tab-pane fade" id="consulta-demandas" role="tabpanel" ,
                 aria-labelledby="pills-consulta-demandas">
                 {% include 'componentes/forms/form_consulta_demandas.html' %}
