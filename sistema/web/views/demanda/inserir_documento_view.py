@@ -14,7 +14,7 @@ def setup_views(app, db):
     )
     @login_required
     def inserir_documento_view(demanda_id: int):
-        demanda = db.get(Demanda, demanda_id)
+        demanda: Demanda = db.get(Demanda, demanda_id)
 
         escolhas = [
             list(x)
@@ -34,7 +34,9 @@ def setup_views(app, db):
             form = upload_documento_form.criar_form(
                 escolhas, arquivo=request.files["arquivo"], **request.form
             )
-            if upload_documento_form.e_valido(form):
+
+            form_e_valido = upload_documento_form.e_valido(form)
+            if form_e_valido:
                 dado = upload_documento_form.obter_dados(form)
                 caminho = upload_arquivo.salvar(app, dado["arquivo"])
 
@@ -52,9 +54,7 @@ def setup_views(app, db):
 
                 return (
                     renderizacao.renderizar_inserir_documento_form(
-                        upload_documento_form.criar_form(
-                            escolhas_tipo_documento=escolhas,
-                        ),
+                        form,
                         demanda_id,
                     ),
                     201,
@@ -62,9 +62,7 @@ def setup_views(app, db):
             else:
                 return (
                     renderizacao.renderizar_inserir_documento_form(
-                        upload_documento_form.criar_form(
-                            escolhas_tipo_documento=escolhas,
-                        ),
+                        form,
                         demanda_id,
                     ),
                     200,
