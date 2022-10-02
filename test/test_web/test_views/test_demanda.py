@@ -469,3 +469,12 @@ def test_atualizar_status_demanda(
     assert resposta.status_code == 200
 
     assert web_app_com_autenticacao.db.get(Demanda, 1).status == "REALIZADA"
+
+
+def test_get_minhas_demandas(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/demanda/minhas_demandas")
+
+    assert resposta.status_code == 200
