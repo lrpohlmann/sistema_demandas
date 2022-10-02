@@ -74,8 +74,9 @@ def renderizar_tabela_de_demandas(
     )
 
 
-def renderizar_lista_de_documentos(documentos) -> str:
+def renderizar_lista_de_documentos(documentos, demanda_id: int) -> str:
     return flask.render_template_string(
-        "{% from 'macros/documento/lista_documento.html' import lista_documento %} {{lista_documento(documentos)}}",
+        "{% from 'macros/documento/lista_documento.html' import lista_documento %} {{lista_documento(documentos, demanda_id)}}",
         documentos=documentos,
+        demanda_id=demanda_id,
     )

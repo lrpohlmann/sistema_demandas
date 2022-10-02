@@ -1,5 +1,6 @@
-{% macro lista_documento(documentos) %}
-<div>
+{% macro lista_documento(documentos, demanda_id) %}
+<div hx-get="{{url_for('obter_lista_de_documentos', demanda_id=demanda_id)}}" hx-trigger="DocumentoCriado from:body"
+    hx-swap="outerHTML">
     <div>
         <h2>Documentos</h2>
     </div>

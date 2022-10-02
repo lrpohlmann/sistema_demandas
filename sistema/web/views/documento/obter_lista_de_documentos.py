@@ -11,7 +11,9 @@ def setup_views(app, db):
     def obter_lista_de_documentos(demanda_id: int):
         demanda: Demanda = db.get(Demanda, demanda_id)
         if demanda:
-            return renderizacao.renderizar_lista_de_documentos(demanda.documentos)
+            return renderizacao.renderizar_lista_de_documentos(
+                demanda.documentos, demanda_id
+            )
 
         return flask.abort(404)
 

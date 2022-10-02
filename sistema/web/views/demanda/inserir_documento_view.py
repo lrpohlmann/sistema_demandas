@@ -58,6 +58,7 @@ def setup_views(app, db):
                         demanda_id,
                     ),
                     201,
+                    {"HX-Trigger": "DocumentoCriado"},
                 )
             else:
                 return (

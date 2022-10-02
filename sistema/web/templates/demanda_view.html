@@ -18,9 +18,8 @@
             data-bs-target="#linha-do-tempo-offcanvas">Linha do Tempo</button>
     </div>
     <div class="col-6">
-        {% if demanda.documentos %}
-        {{lista_documento(demanda.documentos)}}
-        {% endif %}
+        <div hx-get="{{url_for('obter_lista_de_documentos', demanda_id=demanda.id_demanda)}}" hx-trigger="load"
+            hx-swap="outerHTML"></div>
         <div hx-get="{{url_for('inserir_documento_view', demanda_id=demanda.id_demanda)}}" hx-swap="outerHTML"
             hx-trigger="load">
         </div>
