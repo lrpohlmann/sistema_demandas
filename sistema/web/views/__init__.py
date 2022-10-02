@@ -12,6 +12,7 @@ from sistema.web.views import (
     fatos,
     download_arquivos,
     login,
+    documento,
 )
 
 
@@ -26,6 +27,7 @@ def setup_todas_views(app: Flask, db: scoped_session) -> Tuple[Flask, scoped_ses
             fatos.setup_views,
             download_arquivos.setup_views,
             login.setup_views,
+            documento.setup_views,
         ],
         (app, db),
     )

@@ -72,3 +72,10 @@ def renderizar_tabela_de_demandas(
         pagina_atual=pagina_atual,
         url_get=url_get,
     )
+
+
+def renderizar_lista_de_documentos(documentos) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/documento/lista_documento.html' import lista_documento %} {{lista_documento(documentos)}}",
+        documentos=documentos,
+    )
