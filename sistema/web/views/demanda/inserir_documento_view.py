@@ -38,7 +38,10 @@ def setup_views(app, db):
             form_e_valido = upload_documento_form.e_valido(form)
             if form_e_valido:
                 dado = upload_documento_form.obter_dados(form)
-                caminho = upload_arquivo.salvar(app, dado["arquivo"])
+                caminho = upload_arquivo.salvar(
+                    app.config["UPLOAD_FOLDER"],
+                    dado["arquivo"],
+                )
 
                 demanda.documentos.append(
                     Documento(
