@@ -32,14 +32,14 @@
                 <h2>Tarefas</h2>
             </div>
             <div class="col-6">
+                {{criar_tarefa(criar_tarefa_form, demanda.id_demanda)}}
+            </div>
+            <div class="col-6">
                 <div class="row">
                     <div class="col-12" hx-get="{{url_for('tarefa_card_view', demanda_id=demanda.id_demanda)}}"
                         hx-swap="innerHTML" hx-trigger="load, tarefaCriada from:body" hx-params="none">
                     </div>
                 </div>
-            </div>
-            <div class="col-6">
-                {{criar_tarefa(criar_tarefa_form, demanda.id_demanda)}}
             </div>
         </div>
     </div>

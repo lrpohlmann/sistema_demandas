@@ -5,16 +5,8 @@
         <li class="list-group-item"><span>Tipo: </span><span>{{demanda.tipo.nome}}</span></li>
         <li class="list-group-item"><span>Status: </span><span>{{demanda.status}}</span></li>
         <li class="list-group-item"><span>Responsável: </span><span>{{demanda.responsavel.nome}}</span></li>
-        {% if demanda.documentos %}
-        <li class="list-group-item">
-            <span>Documentos: </span>
-            {% for d in demanda.documentos %}
-            <div>{{d.nome}}</div>
-            {% endfor %}
-        </li>
-        {% endif %}
     </ul>
     <button hx-get="{{url_for('editar_demanda_form', demanda_id=demanda_id)}}" hx-target="#lista-dados-demanda"
-        hx-swap="outerHTML" type="button">Editar</button>
+        hx-swap="outerHTML" type="button" class="btn btn-primary">Editar</button>
 </div>
 {%- endmacro %}
