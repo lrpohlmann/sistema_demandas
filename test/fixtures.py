@@ -1,4 +1,5 @@
 import pytest
+import faker
 
 from sistema.persistencia import setup_persistencia
 
@@ -9,3 +10,8 @@ def temp_db():
     yield db
     reg.dispose()
     db.remove()
+
+
+@pytest.fixture
+def faker_obj():
+    return faker.Faker()
