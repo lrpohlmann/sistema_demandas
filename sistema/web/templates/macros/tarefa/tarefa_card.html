@@ -25,10 +25,12 @@
             </ul>
         </div>
         <div>
+            {%if not tarefa.status == 'FINALIZADA'%}
             <button class="btn btn-sm btn-success"
                 hx-put="{{url_for('finalizar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}" hx-swap="innerHTML"
                 hx-target="#tarefa-card-status-item-{{tarefa.id_tarefa}}">Finalizar</button>
-            <button type="button" class="btn btn-danger"
+            {%endif%}
+            <button type="button" class="btn btn-sm btn-danger"
                 hx-delete="{{url_for('deletar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}"
                 hx-target="#tarefa-card-{{tarefa.id_tarefa}}" hx-trigger="click" hx-swap="delete">Deletar</button>
         </div>
