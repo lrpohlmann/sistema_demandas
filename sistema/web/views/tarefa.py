@@ -3,7 +3,7 @@ from sqlalchemy.orm import scoped_session
 from flask_login import login_required
 
 from sistema.model.entidades.tarefa import Tarefa, StatusTarefa
-from sistema.model.operacoes.tarefa import set_status
+from sistema.model.operacoes.tarefa import set_status, finalizar_tarefa
 from .. import renderizacao
 
 
@@ -23,11 +23,12 @@ def setup_views(app: Flask, db: scoped_session):
     def finalizar_tarefa_view(tarefa_id: int):
         tarefa = db.get(Tarefa, tarefa_id)
         if tarefa:
-            set_status(tarefa, StatusTarefa.FINALIZADA)
+            finalizar_tarefa(tarefa)
             db.commit()
             return (
                 renderizacao.renderizar_status_tarefa_html(StatusTarefa.FINALIZADA),
                 200,
+                {"HX-Trigger": "TarefaFinalizada"},
             )
         else:
             return "", 404
