@@ -20,6 +20,7 @@ def setup_views(app: Flask, db: scoped_session):
             return "", 404
 
     @app.route("/tarefa/status/finalizar/<int:tarefa_id>", methods=["PUT"])
+    @login_required
     def finalizar_tarefa_view(tarefa_id: int):
         tarefa = db.get(Tarefa, tarefa_id)
         if tarefa:
