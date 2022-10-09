@@ -12,7 +12,8 @@
             {{fato_simples_form(form)}}
         </div>
         <div id="lista-fato-card" hx-get="{{url_for('lista_fato_card_view', demanda_id=demanda_id)}}"
-            hx-target="#lista-fato-card" hx-trigger="load, fatoCriado from:body" class="col-12 row">
+            hx-target="#lista-fato-card" hx-trigger="load, fatoCriado from:body, TarefaFinalizada from:body"
+            class="col-12 row">
         </div>
     </div>
 </div>
