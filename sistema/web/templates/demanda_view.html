@@ -35,9 +35,28 @@
                 {{criar_tarefa(criar_tarefa_form, demanda.id_demanda)}}
             </div>
             <div class="col-6">
-                <div class="row">
-                    <div class="col-12" hx-get="{{url_for('tarefa_card_view', demanda_id=demanda.id_demanda)}}"
-                        hx-swap="innerHTML" hx-trigger="load, tarefaCriada from:body" hx-params="none">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-tarefas-pendentes" data-bs-toggle="pill"
+                            data-bs-target="#tarefas-pendentes" role="tab" aria-controls="tarefas-pendentes"
+                            aria-selected="true">Tarefas Pendentes</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-tarefas-finalizadas" data-bs-toggle="pill"
+                            data-bs-target="#tarefas-finalizadas" role="tab" aria-controls="tarefas-finalizadas"
+                            aria-selected="false">Tarefas Finalizadas</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tarefas-pendentes" role="tabpanel" aria-labelledby="pills-ultimas-demandas"
+                        class="tab-pane fade show active"
+                        hx-get="{{url_for('tarefa_card_view', demanda_id=demanda.id_demanda)}}" hx-swap="innerHTML"
+                        hx-trigger="load, tarefaCriada from:body">
+                    </div>
+                    <div id="tarefas-finalizadas" role="tabpanel" aria-labelledby="pills-tarefas-finalizadas"
+                        class="tab-pane fade"
+                        hx-get="{{url_for('obter_tarefas_finalizadas_por_demanda_view', demanda_id=demanda.id_demanda)}}"
+                        hx-swap="innerHTML" hx-trigger="load, TarefaFinalizada from:body">
                     </div>
                 </div>
             </div>
