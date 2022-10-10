@@ -7,6 +7,7 @@ from test.test_web.fixtures import (
     WebAppFixture,
     gerar_usuario,
 )
+from test.fixtures import faker_obj
 
 
 def test_deletar_tarefa(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
@@ -42,3 +43,19 @@ def test_finalizar_status_tarefa(
 
     tarefa_atualizada = web_app_com_autenticacao.db.get(Tarefa, 1)
     assert tarefa_atualizada.status == StatusTarefa.FINALIZADA
+
+
+def test_obter_tarefas_finalizadas(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario, faker_obj
+):
+    web_app_com_autenticacao.db.add(
+        Demanda(faker_obj.bothify("???????"), TipoDemanda(faker_obj.bothify("??????")))
+    )
+    web_app_com_autenticacao.db.commit()
+
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/tarefa/cards/finalizadas/por-demanda/1")
+
+    assert resposta.status_code == 200
