@@ -1,0 +1,36 @@
+{% from 'macros/geral/escolha_pagina.html' import escolha_pagina %}
+
+
+{% macro tarefas_tabela(sequencia_tarefas, pagina_atual, numero_paginas, nome_da_view, kwargs_url, alvo_atualizacao) %}
+<div data-hx-elemento-alvo="">
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>Responsável</th>
+                <th>Data Criação</th>
+                <th>Data Entrega</th>
+                <th>Status</th>
+                <th>Demanda</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tarefa in sequencia_tarefas %}
+            <tr>
+                <td>{{tarefa.id_tarefa}}</td>
+                <td>{{tarefa.titulo}}</td>
+                <td>{{tarefa.responsavel.nome}}</td>
+                <td>{{tarefa.data_hora}}</td>
+                <td>{{tarefa.data_entrega}}</td>
+                <td>{{tarefa.status}}</td>
+                <td><a
+                        href="{{url_for('demanda_view', demanda_id=tarefa.demanda.id_demanda)}}">{{tarefa.demanda.titulo}}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {{escolha_pagina(pagina_atual, numero_paginas, nome_da_view, kwargs_url, alvo_atualizacao)}}
+</div>
+{% endmacro %}

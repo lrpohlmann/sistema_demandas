@@ -100,3 +100,22 @@ def renderizar_lista_de_documentos(documentos, demanda_id: int) -> str:
         documentos=documentos,
         demanda_id=demanda_id,
     )
+
+
+def renderizar_tabela_de_tarefas(
+    tarefas,
+    pagina_atual: int,
+    numero_paginas: int,
+    nome_da_view: str,
+    kwargs_url: Mapping,
+    alvo_atualizacao: str,
+) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/tarefa/tarefas_tabela.html' import tarefas_tabela %} {{tarefas_tabela(tarefas, pagina_atual, numero_paginas, nome_da_view, kwargs_url, alvo_atualizacao)}}}",
+        tarefas=tarefas,
+        pagina_atual=pagina_atual,
+        numero_paginas=numero_paginas,
+        nome_da_view=nome_da_view,
+        kwargs_url=kwargs_url,
+        alvo_atualizacao=alvo_atualizacao,
+    )
