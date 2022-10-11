@@ -49,6 +49,13 @@
 <div hx-get="{{url_for('tarefa_card_view', demanda_id=demanda_id)}}" hx-trigger="load" hx-swap="outerHTML"></div>
 {% endmacro %}
 
+
+{% macro sequencia_tarefa_finalizada_card_com_paginacao(demanda_id) %}
+<div hx-get="{{url_for('obter_tarefas_finalizadas_por_demanda_view', demanda_id=demanda_id)}}" hx-trigger="load"
+    hx-swap="outerHTML"></div>
+{% endmacro %}
+
+
 {% macro sequencia_tarefa_card_com_paginacao(tarefas, pagina_atual, numero_paginas, nome_da_view, kwargs_url,
 eventos_gatilho) %}
 <div data-hx-elemento-alvo="" hx-get="{{url_for(nome_da_view, **kwargs_url)}}" hx-trigger="{{eventos_gatilho}}"
