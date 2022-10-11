@@ -40,7 +40,7 @@ def setup_views(app, db):
             tarefas_paginadas["numero_paginas"],
             "tarefa_card_view",
             {"demanda_id": demanda_id},
-            "tarefaCriada from:body",
+            "tarefaCriada from:body, TarefaFinalizada from:body",
         )
 
     return app, db

@@ -29,7 +29,7 @@ def setup_views(app: Flask, db: scoped_session):
             finalizar_tarefa(tarefa)
             db.commit()
             return (
-                renderizacao.renderizar_status_tarefa_html(StatusTarefa.FINALIZADA),
+                "",
                 200,
                 {"HX-Trigger": "TarefaFinalizada"},
             )

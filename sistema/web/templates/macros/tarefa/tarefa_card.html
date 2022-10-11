@@ -10,7 +10,7 @@
                 {% if tarefa.responsavel %}
                 <li>Responsável: {{tarefa.responsavel.nome}}</li>
                 {% endif %}
-                <li id="tarefa-card-status-item-{{tarefa.id_tarefa}}">
+                <li>
                     <div>
                         Status: {{status_tarefa_pill(tarefa.status)}}
                     </div>
@@ -28,8 +28,8 @@
         <div>
             {%if not tarefa.status == 'FINALIZADA'%}
             <button class="btn btn-sm btn-success"
-                hx-put="{{url_for('finalizar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}" hx-swap="innerHTML"
-                hx-target="#tarefa-card-status-item-{{tarefa.id_tarefa}}">Finalizar</button>
+                hx-put="{{url_for('finalizar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}"
+                hx-swap="none">Finalizar</button>
             {%endif%}
             <button type="button" class="btn btn-sm btn-danger"
                 hx-delete="{{url_for('deletar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}"
