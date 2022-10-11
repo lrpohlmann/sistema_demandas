@@ -1,7 +1,7 @@
 from flask import Flask, render_template_string, abort, request
 from sqlalchemy.orm import scoped_session
 import sqlalchemy
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from sistema.model.entidades import Tarefa, StatusTarefa, Demanda
 from sistema.model.operacoes.tarefa import set_status, finalizar_tarefa
@@ -68,6 +68,36 @@ def setup_views(app: Flask, db: scoped_session):
             "obter_tarefas_finalizadas_por_demanda_view",
             {"demanda_id": demanda_id},
             "TarefaFinalizada from:body, TarefaDeletada from:body",
+        )
+
+    @app.route("/tarefa/minhas-tarefas/tabela", methods=["GET"])
+    @login_required
+    def obter_minhas_tarefas_em_aberto_view():
+        minhas_tarefas_em_aberto = (
+            db.execute(
+                sqlalchemy.select(Tarefa).where(
+                    Tarefa.responsavel == current_user,
+                    Tarefa.status == StatusTarefa.EM_ABERTO,
+                )
+            )
+            .scalars()
+            .all()
+        )
+
+        tarefas_paginadas = pagincao.paginar(minhas_tarefas_em_aberto, 10)
+        numero_de_paginas = tarefas_paginadas["numero_paginas"]
+        pagina_requerida = pagincao.validar_pagina_pedida(
+            request.args.get("pagina"), numero_de_paginas
+        )
+        tarefas_pagina_requerida = tarefas_paginadas["paginador"](pagina_requerida)
+
+        return renderizacao.renderizar_tabela_de_tarefas(
+            tarefas_pagina_requerida,
+            pagina_requerida,
+            numero_de_paginas,
+            "obter_minhas_tarefas_em_aberto_view",
+            {},
+            "closest div[data-hx-elemento-alvo]",
         )
 
     return app, db

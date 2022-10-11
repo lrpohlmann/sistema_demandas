@@ -1,3 +1,4 @@
+import random
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.tarefa import Tarefa, StatusTarefa
 from sistema.model.entidades.usuario import Usuario
@@ -57,5 +58,28 @@ def test_obter_tarefas_finalizadas(
         user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
     ) as client:
         resposta = client.get("/tarefa/cards/finalizadas/por-demanda/1")
+
+    assert resposta.status_code == 200
+
+
+def test_obter_tabela_tarefas_em_aberto_usuario_logado(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario, faker_obj
+):
+    usuario = gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    demandas = [
+        Demanda(faker_obj.bothify("???????"), TipoDemanda(faker_obj.bothify("??????")))
+        for _ in range(0, 3)
+    ]
+    tarefas = [
+        Tarefa(
+            faker_obj.bothify("???????"), random.choice(demandas), responsavel=usuario
+        )
+    ]
+
+    web_app_com_autenticacao.db.add_all(demandas)
+    web_app_com_autenticacao.db.add_all(tarefas)
+
+    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
+        resposta = client.get("/tarefa/minhas-tarefas/tabela")
 
     assert resposta.status_code == 200
