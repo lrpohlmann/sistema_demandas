@@ -4,6 +4,7 @@
 {% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %}
 {% from 'macros/demanda/linha_do_tempo_offcanvas.html' import linha_do_tempo %}
 {% from 'macros/documento/lista_documento.html' import lista_documento %}
+{% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_em_aberto_card_com_paginacao %}
 
 {% block main %}
 <div>
@@ -49,9 +50,8 @@
                 </ul>
                 <div class="tab-content">
                     <div id="tarefas-pendentes" role="tabpanel" aria-labelledby="pills-ultimas-demandas"
-                        class="tab-pane fade show active"
-                        hx-get="{{url_for('tarefa_card_view', demanda_id=demanda.id_demanda)}}" hx-swap="innerHTML"
-                        hx-trigger="load, tarefaCriada from:body">
+                        class="tab-pane fade show active">
+                        {{sequencia_tarefa_em_aberto_card_com_paginacao(demanda_id=demanda.id_demanda)}}
                     </div>
                     <div id="tarefas-finalizadas" role="tabpanel" aria-labelledby="pills-tarefas-finalizadas"
                         class="tab-pane fade"

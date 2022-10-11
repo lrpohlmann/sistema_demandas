@@ -1,3 +1,4 @@
+from typing import Mapping
 import flask
 from .paginas import renderizar_pagina_login
 
@@ -45,6 +46,25 @@ def renderizar_sequencia_tarefas_card(tarefas) -> str:
     return flask.render_template_string(
         "{% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_card %} {{sequencia_tarefa_card(tarefas)}}",
         tarefas=tarefas,
+    )
+
+
+def sequencia_tarefa_card_com_paginacao(
+    tarefas,
+    pagina_atual: int,
+    numero_paginas: int,
+    nome_da_view: str,
+    kwargs_url: Mapping,
+    eventos_gatilho: str,
+) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_card_com_paginacao %} {{sequencia_tarefa_card_com_paginacao(tarefas, pagina_atual, numero_paginas, nome_da_view, kwargs_url, eventos_gatilho)}}",
+        tarefas=tarefas,
+        pagina_atual=pagina_atual,
+        numero_paginas=numero_paginas,
+        nome_da_view=nome_da_view,
+        kwargs_url=kwargs_url,
+        eventos_gatilho=eventos_gatilho,
     )
 
 

@@ -1,9 +1,10 @@
-from flask import render_template_string
+from flask import render_template_string, request
 from flask_login import login_required
 import sqlalchemy
 
 from sistema.model.entidades.tarefa import StatusTarefa, Tarefa
 from sistema.web import renderizacao
+from sistema.servicos import pagincao
 
 
 def setup_views(app, db):
@@ -22,6 +23,24 @@ def setup_views(app, db):
             .scalars()
             .all()
         )
-        return renderizacao.renderizar_sequencia_tarefas_card(tarefas)
+
+        tarefas_paginadas = pagincao.paginar(tarefas, 5)
+
+        pagina_selecionada = request.args.get("pagina")
+        if pagina_selecionada is not None:
+            pagina_selecionada = int(pagina_selecionada)
+            if pagina_selecionada > tarefas_paginadas["numero_paginas"]:
+                pagina_selecionada = 1
+        else:
+            pagina_selecionada = 1
+
+        return renderizacao.sequencia_tarefa_card_com_paginacao(
+            tarefas_paginadas["paginador"](pagina_selecionada),
+            pagina_selecionada,
+            tarefas_paginadas["numero_paginas"],
+            "tarefa_card_view",
+            {"demanda_id": demanda_id},
+            "tarefaCriada from:body",
+        )
 
     return app, db

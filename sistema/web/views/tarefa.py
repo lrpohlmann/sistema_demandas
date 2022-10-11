@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, abort
+from flask import Flask, render_template_string, abort, request
 from sqlalchemy.orm import scoped_session
 import sqlalchemy
 from flask_login import login_required
@@ -6,6 +6,7 @@ from flask_login import login_required
 from sistema.model.entidades import Tarefa, StatusTarefa, Demanda
 from sistema.model.operacoes.tarefa import set_status, finalizar_tarefa
 from .. import renderizacao
+from sistema.servicos import pagincao
 
 
 def setup_views(app: Flask, db: scoped_session):
@@ -53,6 +54,20 @@ def setup_views(app: Flask, db: scoped_session):
             .all()
         )
 
-        return renderizacao.renderizar_sequencia_tarefas_card(tarefas_finalizadas)
+        tarefas_finalizadas_paginadas = pagincao.paginar(tarefas_finalizadas, 5)
+        numero_de_paginas = tarefas_finalizadas_paginadas["numero_paginas"]
+        pagina_pedida = pagincao.validar_pagina_pedida(
+            request.args.get("pagina"), numero_de_paginas
+        )
+        pagina_com_tarefas = tarefas_finalizadas_paginadas["paginador"](pagina_pedida)
+
+        return renderizacao.sequencia_tarefa_card_com_paginacao(
+            pagina_com_tarefas,
+            pagina_pedida,
+            numero_de_paginas,
+            "obter_tarefas_finalizadas_por_demanda_view",
+            {"demanda_id": demanda_id},
+            "TarefaFinalizada from:body",
+        )
 
     return app, db

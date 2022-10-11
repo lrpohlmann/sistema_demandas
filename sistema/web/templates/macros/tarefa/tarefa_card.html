@@ -1,4 +1,5 @@
 {% from 'macros/tarefa/status_tarefa_pill.html' import status_tarefa_pill %}
+{% from 'macros/geral/escolha_pagina.html' import escolha_pagina %}
 
 {% macro tarefa_card(tarefa) -%}
 <div class="card" id="tarefa-card-{{tarefa.id_tarefa}}">
@@ -43,3 +44,18 @@
 {{tarefa_card(t)}}
 {% endfor %}
 {%- endmacro %}
+
+{% macro sequencia_tarefa_em_aberto_card_com_paginacao(demanda_id) %}
+<div hx-get="{{url_for('tarefa_card_view', demanda_id=demanda_id)}}" hx-trigger="load" hx-swap="outerHTML"></div>
+{% endmacro %}
+
+{% macro sequencia_tarefa_card_com_paginacao(tarefas, pagina_atual, numero_paginas, nome_da_view, kwargs_url,
+eventos_gatilho) %}
+<div data-hx-elemento-alvo="" hx-get="{{url_for(nome_da_view, **kwargs_url)}}" hx-trigger="{{eventos_gatilho}}"
+    hx-swap="outerHTML">
+    <div>
+        {{sequencia_tarefa_card(tarefas)}}
+    </div>
+    {{escolha_pagina(pagina_atual, numero_paginas, nome_da_view, kwargs_url, 'closest div[data-hx-elemento-alvo]')}}
+</div>
+{% endmacro %}
