@@ -34,3 +34,8 @@
     {{escolha_pagina(pagina_atual, numero_paginas, nome_da_view, kwargs_url, alvo_atualizacao)}}
 </div>
 {% endmacro %}
+
+
+{% macro tabela_minhas_tarefas_em_aberto() %}
+<div hx-get="{{url_for('obter_minhas_tarefas_em_aberto_view')}}" hx-swap="outerHTML" hx-trigger="load"></div>
+{% endmacro %}

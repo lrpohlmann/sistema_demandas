@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% from 'macros/tarefa/tarefas_tabela.html' import tabela_minhas_tarefas_em_aberto %}
+
+
 {% block main %}
 <div>
     <h1>Home</h1>
@@ -20,19 +23,27 @@
                     aria-selected="false">Minhas Demandas</button>
             </li>
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-minhas-tarefas" data-bs-toggle="pill"
+                    data-bs-target="#minhas-tarefas" role="tab" aria-controls="minhas-tarefas"
+                    aria-selected="false">Minhas Tarefas Em Aberto</button>
+            </li>
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" id="pills-consulta-demandas" data-bs-toggle="pill"
                     data-bs-target="#consulta-demandas" role="tab" aria-controls="consulta-demandas"
                     aria-selected="false">Consulta Demandas</button>
             </li>
+
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="ultimas-demandas" hx-get="{{url_for('demanda')}}"
                 hx-target="this" hx-trigger="load" role="tabpanel" aria-labelledby="pills-ultimas-demandas">
             </div>
-            <div class="tab-pane fade" id="minhas-demandas" role="tabpanel" , aria-labelledby="pills-minhas-demandas"
+            <div class="tab-pane fade" id="minhas-demandas" role="tabpanel" aria-labelledby="pills-minhas-demandas"
                 hx-get="{{url_for('minhas_demandas')}}" hx-trigger="load" hx-trigger="this"></div>
-            <div class="tab-pane fade" id="consulta-demandas" role="tabpanel" ,
-                aria-labelledby="pills-consulta-demandas">
+            <div class="tab-pane fade" id="minhas-tarefas" role="tabpanel" aria-labelledby="pills-minhas-tarefas">
+                {{tabela_minhas_tarefas_em_aberto()}}
+            </div>
+            <div class="tab-pane fade" id="consulta-demandas" role="tabpanel" aria-labelledby="pills-consulta-demandas">
                 {% include 'componentes/forms/form_consulta_demandas.html' %}
                 <div id="consulta-demandas-alvo"></div>
             </div>
