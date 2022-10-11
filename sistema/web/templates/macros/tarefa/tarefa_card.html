@@ -33,7 +33,7 @@
             {%endif%}
             <button type="button" class="btn btn-sm btn-danger"
                 hx-delete="{{url_for('deletar_tarefa_view', tarefa_id=tarefa.id_tarefa)}}"
-                hx-target="#tarefa-card-{{tarefa.id_tarefa}}" hx-trigger="click" hx-swap="delete">Deletar</button>
+                hx-swap="none">Deletar</button>
         </div>
     </div>
 </div>

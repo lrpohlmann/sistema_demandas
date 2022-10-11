@@ -17,7 +17,7 @@ def setup_views(app: Flask, db: scoped_session):
         if tarefa:
             db.delete(tarefa)
             db.commit()
-            return "", 200
+            return "", 200, {"HX-Trigger": "TarefaDeletada"}
         else:
             return "", 404
 
@@ -67,7 +67,7 @@ def setup_views(app: Flask, db: scoped_session):
             numero_de_paginas,
             "obter_tarefas_finalizadas_por_demanda_view",
             {"demanda_id": demanda_id},
-            "TarefaFinalizada from:body",
+            "TarefaFinalizada from:body, TarefaDeletada from:body",
         )
 
     return app, db
