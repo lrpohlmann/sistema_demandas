@@ -1,7 +1,8 @@
 {% macro escolha_pagina(pagina_atual, numero_paginas, nome_da_view, kwargs_url, alvo_atualizacao) %}
 {% if numero_paginas > 1%}
 <div>
-    <select name="">
+    <div><small>Página</small></div>
+    <select class="form-select" name="">
         {% for n in range(1, numero_paginas+1) %}
         <option hx-trigger="click" hx-get="{{url_for(nome_da_view, pagina=n, **kwargs_url)}}"
             hx-target="{{alvo_atualizacao}}" hx-swap="outerHTML" value="{{n}}" {% if pagina_atual==n %}selected{% endif
