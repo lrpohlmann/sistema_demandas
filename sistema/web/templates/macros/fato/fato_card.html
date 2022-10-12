@@ -1,3 +1,5 @@
+{% from 'macros/geral/escolha_pagina.html' import escolha_pagina %}
+
 {% macro fato_card(fato) %}
 <div class="card">
     <div class="card-body">
@@ -33,10 +35,13 @@
 </div>
 {% endmacro %}
 
-{% macro fato_card_list(fatos, container_css_class="col-12") %}
-{% for f in fatos %}
-<div class="{{container_css_class}}">
-    {{fato_card(f)}}
+{% macro fato_card_list(fatos, pagina_atual, numero_paginas, nome_da_view, kwargs_url) %}
+<div data-hx-elemento-alvo="">
+    <div>
+        {% for f in fatos %}
+        {{fato_card(f)}}
+        {% endfor %}
+    </div>
+    {{escolha_pagina(pagina_atual, numero_paginas, nome_da_view, kwargs_url, 'closest div[data-hx-elemento-alvo]')}}
 </div>
-{% endfor %}
 {% endmacro %}

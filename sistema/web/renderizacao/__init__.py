@@ -75,10 +75,20 @@ def renderizar_criar_fato_simples_form(form) -> str:
     )
 
 
-def renderizar_lista_fato_card(fatos) -> str:
+def renderizar_lista_fato_card(
+    fatos,
+    pagina_atual: int,
+    numero_paginas: int,
+    nome_da_view: str,
+    kwargs_url: Mapping,
+) -> str:
     return flask.render_template_string(
-        "{% from 'macros/fato/fato_card.html' import fato_card_list %} {{fato_card_list(fatos)}}",
+        "{% from 'macros/fato/fato_card.html' import fato_card_list %} {{fato_card_list(fatos, pagina_atual, numero_paginas, nome_da_view, kwargs_url)}}",
         fatos=fatos,
+        pagina_atual=pagina_atual,
+        numero_paginas=numero_paginas,
+        nome_da_view=nome_da_view,
+        kwargs_url=kwargs_url,
     )
 
 
