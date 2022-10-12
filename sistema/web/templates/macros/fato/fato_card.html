@@ -37,7 +37,7 @@
 
 {% macro fato_card_list(fatos, pagina_atual, numero_paginas, nome_da_view, kwargs_url) %}
 <div data-hx-elemento-alvo="">
-    <div>
+    <div class="d-flex flex-column justify-content-start gap-3">
         {% for f in fatos %}
         {{fato_card(f)}}
         {% endfor %}

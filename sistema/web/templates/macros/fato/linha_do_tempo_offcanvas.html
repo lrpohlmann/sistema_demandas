@@ -7,13 +7,13 @@
         <h2 class="offcanvas-title" id="offcanvasLabel">Linha do Tempo</h2>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body row">
-        <div class="col-12">
+    <div class="offcanvas-body">
+        <div class="">
             {{fato_simples_form(form)}}
         </div>
+        <h3>Fatos</h3>
         <div id="lista-fato-card" hx-get="{{url_for('lista_fato_card_view', demanda_id=demanda_id)}}"
-            hx-target="#lista-fato-card" hx-trigger="load, fatoCriado from:body, TarefaFinalizada from:body"
-            class="col-12 row">
+            hx-target="#lista-fato-card" hx-trigger="load, fatoCriado from:body, TarefaFinalizada from:body" class="">
         </div>
     </div>
 </div>
