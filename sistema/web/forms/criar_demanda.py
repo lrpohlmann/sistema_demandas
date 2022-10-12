@@ -27,8 +27,8 @@ def e_valido(form) -> bool:
     return form.validate()
 
 
-def obter_dados(form) -> Mapping:
-    dados = dict(dados.data)
+def obter_dados(form: CriarDemandaForm) -> Mapping:
+    dados = dict(form.data)
     if dados["data_entrega"] == datetime(1900, 1, 1, 0, 0):
         dados["data_entrega"] = None
 
