@@ -6,6 +6,7 @@ from sistema.web import renderizacao, upload_arquivo
 from sistema.web.forms import upload_documento_form
 from sistema.model.entidades.demanda import Demanda
 from sistema.model.entidades.documento import TipoDocumento, Documento
+from sistema.web import eventos_cliente
 
 
 def setup_views(app, db):
@@ -61,7 +62,7 @@ def setup_views(app, db):
                         demanda_id,
                     ),
                     201,
-                    {"HX-Trigger": "DocumentoCriado"},
+                    {"HX-Trigger": eventos_cliente.DOCUMENTO_CRIADO},
                 )
             else:
                 return (

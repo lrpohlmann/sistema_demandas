@@ -6,6 +6,7 @@ from sistema.model.operacoes.demanda import (
     tornar_demanda_pendente,
     tornar_demanda_realizada,
 )
+from sistema.web import eventos_cliente
 
 
 def setup_views(app, db):
@@ -20,13 +21,13 @@ def setup_views(app, db):
             demanda_pendente = tornar_demanda_pendente(demanda)
             db.commit()
 
-            return "", 200, {"HX-Trigger": "statusDemandaAlterado"}
+            return "", 200, {"HX-Trigger": eventos_cliente.DEMANDA_STATUS_ALTERADO}
 
         elif status == "realizada":
             demanda_realizada = tornar_demanda_realizada(demanda)
             db.commit()
 
-            return "", 200, {"HX-Trigger": "statusDemandaAlterado"}
+            return "", 200, {"HX-Trigger": eventos_cliente.DEMANDA_STATUS_ALTERADO}
 
         else:
             return "", 404

@@ -6,6 +6,7 @@ from sistema.web import renderizacao
 from sistema.web.forms import criar_fato_simples_form
 from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.operacoes.tarefa import inserir_fatos
+from sistema.web import eventos_cliente
 
 
 def setup_views(app, db):
@@ -33,7 +34,7 @@ def setup_views(app, db):
             return (
                 renderizacao.renderizar_criar_fato_simples_form(form),
                 202,
-                {"HX-Trigger": "fatoCriado"},
+                {"HX-Trigger": eventos_cliente.FATO_CRIADO},
             )
         return (
             renderizacao.renderizar_criar_fato_simples_form(form),

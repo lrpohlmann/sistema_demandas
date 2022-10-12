@@ -7,6 +7,7 @@ from sistema.model.entidades import Tarefa, StatusTarefa, Demanda
 from sistema.model.operacoes.tarefa import set_status, finalizar_tarefa
 from .. import renderizacao
 from sistema.servicos import pagincao
+from sistema.web import eventos_cliente
 
 
 def setup_views(app: Flask, db: scoped_session):
@@ -17,7 +18,7 @@ def setup_views(app: Flask, db: scoped_session):
         if tarefa:
             db.delete(tarefa)
             db.commit()
-            return "", 200, {"HX-Trigger": "TarefaDeletada"}
+            return "", 200, {"HX-Trigger": eventos_cliente.TAREFA_DELETADA}
         else:
             return "", 404
 
@@ -31,7 +32,7 @@ def setup_views(app: Flask, db: scoped_session):
             return (
                 "",
                 200,
-                {"HX-Trigger": "TarefaFinalizada"},
+                {"HX-Trigger": eventos_cliente.TAREFA_FINALIZADA},
             )
         else:
             return "", 404
