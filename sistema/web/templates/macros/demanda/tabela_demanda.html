@@ -1,5 +1,7 @@
-{% macro tabela_demanda(demandas, numero_paginas, pagina_atual, url_get) %}
-<div data-htmx-elemento="tabela">
+{% from 'macros/geral/escolha_pagina.html' import escolha_pagina %}
+
+{% macro tabela_demanda(demandas, pagina_atual, numero_paginas, nome_da_view, kwargs_url) %}
+<div data-hx-elemento-alvo="">
     <table class="table table-striped table-hover border-primary">
         <thead>
             <tr>
@@ -16,16 +18,7 @@
             {{dados_tabela_demanda(demandas)}}
         </tbody>
     </table>
-    {% if numero_paginas > 1%}
-    <div>
-        <select name="">
-            {% for n in range(1, numero_paginas+1) %}
-            <option hx-trigger="click" hx-get="{{url_for(url_get, pagina=n)}}" hx-params="*"
-                hx-target="closest [data-htmx-elemento=tabela]" hx-swap="outerHTML" value="{{n}}">{{n}}</option>
-            {% endfor %}
-        </select>
-    </div>
-    {% endif %}
+    {{escolha_pagina(pagina_atual, numero_paginas, nome_da_view, kwargs_url, 'closest div[data-hx-elemento-alvo]')}}
 </div>
 {% endmacro %}
 

@@ -93,14 +93,15 @@ def renderizar_lista_fato_card(
 
 
 def renderizar_tabela_de_demandas(
-    demandas, numero_paginas, pagina_atual, url_get
+    demandas, numero_paginas, pagina_atual, nome_da_view, kwargs_url
 ) -> str:
     return flask.render_template_string(
-        "{% from 'macros/demanda/tabela_demanda.html' import tabela_demanda %} {{tabela_demanda(demandas, numero_paginas, pagina_atual, url_get)}}",
+        "{% from 'macros/demanda/tabela_demanda.html' import tabela_demanda %} {{tabela_demanda(demandas, pagina_atual, numero_paginas, nome_da_view, kwargs_url)}}",
         demandas=demandas,
         numero_paginas=numero_paginas,
         pagina_atual=pagina_atual,
-        url_get=url_get,
+        nome_da_view=nome_da_view,
+        kwargs_url=kwargs_url,
     )
 
 

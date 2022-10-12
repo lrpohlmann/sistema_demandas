@@ -24,10 +24,11 @@ def setup_views(app, db):
         pagina = request.args.get("pagina") or 1
 
         return renderizacao.renderizar_tabela_de_demandas(
-            demandas_paginadas["paginador"](pagina),
-            demandas_paginadas["numero_paginas"],
-            pagina,
-            "minhas_demandas",
+            demandas=demandas_paginadas["paginador"](pagina),
+            numero_paginas=demandas_paginadas["numero_paginas"],
+            pagina_atual=pagina,
+            nome_da_view="minhas_demandas",
+            kwargs_url={},
         )
 
     return app, db

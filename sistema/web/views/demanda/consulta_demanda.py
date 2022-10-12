@@ -59,7 +59,8 @@ def setup_views(app, db):
                 demandas=demandas,
                 numero_paginas=1,
                 pagina_atual=1,
-                url_get="consulta_demanda",
+                nome_da_view="consulta_demanda",
+                kwargs_url={},
             )
         else:
             return "", 400
