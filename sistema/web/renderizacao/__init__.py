@@ -122,7 +122,7 @@ def renderizar_tabela_de_tarefas(
     alvo_atualizacao: str,
 ) -> str:
     return flask.render_template_string(
-        "{% from 'macros/tarefa/tarefas_tabela.html' import tarefas_tabela %} {{tarefas_tabela(tarefas, pagina_atual, numero_paginas, nome_da_view, kwargs_url, alvo_atualizacao)}}}",
+        "{% from 'macros/tarefa/tarefas_tabela.html' import tarefas_tabela %} {{tarefas_tabela(tarefas, pagina_atual, numero_paginas, nome_da_view, kwargs_url, alvo_atualizacao)}}",
         tarefas=tarefas,
         pagina_atual=pagina_atual,
         numero_paginas=numero_paginas,
