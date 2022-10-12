@@ -22,7 +22,13 @@
                 <td>{{tarefa.titulo}}</td>
                 <td>{{tarefa.responsavel.nome}}</td>
                 <td>{{tarefa.data_hora}}</td>
-                <td>{{tarefa.data_entrega}}</td>
+                <td>
+                    {% if tarefa.data_entrega %}
+                    {{tarefa.data_entrega}}
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
                 <td>{{tarefa.status}}</td>
                 <td><a
                         href="{{url_for('demanda_view', demanda_id=tarefa.demanda.id_demanda)}}">{{tarefa.demanda.titulo}}</a>
