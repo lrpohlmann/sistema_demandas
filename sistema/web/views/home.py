@@ -38,6 +38,7 @@ def setup_views(app, db):
                 ("", "-"),
             ],
         )
+
         demandas = db.query(Demanda).all()
         if request.method == "GET":
             return render_template(
@@ -47,13 +48,21 @@ def setup_views(app, db):
                 form_consulta_demanda=form_consulta_demanda,
             )
         elif request.method == "POST":
-            if form_criar_demanda.validate_on_submit():
+            form_criar_demanda = criar_demanda.criar_form(
+                tipo_id_escolhas=[(t.id_tipo_demanda, t.nome) for t in tipos_demanda],
+                responsavel_id_escolhas=[(r.id_usuario, r.nome) for r in responsaveis]
+                + [
+                    ("", "-"),
+                ],
+                dados_input_usuario=request.form,
+            )
+            if criar_demanda.e_valido(form_criar_demanda):
+                dados = criar_demanda.obter_dados(form_criar_demanda)
                 nova_demanda = Demanda(
-                    titulo=form_criar_demanda.titulo.data,
-                    tipo=db.query(TipoDemanda).get(form_criar_demanda.tipo_id.data),
-                    responsavel=db.query(Usuario).get(
-                        form_criar_demanda.responsavel_id.data
-                    ),
+                    titulo=dados["titulo"],
+                    tipo=db.query(TipoDemanda).get(dados["tipo_id"]),
+                    responsavel=db.query(Usuario).get(dados["responsavel_id"]),
+                    data_entrega=dados["data_entrega"],
                 )
 
                 db.add(nova_demanda)

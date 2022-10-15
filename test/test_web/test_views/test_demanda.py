@@ -94,7 +94,8 @@ def test_post_demandas(web_app_com_autenticacao: WebAppFixture):
                 "titulo": "Alterações",
                 "tipo_id": "1",
                 "responsavel_id": "1",
-                "data_entrega": "",
+                "dia_entrega": "2022-05-01",
+                "hora_entrega": "14:44",
             },
         )
 

@@ -1,4 +1,6 @@
-<form action="{{url_for('main')}}" method="post">
+{% from 'macros/form_utils/erros_campo.html' import erros_campo %}
+
+<form action="{{url_for('main')}}" method="post" class="d-flex flex-column gap-3">
     <div>
         <legend>Nova Demanda</legend>
         {{form_criar_demanda.csrf_token}}
@@ -6,35 +8,29 @@
     <div>
         {{form_criar_demanda.titulo.label}}
         {{form_criar_demanda.titulo(class_='form-control')}}
-        {% if form_criar_demanda.titulo.errors %}
-        <ul>
-            {% for e in form_criar_demanda.titulo.errors %}
-            <li>{{e}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        {{erros_campo(form_criar_demanda.titulo)}}
     </div>
     <div>
         {{form_criar_demanda.tipo_id.label}}
         {{form_criar_demanda.tipo_id(class_='form-select')}}
-        {% if form_criar_demanda.tipo_id.errors %}
-        <ul>
-            {% for e in form_criar_demanda.tipo_id.errors %}
-            <li>{{e}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        {{erros_campo(form_criar_demanda.tipo_id)}}
     </div>
     <div>
         {{form_criar_demanda.responsavel_id.label}}
         {{form_criar_demanda.responsavel_id(class_='form-select')}}
-        {% if form_criar_demanda.responsavel_id.errors %}
-        <ul>
-            {% for e in form_criar_demanda.responsavel_id.errors %}
-            <li>{{e}}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        {{erros_campo(form_criar_demanda.responsavel_id)}}
+    </div>
+    <div class="d-flex gap-2">
+        <div>
+            {{form_criar_demanda.dia_entrega.label}}
+            {{form_criar_demanda.dia_entrega(class_='form-select')}}
+            {{erros_campo(form_criar_demanda.dia_entrega)}}
+        </div>
+        <div>
+            {{form_criar_demanda.hora_entrega.label}}
+            {{form_criar_demanda.hora_entrega(class_='form-select')}}
+            {{erros_campo(form_criar_demanda.hora_entrega)}}
+        </div>
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Criar</button>
