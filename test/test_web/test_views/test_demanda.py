@@ -44,20 +44,6 @@ def test_post_demandas(web_app_com_autenticacao: WebAppFixture):
     assert x
 
 
-def test_get_option_tipo_demanda(
-    web_app_com_autenticacao: WebAppFixture, gerar_usuario
-):
-    web_app_com_autenticacao.db.add(TipoDemanda(nome="X"))
-    web_app_com_autenticacao.db.commit()
-
-    with web_app_com_autenticacao.app.test_client(
-        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
-    ) as client:
-        resposta = client.get("/tipo_demanda", query_string={"formato": "select"})
-    assert resposta.status_code == 200
-    assert "option" in resposta.data.decode()
-
-
 def test_get_consulta_demanda_form(
     web_app_com_autenticacao: WebAppFixture, gerar_usuario
 ):
