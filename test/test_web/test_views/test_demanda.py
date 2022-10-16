@@ -479,3 +479,14 @@ def test_get_minhas_demandas(web_app_com_autenticacao: WebAppFixture, gerar_usua
         resposta = client.get("/demanda/minhas_demandas")
 
     assert resposta.status_code == 200
+
+
+def test_get_ultimas_demandas_pendentes(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario
+):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/demanda/ultimas-demandas-pendentes")
+
+    assert resposta.status_code == 200

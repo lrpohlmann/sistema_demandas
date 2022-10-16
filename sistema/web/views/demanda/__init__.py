@@ -13,6 +13,7 @@ from sistema.web.views.demanda import (
     consulta_demanda,
     atualizar_status_view,
     minhas_demandas_view,
+    obter_ultimas_demandas_pendentes_view,
 )
 
 
@@ -32,6 +33,7 @@ def setup_views(app, db):
         consulta_demanda,
         atualizar_status_view,
         minhas_demandas_view,
+        obter_ultimas_demandas_pendentes_view,
     ]:
         app, db = v.setup_views(app, db)
 
