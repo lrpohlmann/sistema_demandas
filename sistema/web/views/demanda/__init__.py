@@ -1,6 +1,5 @@
 from sistema.web.views.demanda import (
     criar_tarefa_view,
-    demanda,
     demanda_view,
     editar_demanda_form,
     salvar_edicao_demanda,
@@ -20,7 +19,6 @@ from sistema.web.views.demanda import (
 def setup_views(app, db):
     for v in [
         criar_tarefa_view,
-        demanda,
         demanda_view,
         editar_demanda_form,
         salvar_edicao_demanda,

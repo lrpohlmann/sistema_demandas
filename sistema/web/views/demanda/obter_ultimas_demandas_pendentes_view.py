@@ -30,7 +30,7 @@ def setup_views(app, db):
                 demandas=paginas["paginador"](1),
                 numero_paginas=paginas["numero_paginas"],
                 pagina_atual=1,
-                nome_da_view="demanda",
+                nome_da_view="obter_ultimas_demandas_pendentes",
                 kwargs_url={},
             )
         else:
@@ -38,7 +38,7 @@ def setup_views(app, db):
                 demandas=paginas["paginador"](pagina_requerida),
                 numero_paginas=paginas["numero_paginas"],
                 pagina_atual=pagina_requerida,
-                nome_da_view="demanda",
+                nome_da_view="obter_ultimas_demandas_pendentes",
                 kwargs_url={},
             )
 

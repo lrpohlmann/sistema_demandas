@@ -20,66 +20,6 @@ from test.test_web.fixtures import (
 )
 
 
-def test_get_demandas_vazio(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
-    with web_app_com_autenticacao.app.test_client(
-        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
-    ) as client:
-        resposta = client.get("/demanda", query_string={"pagina": "1"})
-    assert resposta.status_code == 200
-
-
-def test_get_demandas(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
-    web_app_com_autenticacao.db.add(
-        Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Entregar Documento")
-    )
-    web_app_com_autenticacao.db.commit()
-
-    with web_app_com_autenticacao.app.test_client(
-        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
-    ) as client:
-        resposta = client.get("/demanda")
-
-    assert resposta.status_code == 200
-
-
-def test_get_demandas_pagina(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
-    web_app_com_autenticacao.db.add(tp_demanda := TipoDemanda("PROCESSO"))
-    web_app_com_autenticacao.db.commit()
-
-    for n in range(1, 21):
-        web_app_com_autenticacao.db.add(
-            Demanda(tipo=tp_demanda, titulo=str(random.randint(1, 100)))
-        )
-
-    web_app_com_autenticacao.db.commit()
-
-    with web_app_com_autenticacao.app.test_client(
-        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
-    ) as client:
-        resposta = client.get("/demanda", query_string={"pagina": "1"})
-    assert resposta.status_code == 200
-
-
-def test_get_args_demandas(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
-    web_app_com_autenticacao.db.add(
-        Demanda(tipo=TipoDemanda("PROCESSO"), titulo="Demanda X")
-    )
-    web_app_com_autenticacao.db.commit()
-
-    with web_app_com_autenticacao.app.test_client(
-        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
-    ) as client:
-        resposta = client.get(
-            "/demanda",
-            query_string={
-                "titulo": "X",
-                "tipo_id": "1",
-            },
-        )
-
-    assert resposta.status_code == 200
-
-
 def test_post_demandas(web_app_com_autenticacao: WebAppFixture):
     web_app_com_autenticacao.db.add_all(
         [Usuario("Leonardo", "123456"), TipoDemanda("xxxxx")]
