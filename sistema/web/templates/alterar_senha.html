@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from 'macros/form_utils/erros_campo' import erros_campo %}
+
+{% block main %}
+<div>
+    <div>
+        <h1>Alterar Senha</h1>
+    </div>
+    <div>
+        <form action="{{url_for('alterar_senha_view')}}" method="post">
+            <div>
+                {{form.nova_senha.label}}
+                {{form.nova_senha(class_='form-control')}}
+                {{erros_campo(form.nova_senha)}}
+            </div>
+            <div>
+                {{form.nova_senha_repeticao.label}}
+                {{form.nova_senha_repeticao(class_='form-control')}}
+                {{erros_campo(form.nova_senha_repeticao)}}
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">Alterar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

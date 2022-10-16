@@ -1,6 +1,6 @@
 from typing import Mapping
 import flask
-from .paginas import renderizar_pagina_login
+from .paginas import renderizar_pagina_login, renderizar_pagina_alteracao_senha
 
 
 def renderizar_status_tarefa_html(status) -> str:
