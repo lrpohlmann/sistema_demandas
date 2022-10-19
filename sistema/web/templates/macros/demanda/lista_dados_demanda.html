@@ -1,12 +1,29 @@
 {% macro lista_dados_demanda(demanda, demanda_id) -%}
-<div id="lista-dados-demanda">
+<div id="lista-dados-demanda" class="d-flex flex-column gap-2">
     <ul class="list-group">
-        <li class="list-group-item"><span>id: </span><span>{{demanda.id_demanda}}</span></li>
-        <li class="list-group-item"><span>Tipo: </span><span>{{demanda.tipo.nome}}</span></li>
-        <li class="list-group-item"><span>Status: </span><span>{{demanda.status}}</span></li>
-        <li class="list-group-item"><span>Responsável: </span><span>{{demanda.responsavel.nome}}</span></li>
+        <li class="list-group-item"><span class="badge text-bg-primary">id:</span><span
+                class="ms-1">{{demanda.id_demanda}}</span>
+        </li>
+        <li class="list-group-item"><span class="badge text-bg-primary">Tipo: </span><span
+                class="ms-1">{{demanda.tipo.nome}}</span>
+        </li>
+        <li class="list-group-item"><span class="badge text-bg-primary">Status: </span><span
+                class="ms-1">{{demanda.status}}</span>
+        </li>
+        {% if demanda.responsavel %}
+        <li class="list-group-item"><span class="badge text-bg-primary">Responsável:
+            </span><span class="ms-1">{{demanda.responsavel.nome}}</span></li>
+        {% endif %}
+        <li class="list-group-item"><span class="badge text-bg-primary">Data Criação:
+            </span><span class="ms-1">{{demanda.data_criacao}}</span></li>
+        {% if demanda.data_entrega %}
+        <li class="list-group-item"><span class="badge text-bg-primary">Data Entrega:
+            </span><span class="ms-1">{{demanda.data_entrega}}</span></li>
+        {% endif %}
     </ul>
-    <button hx-get="{{url_for('editar_demanda_form', demanda_id=demanda_id)}}" hx-target="#lista-dados-demanda"
-        hx-swap="outerHTML" type="button" class="btn btn-primary">Editar</button>
+    <div>
+        <button hx-get="{{url_for('editar_demanda_form', demanda_id=demanda_id)}}" hx-target="#lista-dados-demanda"
+            hx-swap="outerHTML" type="button" class="btn btn-warning">Editar</button>
+    </div>
 </div>
 {%- endmacro %}
