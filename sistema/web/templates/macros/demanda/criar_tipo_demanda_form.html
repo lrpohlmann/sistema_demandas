@@ -2,7 +2,7 @@
 
 {% macro criar_tipo_demanda_form(form) %}
 <div data-hx-elemento-alvo="">
-    <form>
+    <form class="d-flex flex-column gap-2">
         <div>
             <legend>Criar Tipo Demanda</legend>
         </div>
@@ -17,4 +17,8 @@
         </div>
     </form>
 </div>
+{% endmacro %}
+
+{% macro obter_tipo_demanda_form() %}
+<div hx-get="{{url_for('criar_tipo_demanda_view')}}" hx-swap="outerHTML" hx-trigger="load"></div>
 {% endmacro %}
