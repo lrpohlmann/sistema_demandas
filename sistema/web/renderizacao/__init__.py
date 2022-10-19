@@ -1,4 +1,4 @@
-from typing import Mapping
+from typing import Mapping, Sequence, Tuple, Union
 import flask
 from .paginas import renderizar_pagina_login, renderizar_pagina_alteracao_senha
 
@@ -136,4 +136,13 @@ def renderizar_criar_tipo_demanda_form(form) -> str:
     return flask.render_template_string(
         "{% from 'macros/demanda/criar_tipo_demanda_form.html' import criar_tipo_demanda_form %} {{criar_tipo_demanda_form(form)}}",
         form=form,
+    )
+
+
+def renderizar_option_tags(
+    dados_opcoes: Sequence[Tuple[Union[int, str], Union[int, str]]]
+) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/form_utils/option_tag.html' import gerar_options %} {{gerar_options(opcoes)}}",
+        opcoes=dados_opcoes,
     )

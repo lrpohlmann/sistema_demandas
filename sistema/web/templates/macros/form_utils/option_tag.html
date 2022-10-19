@@ -1,0 +1,7 @@
+{% macro gerar_options(opcoes) %}
+
+{% for opcao_id, opcao_nome in opcoes %}
+<option value="{{opcao_id}}">{{opcao_nome}}</option>
+{% endfor %}
+
+{% endmacro %}
