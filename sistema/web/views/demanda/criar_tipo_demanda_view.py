@@ -1,5 +1,6 @@
 from flask_login import login_required
 import flask
+import sqlalchemy
 
 from sistema.web.forms import criar_tipo_demanda
 from sistema.model.entidades import TipoDemanda
@@ -23,5 +24,18 @@ def setup_views(app, db):
             )
 
         return renderizacao.renderizar_criar_tipo_demanda_form(form)
+
+    @app.route("/tipo-demanda/options", methods=["GET"])
+    @login_required
+    def obter_options_tipo_demanda():
+
+        dados_tipo_demanda = [
+            (resultado[0], resultado[1])
+            for resultado in db.execute(
+                sqlalchemy.select(TipoDemanda.id_tipo_demanda, TipoDemanda.nome)
+            )
+        ]
+
+        return renderizacao.renderizar_option_tags(dados_tipo_demanda)
 
     return app, db
