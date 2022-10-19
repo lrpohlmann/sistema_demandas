@@ -130,3 +130,10 @@ def renderizar_tabela_de_tarefas(
         kwargs_url=kwargs_url,
         alvo_atualizacao=alvo_atualizacao,
     )
+
+
+def renderizar_criar_tipo_demanda_form(form) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/demanda/criar_tipo_demanda_form.html' import criar_tipo_demanda_form %} {{criar_tipo_demanda_form(form)}}",
+        form=form,
+    )

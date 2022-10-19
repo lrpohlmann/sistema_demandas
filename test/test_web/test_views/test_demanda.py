@@ -416,3 +416,17 @@ def test_get_ultimas_demandas_pendentes(
         resposta = client.get("/demanda/ultimas-demandas-pendentes")
 
     assert resposta.status_code == 200
+
+
+def test_post_criar_tipo_demanda_view(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario
+):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.post(
+            "/tipo-demanda/criar",
+            data={"nome": "acamdvpdokadpsk"},
+        )
+
+    assert resposta.status_code == 201

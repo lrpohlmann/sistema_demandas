@@ -1,0 +1,20 @@
+{% from 'macros/form_utils/erros_campo.html' import erros_campo %}
+
+{% macro criar_tipo_demanda_form(form) %}
+<div data-hx-elemento-alvo="">
+    <form>
+        <div>
+            <legend>Criar Tipo Demanda</legend>
+        </div>
+        <div>
+            {{form.nome.label}}
+            {{form.nome(class_='form-control')}}
+            {{erros_campo(form.nome)}}
+        </div>
+        <div>
+            <button class="btn btn-success" hx-post="{{url_for('criar_tipo_demanda_view')}}"
+                hx-target="closest div[data-hx-elemento-alvo]" hx-swap="outerHTML">Criar</button>
+        </div>
+    </form>
+</div>
+{% endmacro %}
