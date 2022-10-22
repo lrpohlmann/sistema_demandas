@@ -146,3 +146,10 @@ def renderizar_option_tags(
         "{% from 'macros/form_utils/option_tag.html' import gerar_options %} {{gerar_options(opcoes)}}",
         opcoes=dados_opcoes,
     )
+
+
+def renderizar_form_criar_tipo_documento(form) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/documento/criar_tipo_documento_form.html' import criar_tipo_documento_form %} {{criar_tipo_documento_form(form)}}",
+        form=form,
+    )

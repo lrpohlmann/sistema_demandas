@@ -1,0 +1,19 @@
+{% from 'macros/form_utils/erros_campo.html' import erros_campo %}
+
+{% macro criar_tipo_documento_form(form) %}
+<div>
+    <form hx-post="{{url_for('criar_tipo_documento_view')}}" class="d-flex flex-column gap-2">
+        <div>
+            <legend>Criar Tipo Documento</legend>
+        </div>
+        <div>
+            {{form.nome.label}}
+            {{form.nome(class_='form-control')}}
+            {{erros_campo(form.nome)}}
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success">Criar</button>
+        </div>
+    </form>
+</div>
+{% endmacro %}
