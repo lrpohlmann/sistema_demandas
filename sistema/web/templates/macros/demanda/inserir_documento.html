@@ -1,4 +1,5 @@
 {% from 'macros/form_utils/erros_campo.html' import erros_campo %}
+{% from 'macros/documento/criar_tipo_documento_form.html' import obter_criar_tipo_documento_form %}
 
 {% macro inserir_documento(form, demanda_id) %}
 <div id="inserir-documento-form">
@@ -15,10 +16,34 @@
             {{form.nome(class_='form-control')}}
             {{erros_campo(form.nome)}}
         </div>
-        <div>
-            {{form.tipo.label}}
-            {{form.tipo(class_='form-select')}}
-            {{erros_campo(form.tipo)}}
+        <div class="d-flex gap-2">
+            <div>
+                {{form.tipo.label}}
+                {{form.tipo(class_='form-select')}}
+                {{erros_campo(form.tipo)}}
+            </div>
+            <div class="d-flex flex-column justify-content-end">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#form-criar-tipo-de-documento">
+                    Novo Tipo de Documento
+                </button>
+
+                <div class="modal fade" id="form-criar-tipo-de-documento" tabindex="-1"
+                    aria-labelledby="form-criar-tipo-de-documentoLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="form-criar-tipo-de-documentoLabel">Modal title</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{obter_criar_tipo_documento_form()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div>
             {{form.identificador.label}}

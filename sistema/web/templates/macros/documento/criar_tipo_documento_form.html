@@ -17,3 +17,7 @@
     </form>
 </div>
 {% endmacro %}
+
+{% macro obter_criar_tipo_documento_form() %}
+<div hx-get="{{url_for('obter_criar_tipo_documento_form_view')}}" hx-trigger="load" hx-swap="outerHTML"></div>
+{% endmacro %}
