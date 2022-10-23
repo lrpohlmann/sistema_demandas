@@ -8,4 +8,5 @@ TAREFA_FINALIZADA = "TarefaFinalizada"
 
 FATO_CRIADO = "fatoCriado"
 
+TIPO_DOCUMENTO_CRIADO = "TipoDocumentoCriado"
 DOCUMENTO_CRIADO = "DocumentoCriado"

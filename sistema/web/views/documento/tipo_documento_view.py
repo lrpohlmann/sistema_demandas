@@ -5,6 +5,7 @@ import sqlalchemy
 from sistema.web.forms import criar_tipo_documento_form
 from sistema.web import renderizacao
 from sistema.model.entidades.documento import TipoDocumento
+from sistema.web import eventos_cliente
 
 
 def setup_views(app, db):
@@ -23,10 +24,14 @@ def setup_views(app, db):
         )
         if criar_tipo_documento_form.e_valido(form):
             dados = criar_tipo_documento_form.obter_dados(form)
-            db.add(TipoDocumento(**dados))
+            db.add(TipoDocumento(dados["nome"]))
             db.commit()
 
-            return renderizacao.renderizar_form_criar_tipo_documento(form), 201
+            return (
+                renderizacao.renderizar_form_criar_tipo_documento(form),
+                201,
+                {"HX-Trigger": eventos_cliente.TIPO_DOCUMENTO_CRIADO},
+            )
 
         return renderizacao.renderizar_form_criar_tipo_documento(form)
 
