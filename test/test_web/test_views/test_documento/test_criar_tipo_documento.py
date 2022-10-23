@@ -28,3 +28,14 @@ def test_post_criar_tipo_documento_view(
         )
 
     assert resposta.status_code == 201
+
+
+def test_get_options_tipo_documento(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario, faker_obj
+):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/tipo-documento/options")
+
+    assert resposta.status_code == 200

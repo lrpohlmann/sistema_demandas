@@ -1,5 +1,6 @@
 from flask_login import login_required
 import flask
+import sqlalchemy
 
 from sistema.web.forms import criar_tipo_documento_form
 from sistema.web import renderizacao
@@ -28,5 +29,19 @@ def setup_views(app, db):
             return renderizacao.renderizar_form_criar_tipo_documento(form), 201
 
         return renderizacao.renderizar_form_criar_tipo_documento(form)
+
+    @app.route("/tipo-documento/options", methods=["GET"])
+    @login_required
+    def obter_options_tipo_documento():
+        return renderizacao.renderizar_option_tags(
+            [
+                (consulta[0], consulta[1])
+                for consulta in db.execute(
+                    sqlalchemy.select(
+                        TipoDocumento.id_tipo_documento, TipoDocumento.nome
+                    )
+                ).fetchall()
+            ]
+        )
 
     return app, db
