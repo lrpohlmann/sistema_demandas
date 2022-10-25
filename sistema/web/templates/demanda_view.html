@@ -6,6 +6,9 @@
 {% from 'macros/documento/lista_documento.html' import lista_documento %}
 {% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_em_aberto_card_com_paginacao,
 sequencia_tarefa_finalizada_card_com_paginacao %}
+{% from 'macros/documento/tabela_e_form_documento.html' import obter_tabela_e_form_documento %}
+{% from 'macros/tarefa/lista_e_form_tarefa.html' import lista_e_form_tarefa %}
+{% from 'macros/geral/bootstrap/accordion.html' import accordion %}
 
 {% block main %}
 <div>
@@ -19,49 +22,21 @@ sequencia_tarefa_finalizada_card_com_paginacao %}
         <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
             data-bs-target="#linha-do-tempo-offcanvas">Linha do Tempo</button>
     </div>
-    <div class="col-6">
-        <div hx-get="{{url_for('obter_lista_de_documentos', demanda_id=demanda.id_demanda)}}" hx-trigger="load"
-            hx-swap="outerHTML"></div>
-        <div hx-get="{{url_for('inserir_documento_view', demanda_id=demanda.id_demanda)}}" hx-swap="outerHTML"
-            hx-trigger="load">
-        </div>
-    </div>
 </div>
 <div>
-    <div class="col">
-        <div class="row">
-            <div class="col-12">
-                <h2>Tarefas</h2>
-            </div>
-            <div class="col-6">
-                {{criar_tarefa(criar_tarefa_form, demanda.id_demanda)}}
-            </div>
-            <div class="col-6">
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pills-tarefas-pendentes" data-bs-toggle="pill"
-                            data-bs-target="#tarefas-pendentes" role="tab" aria-controls="tarefas-pendentes"
-                            aria-selected="true">Tarefas Pendentes</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-tarefas-finalizadas" data-bs-toggle="pill"
-                            data-bs-target="#tarefas-finalizadas" role="tab" aria-controls="tarefas-finalizadas"
-                            aria-selected="false">Tarefas Finalizadas</button>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div id="tarefas-pendentes" role="tabpanel" aria-labelledby="pills-ultimas-demandas"
-                        class="tab-pane fade show active">
-                        {{sequencia_tarefa_em_aberto_card_com_paginacao(demanda_id=demanda.id_demanda)}}
-                    </div>
-                    <div id="tarefas-finalizadas" role="tabpanel" aria-labelledby="pills-tarefas-finalizadas"
-                        class="tab-pane fade">
-                        {{sequencia_tarefa_finalizada_card_com_paginacao(demanda.id_demanda)}}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{
+    accordion('demanda',
+    [
+    {'titulo': 'Documentos', 'conteudo': obter_tabela_e_form_documento, 'kwargs': {'demanda_id':
+    demanda.id_demanda}},
+    {'titulo': 'Tarefas', 'conteudo': lista_e_form_tarefa, 'kwargs': {'criar_tarefa_form': criar_tarefa_form,
+    'demanda_id': demanda.id_demanda}}
+    ]
+    )
+    }}
+</div>
+<div>
+
     {{linha_do_tempo(demanda.id_demanda, form_criar_fato)}}
 </div>
-{% endblock %}
+{% endblock %}{{criar_tarefa(criar_tarefa_form, demanda.id_demanda)}}

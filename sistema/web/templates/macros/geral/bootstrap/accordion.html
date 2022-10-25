@@ -1,5 +1,5 @@
 {% macro accordion(html_id, conteudo_obj_sequencia=[]) %}
-<div class="accordion" id="{{html_id}}">
+<div class="accordion accordion-flush" id="{{html_id}}">
     {% for cont in conteudo_obj_sequencia %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="{{html_id}}-header-{{loop.index0}}">
@@ -10,10 +10,10 @@
             </button>
         </h2>
         <div id="{{html_id}}-conteudo-{{loop.index0}}" class="accordion-collapse collapse show"
-            aria-labelledby="{{html_id}}-header-{{loop.index0}}" data-bs-parent="#{{html_id}}">
+            aria-labelledby="{{html_id}}-header-{{loop.index0}}">
             <div class="accordion-body">
                 {% if cont.conteudo is callable %}
-                {{cont.conteudo()}}
+                {{cont.conteudo(**cont.kwargs)}}
                 {% else %}
                 {{cont.conteudo}}
                 {% endif %}
