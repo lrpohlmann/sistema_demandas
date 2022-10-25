@@ -1,0 +1,25 @@
+{% macro accordion(html_id, conteudo_obj_sequencia=[]) %}
+<div class="accordion" id="{{html_id}}">
+    {% for cont in conteudo_obj_sequencia %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="{{html_id}}-header-{{loop.index0}}">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                data-bs-target="#{{html_id}}-conteudo-{{loop.index0}}" aria-expanded="true"
+                aria-controls="{{html_id}}-conteudo-{{loop.index0}}">
+                {{cont.titulo}}
+            </button>
+        </h2>
+        <div id="{{html_id}}-conteudo-{{loop.index0}}" class="accordion-collapse collapse show"
+            aria-labelledby="{{html_id}}-header-{{loop.index0}}" data-bs-parent="#{{html_id}}">
+            <div class="accordion-body">
+                {% if cont.conteudo is callable %}
+                {{cont.conteudo()}}
+                {% else %}
+                {{cont.conteudo}}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endmacro %}
