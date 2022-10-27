@@ -1,41 +1,33 @@
+{% from 'macros/form_utils/erros_campo.html' import erros_campo %}
+
 {% macro criar_tarefa(form, id_demanda) -%}
 <div id="criar-tarefa-form-container">
-    <form id="form-criar-tarefa" hx-post="{{url_for('criar_tarefa_view', demanda_id=id_demanda)}}"
-        hx-target="#criar-tarefa-form-container" hx-swap="outerHTML">
+    <form class="d-flex flex-column gap-2" id="form-criar-tarefa"
+        hx-post="{{url_for('criar_tarefa_view', demanda_id=id_demanda)}}" hx-target="#criar-tarefa-form-container"
+        hx-swap="outerHTML">
         <legend>Criar Tarefa</legend>
         {{form.csrf_token}}
         <div>
             {{form.titulo.label}}
             {{form.titulo(class_='form-control')}}
-            {% if form.titulo.errors %}
-            <ul>
-                {% for erro in form.titulo.errors %}
-                <li>{{erro}}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+            {{erros_campo(form.titulo)}}
         </div>
         <div>
             {{form.responsavel_id.label}}
             {{form.responsavel_id(class_='form-select')}}
-            {% if form.responsavel_id.errors %}
-            <ul>
-                {% for erro in form.responsavel_id.errors %}
-                <li>{{erro}}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+            {{erros_campo(form.responsavel_id)}}
         </div>
-        <div>
-            {{form.data_entrega.label}}
-            {{form.data_entrega(class_='form-control')}}
-            {% if form.data_entrega.errors %}
-            <ul>
-                {% for erro in form.data_entrega.errors %}
-                <li>{{erro}}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+        <div class="d-flex gap-2">
+            <div>
+                {{form.dia_entrega.label}}
+                {{form.dia_entrega(class_='form-control')}}
+                {{erros_campo(form.dia_entrega)}}
+            </div>
+            <div>
+                {{form.hora_entrega.label}}
+                {{form.hora_entrega(class_='form-control')}}
+                {{erros_campo(form.hora_entrega)}}
+            </div>
         </div>
         <div>
             {{form.descricao.label}}
