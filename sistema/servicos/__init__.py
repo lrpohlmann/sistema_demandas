@@ -1,1 +1,1 @@
-from .pagincao import paginar
+from .paginacao import paginar
