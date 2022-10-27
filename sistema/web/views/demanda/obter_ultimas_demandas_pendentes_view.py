@@ -2,7 +2,7 @@ from flask import request
 from flask_login import login_required
 
 from sistema.model.entidades import Demanda
-from sistema.servicos import pagincao
+from sistema.servicos import paginacao
 from sistema.web import renderizacao
 
 
@@ -18,8 +18,8 @@ def setup_views(app, db):
             .all()
         )
 
-        paginas = pagincao.paginar(demandas, 10)
-        pagina_requerida = pagincao.validar_pagina_pedida(
+        paginas = paginacao.paginar(demandas, 10)
+        pagina_requerida = paginacao.validar_pagina_pedida(
             request.args.get("pagina"), paginas["numero_paginas"]
         )
 

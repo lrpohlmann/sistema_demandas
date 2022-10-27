@@ -7,7 +7,7 @@ from sistema.model.entidades import Tarefa, StatusTarefa, Demanda, Usuario
 from sistema.model.operacoes.tarefa import set_status, finalizar_tarefa
 from sistema.web.forms import criar_tarefa
 from .. import renderizacao
-from sistema.servicos import pagincao
+from sistema.servicos import paginacao
 from sistema.web import eventos_cliente
 
 
@@ -92,9 +92,9 @@ def setup_views(app: Flask, db: scoped_session):
             .all()
         )
 
-        tarefas_finalizadas_paginadas = pagincao.paginar(tarefas_finalizadas, 5)
+        tarefas_finalizadas_paginadas = paginacao.paginar(tarefas_finalizadas, 5)
         numero_de_paginas = tarefas_finalizadas_paginadas["numero_paginas"]
-        pagina_pedida = pagincao.validar_pagina_pedida(
+        pagina_pedida = paginacao.validar_pagina_pedida(
             request.args.get("pagina"), numero_de_paginas
         )
         pagina_com_tarefas = tarefas_finalizadas_paginadas["paginador"](pagina_pedida)
@@ -122,9 +122,9 @@ def setup_views(app: Flask, db: scoped_session):
             .all()
         )
 
-        tarefas_paginadas = pagincao.paginar(minhas_tarefas_em_aberto, 10)
+        tarefas_paginadas = paginacao.paginar(minhas_tarefas_em_aberto, 10)
         numero_de_paginas = tarefas_paginadas["numero_paginas"]
-        pagina_requerida = pagincao.validar_pagina_pedida(
+        pagina_requerida = paginacao.validar_pagina_pedida(
             request.args.get("pagina"), numero_de_paginas
         )
         tarefas_pagina_requerida = tarefas_paginadas["paginador"](pagina_requerida)

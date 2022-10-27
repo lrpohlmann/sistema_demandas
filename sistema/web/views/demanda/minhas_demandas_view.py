@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 import sqlalchemy
 
 from sistema.model.entidades.demanda import Demanda
-from sistema.servicos import pagincao
+from sistema.servicos import paginacao
 from sistema.web import renderizacao
 
 
@@ -20,7 +20,7 @@ def setup_views(app, db):
             .scalars()
             .all()
         )
-        demandas_paginadas = pagincao.paginar(demandas, 10)
+        demandas_paginadas = paginacao.paginar(demandas, 10)
         pagina = request.args.get("pagina") or 1
 
         return renderizacao.renderizar_tabela_de_demandas(

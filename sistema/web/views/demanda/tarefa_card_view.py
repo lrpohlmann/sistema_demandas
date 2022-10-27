@@ -4,7 +4,7 @@ import sqlalchemy
 
 from sistema.model.entidades.tarefa import StatusTarefa, Tarefa
 from sistema.web import renderizacao
-from sistema.servicos import pagincao
+from sistema.servicos import paginacao
 
 
 def setup_views(app, db):
@@ -24,7 +24,7 @@ def setup_views(app, db):
             .all()
         )
 
-        tarefas_paginadas = pagincao.paginar(tarefas, 5)
+        tarefas_paginadas = paginacao.paginar(tarefas, 5)
 
         pagina_selecionada = request.args.get("pagina")
         if pagina_selecionada is not None:
