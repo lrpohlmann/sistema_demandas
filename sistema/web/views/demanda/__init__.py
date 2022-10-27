@@ -12,6 +12,7 @@ from sistema.web.views.demanda import (
     minhas_demandas_view,
     obter_ultimas_demandas_pendentes_view,
     criar_tipo_demanda_view,
+    criar_demanda_view,
 )
 
 
@@ -30,6 +31,7 @@ def setup_views(app, db):
         minhas_demandas_view,
         obter_ultimas_demandas_pendentes_view,
         criar_tipo_demanda_view,
+        criar_demanda_view,
     ]:
         app, db = v.setup_views(app, db)
 

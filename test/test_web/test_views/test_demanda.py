@@ -18,6 +18,53 @@ from test.test_web.fixtures import (
     WebAppFixture,
     gerar_usuario,
 )
+from test.fixtures import faker_obj
+
+
+def test_post_criar_demanda_view_ok(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario, faker_obj
+):
+    web_app_com_autenticacao.db.add(TipoDemanda(faker_obj.bothify("??????")))
+    web_app_com_autenticacao.db.commit()
+
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.post(
+            "/demanda/criar",
+            data={
+                "titulo": "Demanda 1",
+                "tipo_id": "1",
+                "responsavel_id": "1",
+                "dia_entrega": "2022-11-01",
+                "hora_entrega": "15:00",
+            },
+        )
+
+    assert resposta.status_code == 201
+
+
+def test_post_criar_demanda_view_falha(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario, faker_obj
+):
+    web_app_com_autenticacao.db.add(TipoDemanda(faker_obj.bothify("??????")))
+    web_app_com_autenticacao.db.commit()
+
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.post(
+            "/demanda/criar",
+            data={
+                "titulo": "Demanda 1",
+                "tipo_id": "1",
+                "responsavel_id": "1",
+                "dia_entrega": "2022-11-01",
+                "hora_entrega": "",
+            },
+        )
+
+    assert resposta.status_code == 200
 
 
 def test_post_demandas(web_app_com_autenticacao: WebAppFixture):
