@@ -3,14 +3,53 @@ from sqlalchemy.orm import scoped_session
 import sqlalchemy
 from flask_login import login_required, current_user
 
-from sistema.model.entidades import Tarefa, StatusTarefa, Demanda
+from sistema.model.entidades import Tarefa, StatusTarefa, Demanda, Usuario
 from sistema.model.operacoes.tarefa import set_status, finalizar_tarefa
+from sistema.web.forms import criar_tarefa
 from .. import renderizacao
 from sistema.servicos import pagincao
 from sistema.web import eventos_cliente
 
 
 def setup_views(app: Flask, db: scoped_session):
+    @app.route("/tarefas/criar/<int:demanda_id>", methods=["POST"])
+    @login_required
+    def criar_tarefa_view(demanda_id: int):
+        demanda: Demanda = db.get(Demanda, demanda_id)
+        if not demanda:
+            return "", 404
+
+        form = criar_tarefa.criar_form(
+            escolhas_responsavel=[
+                (u.id_usuario, u.nome) for u in db.query(Usuario).all()
+            ]
+            + [("", "-")],
+            **request.form
+        )
+        if criar_tarefa.e_valido(form):
+            dados = criar_tarefa.obter_dados(form)
+            tarefa_criada = Tarefa(
+                responsavel=db.get(Usuario, dados.get("responsavel_id"))
+                if dados.get("responsavel_id")
+                else None,
+                titulo=dados.get("titulo"),
+                data_entrega=dados.get("data_entrega"),
+                descricao=dados.get("descricao"),
+            )
+            demanda.tarefas.append(
+                tarefa_criada,
+            )
+            db.add(tarefa_criada)
+            db.commit()
+
+            return (
+                renderizacao.renderizar_criar_tarefa_form(form, demanda_id),
+                202,
+                {"HX-Trigger": eventos_cliente.TAREFA_CRIADA},
+            )
+
+        return renderizacao.renderizar_criar_tarefa_form(form, demanda_id)
+
     @app.route("/tarefa/deletar/<int:tarefa_id>", methods=["DELETE"])
     @login_required
     def deletar_tarefa_view(tarefa_id: int):

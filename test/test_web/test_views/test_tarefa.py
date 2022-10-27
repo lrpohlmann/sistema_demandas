@@ -11,6 +11,31 @@ from test.test_web.fixtures import (
 from test.fixtures import faker_obj
 
 
+def test_criar_tarefa(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
+    usuario = gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    web_app_com_autenticacao.db.add(
+        Demanda(
+            "AAAAA",
+            tipo=TipoDemanda("XXXXX"),
+            responsavel=Usuario("IIIIII", "12348665"),
+        )
+    )
+    web_app_com_autenticacao.db.commit()
+
+    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
+        resposta = client.post(
+            "/tarefas/criar/1",
+            data={
+                "titulo": "Título Tarefa",
+                "responsavel_id": "1",
+                "descricao": "",
+                "data_entrega": "",
+            },
+        )
+
+    assert resposta.status_code == 202
+
+
 def test_deletar_tarefa(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
     tarefa = Tarefa(titulo="Z")
     demanda = Demanda(titulo="X", tipo=TipoDemanda("Y"), tarefas=[tarefa])
