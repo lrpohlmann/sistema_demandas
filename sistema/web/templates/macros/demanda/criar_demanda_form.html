@@ -1,0 +1,68 @@
+{% from 'macros/form_utils/erros_campo.html' import erros_campo %}
+{% from 'macros/demanda/criar_tipo_demanda_form.html' import obter_tipo_demanda_form %}
+
+
+{% macro form_criar_demanda(form_criar_demanda) %}
+<form action="{{url_for('main')}}" method="post" class="d-flex flex-column gap-3">
+    <div>
+        <legend>Nova Demanda</legend>
+        {{form_criar_demanda.csrf_token}}
+    </div>
+    <div>
+        {{form_criar_demanda.titulo.label}}
+        {{form_criar_demanda.titulo(class_='form-control')}}
+        {{erros_campo(form_criar_demanda.titulo)}}
+    </div>
+    <div>
+        {{form_criar_demanda.responsavel_id.label}}
+        {{form_criar_demanda.responsavel_id(class_='form-select')}}
+        {{erros_campo(form_criar_demanda.responsavel_id)}}
+
+    </div>
+    <div class="d-flex gap-2">
+        <div>
+            {{form_criar_demanda.tipo_id.label}}
+            {{form_criar_demanda.tipo_id(class_='form-select', **{'hx-get': url_for('obter_options_tipo_demanda'),
+            'hx-trigger': 'TipoDemandaCriado from:body'})}}
+            {{erros_campo(form_criar_demanda.tipo_id)}}
+        </div>
+        <div class="d-flex flex-column justify-content-end">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#form-criar-tipo-demanda-modal">
+                Novo Tipo de Demanda
+            </button>
+
+            <div class="modal fade" id="form-criar-tipo-demanda-modal" tabindex="-1"
+                aria-labelledby="form-criar-tipo-demanda-modalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="form-criar-tipo-demanda-modalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{obter_tipo_demanda_form()}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <div>
+            {{form_criar_demanda.dia_entrega.label}}
+            {{form_criar_demanda.dia_entrega(class_='form-select')}}
+            {{erros_campo(form_criar_demanda.dia_entrega)}}
+        </div>
+        <div>
+            {{form_criar_demanda.hora_entrega.label}}
+            {{form_criar_demanda.hora_entrega(class_='form-select')}}
+            {{erros_campo(form_criar_demanda.hora_entrega)}}
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Criar</button>
+    </div>
+</form>
+{% endmacro %}

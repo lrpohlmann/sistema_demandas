@@ -153,3 +153,10 @@ def renderizar_form_criar_tipo_documento(form) -> str:
         "{% from 'macros/documento/criar_tipo_documento_form.html' import criar_tipo_documento_form %} {{criar_tipo_documento_form(form)}}",
         form=form,
     )
+
+
+def renderizar_form_criar_demanda(form) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/demanda/criar_demanda_form.html' import form_criar_demanda %} {{form_criar_demanda(form)}}",
+        form=form,
+    )
