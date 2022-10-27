@@ -10,6 +10,12 @@ sequencia_tarefa_finalizada_card_com_paginacao %}
 {% from 'macros/tarefa/lista_e_form_tarefa.html' import lista_e_form_tarefa %}
 {% from 'macros/geral/bootstrap/accordion.html' import accordion %}
 
+
+{% block page_title %}
+{{demanda.titulo}} | Demanda
+{% endblock %}
+
+
 {% block main %}
 <div>
     <h1>{{demanda.titulo}}</h1>
