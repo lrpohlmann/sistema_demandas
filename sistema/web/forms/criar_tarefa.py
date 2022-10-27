@@ -90,5 +90,7 @@ def obter_dados(form) -> Mapping:
 
     if dia_entrega and hora_entrega:
         dados["data_entrega"] = datetime.combine(dia_entrega, hora_entrega)
+    else:
+        dados["data_entrega"] = None
 
     return dados
