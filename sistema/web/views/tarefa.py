@@ -17,14 +17,14 @@ def setup_views(app: Flask, db: scoped_session):
     def criar_tarefa_view(demanda_id: int):
         demanda: Demanda = db.get(Demanda, demanda_id)
         if not demanda:
-            return "", 404
+            return abort(404)
 
         form = criar_tarefa.criar_form(
             escolhas_responsavel=[
                 (u.id_usuario, u.nome) for u in db.query(Usuario).all()
             ]
             + [("", "-")],
-            **request.form
+            dados_input_usuario=request.form,
         )
         if criar_tarefa.e_valido(form):
             dados = criar_tarefa.obter_dados(form)
@@ -32,19 +32,17 @@ def setup_views(app: Flask, db: scoped_session):
                 responsavel=db.get(Usuario, dados.get("responsavel_id"))
                 if dados.get("responsavel_id")
                 else None,
-                titulo=dados.get("titulo"),
-                data_entrega=dados.get("data_entrega"),
-                descricao=dados.get("descricao"),
-            )
-            demanda.tarefas.append(
-                tarefa_criada,
+                titulo=dados["titulo"],
+                data_entrega=dados["data_entrega"],
+                descricao=dados["descricao"],
+                demanda=demanda,
             )
             db.add(tarefa_criada)
             db.commit()
 
             return (
                 renderizacao.renderizar_criar_tarefa_form(form, demanda_id),
-                202,
+                201,
                 {"HX-Trigger": eventos_cliente.TAREFA_CRIADA},
             )
 

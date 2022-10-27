@@ -29,11 +29,12 @@ def test_criar_tarefa(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
                 "titulo": "Título Tarefa",
                 "responsavel_id": "1",
                 "descricao": "",
-                "data_entrega": "",
+                "dia_entrega": "",
+                "hora_entrega": "",
             },
         )
 
-    assert resposta.status_code == 202
+    assert resposta.status_code == 201
 
 
 def test_deletar_tarefa(web_app_com_autenticacao: WebAppFixture, gerar_usuario):
