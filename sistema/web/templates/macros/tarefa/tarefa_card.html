@@ -60,7 +60,7 @@
 eventos_gatilho) %}
 <div data-hx-elemento-alvo="" hx-get="{{url_for(nome_da_view, **kwargs_url)}}" hx-trigger="{{eventos_gatilho}}"
     hx-swap="outerHTML">
-    <div>
+    <div class="d-flex flex-column gap-2 border border-primary border-2 rounded p-3">
         {{sequencia_tarefa_card(tarefas)}}
     </div>
     {{escolha_pagina(pagina_atual, numero_paginas, nome_da_view, kwargs_url, 'closest div[data-hx-elemento-alvo]')}}
