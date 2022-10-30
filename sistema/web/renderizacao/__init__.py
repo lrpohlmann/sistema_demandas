@@ -160,3 +160,10 @@ def renderizar_form_criar_demanda(form) -> str:
         "{% from 'macros/demanda/criar_demanda_form.html' import form_criar_demanda %} {{form_criar_demanda(form)}}",
         form=form,
     )
+
+
+def renderizar_form_consulta_demanda(form) -> str:
+    return flask.render_template_string(
+        "{% from 'macros/demanda/consulta_demanda_form.html' import consulta_demanda_form %} {{consulta_demanda_form(form)}}",
+        form=form,
+    )

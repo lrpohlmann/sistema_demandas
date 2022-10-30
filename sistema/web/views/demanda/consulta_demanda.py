@@ -9,6 +9,28 @@ from sistema.web.forms.consulta_demanda import criar_form, e_valido, obter_dados
 
 
 def setup_views(app, db):
+    @app.route("/demanda/form/consulta-demanda", methods=["GET"])
+    @login_required
+    def obter_form_consulta_demanda():
+        form_consulta_demanda = criar_form(
+            [
+                (r[0], r[1])
+                for r in db.execute(
+                    sqlalchemy.select(usuario.Usuario.id_usuario, usuario.Usuario.nome)
+                ).fetchall()
+            ],
+            [
+                (r[0], r[1])
+                for r in db.execute(
+                    sqlalchemy.select(
+                        demanda.TipoDemanda.id_tipo_demanda, demanda.TipoDemanda.nome
+                    )
+                ).fetchall()
+            ],
+        )
+
+        return renderizacao.renderizar_form_consulta_demanda(form_consulta_demanda)
+
     @app.route("/demanda/consulta", methods=["GET"])
     @login_required
     def consulta_demanda():

@@ -1,0 +1,30 @@
+{% macro consulta_demanda_form(form_consulta_demanda) %}
+<form hx-get="{{url_for('consulta_demanda')}}" hx-params="*" hx-target="#consulta-demandas-alvo" hx-swap="innerHTML">
+    <legend>Consulta Demanda</legend>
+    {{form_consulta_demanda.csrf_token}}
+    <div>
+        {{form_consulta_demanda.titulo.label}}
+        {{form_consulta_demanda.titulo(class_="form-control")}}
+    </div>
+    <div>
+        {{form_consulta_demanda.responsavel_id.label}}
+        {{form_consulta_demanda.responsavel_id(class_="form-select")}}
+    </div>
+    <div>
+        {{form_consulta_demanda.tipo_id.label}}
+        {{form_consulta_demanda.tipo_id(class_="form-select")}}
+    </div>
+    <div>
+        {{form_consulta_demanda.data_criacao.label}}
+        {{form_consulta_demanda.data_criacao(class_="form-control")}}
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Consultar</button>
+    </div>
+</form>
+{% endmacro %}
+
+
+{% macro obter_consulta_demanda_form() %}
+<div hx-get="{{url_for('obter_form_consulta_demanda')}}" hx-trigger="load" hx-swap="outerHTML"></div>
+{% endmacro %}
