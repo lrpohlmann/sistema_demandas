@@ -1,0 +1,9 @@
+{% macro data_hora(valor, valor_padrao='-') %}
+<time datetime="{{valor}}">
+    {% if valor %}
+    {{valor.strftime('%d/%m/%Y %H:%M')}}
+    {% else %}
+    {{valor_padrao}}
+    {% endif %}
+</time>
+{% endmacro %}

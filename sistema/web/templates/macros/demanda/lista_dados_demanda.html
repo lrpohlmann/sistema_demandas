@@ -1,3 +1,5 @@
+{% from 'macros/geral/apresentacao_dados.html' import data_hora %}
+
 {% macro lista_dados_demanda(demanda, demanda_id) -%}
 <div id="lista-dados-demanda" class="d-flex flex-column gap-2">
     <ul class="list-group">
@@ -15,10 +17,10 @@
             </span><span class="ms-1">{{demanda.responsavel.nome}}</span></li>
         {% endif %}
         <li class="list-group-item"><span class="badge text-bg-primary">Data Criação:
-            </span><span class="ms-1">{{demanda.data_criacao}}</span></li>
+            </span><span class="ms-1">{{data_hora(demanda.data_criacao)}}</span></li>
         {% if demanda.data_entrega %}
         <li class="list-group-item"><span class="badge text-bg-primary">Data Entrega:
-            </span><span class="ms-1">{{demanda.data_entrega}}</span></li>
+            </span><span class="ms-1">{{data_hora(demanda.data_entrega)}}</span></li>
         {% endif %}
     </ul>
     <div>

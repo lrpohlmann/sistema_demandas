@@ -1,4 +1,5 @@
 {% from 'macros/geral/escolha_pagina.html' import escolha_pagina %}
+{% from 'macros/geral/apresentacao_dados.html' import data_hora %}
 
 {% macro tabela_demanda(demandas, pagina_atual, numero_paginas, nome_da_view, kwargs_url) %}
 <div data-hx-elemento-alvo="">
@@ -32,8 +33,8 @@
     </td>
     <td>{{d.tipo.nome}}</td>
     <td>{{d.responsavel.nome}}</td>
-    <td><time datetime="{{d.data_criacao}}">{{d.data_criacao}}</time></td>
-    <td><time datetime="{{d.data_entrega}}">{{d.data_entrega}}</time></td>
+    <td>{{data_hora(d.data_criacao)}}</td>
+    <td>{{data_hora(d.data_entrega)}}</td>
     <td>{{d.status}}</td>
 </tr>
 {% endfor %}
