@@ -21,6 +21,17 @@ from test.test_web.fixtures import (
 from test.fixtures import faker_obj
 
 
+def test_obter_form_criar_demanda_view(
+    web_app_com_autenticacao: WebAppFixture, gerar_usuario, faker_obj
+):
+    with web_app_com_autenticacao.app.test_client(
+        user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
+    ) as client:
+        resposta = client.get("/demanda/form/criar-demanda")
+
+    assert resposta.status_code == 200
+
+
 def test_post_criar_demanda_view_ok(
     web_app_com_autenticacao: WebAppFixture, gerar_usuario, faker_obj
 ):

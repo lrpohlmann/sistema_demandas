@@ -9,6 +9,27 @@ from sistema.web import renderizacao
 
 
 def setup_views(app, db):
+    @app.route("/demanda/form/criar-demanda", methods=["GET"])
+    @login_required
+    def obter_form_criar_demanda_view():
+        form = criar_demanda.criar_form(
+            responsavel_id_escolhas=[
+                (consulta[0], consulta[1])
+                for consulta in db.execute(
+                    sqlalchemy.select(Usuario.id_usuario, Usuario.nome)
+                )
+            ]
+            + [("", "-")],
+            tipo_id_escolhas=[
+                (consulta[0], consulta[1])
+                for consulta in db.execute(
+                    sqlalchemy.select(TipoDemanda.id_tipo_demanda, TipoDemanda.nome)
+                )
+            ],
+        )
+
+        return renderizacao.renderizar_form_criar_demanda(form)
+
     @app.route("/demanda/criar", methods=["POST"])
     @login_required
     def criar_demanda_view():
