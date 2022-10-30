@@ -55,8 +55,7 @@ Home | Sistema
         </div>
     </div>
     <div class="col-4">
-        <div>
-            {% include 'componentes/forms/form_criar_demandas.html' %}
+        <div hx-get="{{url_for('obter_form_criar_demanda_view')}}" hx-trigger="load" hx-swap="outerHTML">
         </div>
     </div>
 </div>
