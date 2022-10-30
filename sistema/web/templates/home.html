@@ -10,51 +10,57 @@ Home | Sistema
 <div>
     <h1>Home</h1>
 </div>
-<div class="row">
-    <div class="col-12">
+<div>
+    <div>
         <h2>Demandas</h2>
     </div>
-    <div class="col">
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-ultimas-demandas" data-bs-toggle="pill"
-                    data-bs-target="#ultimas-demandas" role="tab" aria-controls="ultimas-demandas"
-                    aria-selected="true">Ultimas Demandas Pendentes</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-minhas-demandas" data-bs-toggle="pill"
-                    data-bs-target="#minhas-demandas" role="tab" aria-controls="minhas-demandas"
-                    aria-selected="false">Minhas Demandas</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-minhas-tarefas" data-bs-toggle="pill"
-                    data-bs-target="#minhas-tarefas" role="tab" aria-controls="minhas-tarefas"
-                    aria-selected="false">Minhas Tarefas Em Aberto</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-consulta-demandas" data-bs-toggle="pill"
-                    data-bs-target="#consulta-demandas" role="tab" aria-controls="consulta-demandas"
-                    aria-selected="false">Consulta Demandas</button>
-            </li>
+    <div class="row">
+        <div class="col-md col-lg-8">
+            <div>
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-ultimas-demandas" data-bs-toggle="pill"
+                            data-bs-target="#ultimas-demandas" role="tab" aria-controls="ultimas-demandas"
+                            aria-selected="true">Ultimas Demandas Pendentes</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-minhas-demandas" data-bs-toggle="pill"
+                            data-bs-target="#minhas-demandas" role="tab" aria-controls="minhas-demandas"
+                            aria-selected="false">Minhas Demandas</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-minhas-tarefas" data-bs-toggle="pill"
+                            data-bs-target="#minhas-tarefas" role="tab" aria-controls="minhas-tarefas"
+                            aria-selected="false">Minhas Tarefas Em Aberto</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-consulta-demandas" data-bs-toggle="pill"
+                            data-bs-target="#consulta-demandas" role="tab" aria-controls="consulta-demandas"
+                            aria-selected="false">Consulta Demandas</button>
+                    </li>
 
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="ultimas-demandas"
-                hx-get="{{url_for('obter_ultimas_demandas_pendentes')}}" hx-target="this" hx-trigger="load"
-                role="tabpanel" aria-labelledby="pills-ultimas-demandas">
+                </ul>
             </div>
-            <div class="tab-pane fade" id="minhas-demandas" role="tabpanel" aria-labelledby="pills-minhas-demandas"
-                hx-get="{{url_for('minhas_demandas')}}" hx-trigger="load" hx-trigger="this"></div>
-            <div class="tab-pane fade" id="minhas-tarefas" role="tabpanel" aria-labelledby="pills-minhas-tarefas">
-                {{tabela_minhas_tarefas_em_aberto()}}
-            </div>
-            <div class="tab-pane fade" id="consulta-demandas" role="tabpanel" aria-labelledby="pills-consulta-demandas">
-                <div hx-get="{{url_for('obter_form_consulta_demanda')}}" hx-trigger="load" hx-swap="outerHTML">
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="ultimas-demandas"
+                    hx-get="{{url_for('obter_ultimas_demandas_pendentes')}}" hx-target="this" hx-trigger="load"
+                    role="tabpanel" aria-labelledby="pills-ultimas-demandas">
                 </div>
-                <div id="consulta-demandas-alvo"></div>
+                <div class="tab-pane fade" id="minhas-demandas" role="tabpanel" aria-labelledby="pills-minhas-demandas"
+                    hx-get="{{url_for('minhas_demandas')}}" hx-trigger="load" hx-trigger="this"></div>
+                <div class="tab-pane fade" id="minhas-tarefas" role="tabpanel" aria-labelledby="pills-minhas-tarefas">
+                    {{tabela_minhas_tarefas_em_aberto()}}
+                </div>
+                <div class="tab-pane fade" id="consulta-demandas" role="tabpanel"
+                    aria-labelledby="pills-consulta-demandas">
+                    <div hx-get="{{url_for('obter_form_consulta_demanda')}}" hx-trigger="load" hx-swap="outerHTML">
+                    </div>
+                    <div id="consulta-demandas-alvo"></div>
+                </div>
             </div>
         </div>
-        <div class="col-4">
+
+        <div class="col-md col-lg-4">
             <div hx-get="{{url_for('obter_form_criar_demanda_view')}}" hx-trigger="load" hx-swap="outerHTML">
             </div>
         </div>
