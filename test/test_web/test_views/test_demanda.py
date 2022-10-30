@@ -78,37 +78,13 @@ def test_post_criar_demanda_view_falha(
     assert resposta.status_code == 200
 
 
-def test_post_demandas(web_app_com_autenticacao: WebAppFixture):
-    web_app_com_autenticacao.db.add_all(
-        [Usuario("Leonardo", "123456"), TipoDemanda("xxxxx")]
-    )
-    web_app_com_autenticacao.db.commit()
-    usuario = web_app_com_autenticacao.db.get(Usuario, 1)
-
-    with web_app_com_autenticacao.app.test_client(user=usuario) as client:
-        resposta = client.post(
-            "/",
-            data={
-                "titulo": "Alterações",
-                "tipo_id": "1",
-                "responsavel_id": "1",
-                "dia_entrega": "2022-05-01",
-                "hora_entrega": "14:44",
-            },
-        )
-
-    assert resposta.status_code == 302
-    x = web_app_com_autenticacao.db.query(Demanda).get(1)
-    assert x
-
-
 def test_get_consulta_demanda_form(
     web_app_com_autenticacao: WebAppFixture, gerar_usuario
 ):
     with web_app_com_autenticacao.app.test_client(
         user=gerar_usuario(web_app_com_autenticacao.db, "Leonardo")
     ) as client:
-        resposta = client.get(f"/form/consulta_demanda")
+        resposta = client.get(f"/demanda/form/consulta-demanda")
 
     assert resposta.status_code == 200
     assert "form" in resposta.data.decode()

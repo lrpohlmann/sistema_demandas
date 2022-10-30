@@ -49,13 +49,14 @@ Home | Sistema
                 {{tabela_minhas_tarefas_em_aberto()}}
             </div>
             <div class="tab-pane fade" id="consulta-demandas" role="tabpanel" aria-labelledby="pills-consulta-demandas">
-                {% include 'componentes/forms/form_consulta_demandas.html' %}
+                <div hx-get="{{url_for('obter_form_consulta_demanda')}}" hx-trigger="load" hx-swap="outerHTML">
+                </div>
                 <div id="consulta-demandas-alvo"></div>
             </div>
         </div>
-    </div>
-    <div class="col-4">
-        <div hx-get="{{url_for('obter_form_criar_demanda_view')}}" hx-trigger="load" hx-swap="outerHTML">
+        <div class="col-4">
+            <div hx-get="{{url_for('obter_form_criar_demanda_view')}}" hx-trigger="load" hx-swap="outerHTML">
+            </div>
         </div>
     </div>
 </div>
