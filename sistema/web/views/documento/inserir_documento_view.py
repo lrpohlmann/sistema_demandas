@@ -10,9 +10,7 @@ from sistema.web import eventos_cliente
 
 
 def setup_views(app, db):
-    @app.route(
-        "/demanda/editar/inserir_documento/<int:demanda_id>", methods=["GET", "POST"]
-    )
+    @app.route("/documento/criar/<int:demanda_id>", methods=["GET", "POST"])
     @login_required
     def inserir_documento_view(demanda_id: int):
         demanda: Demanda = db.get(Demanda, demanda_id)

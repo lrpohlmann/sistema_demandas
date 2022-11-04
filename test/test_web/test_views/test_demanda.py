@@ -247,7 +247,7 @@ def test_inserir_documento_get(web_app_com_autenticacao: WebAppFixture, gerar_us
     with web_app_com_autenticacao.app.test_client(
         user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
     ) as client:
-        resposta = client.get("/demanda/editar/inserir_documento/1")
+        resposta = client.get("/documento/criar/1")
 
     assert resposta.status_code == 200
 
@@ -268,7 +268,7 @@ def test_inserir_documento_post(web_app_com_autenticacao: WebAppFixture, gerar_u
         user=gerar_usuario(web_app_com_autenticacao.db, "Fernão")
     ) as client:
         resposta = client.post(
-            "/demanda/editar/inserir_documento/1",
+            "/documento/criar/1",
             content_type="multipart/form-data",
             data={
                 "nome": "Doc1",
