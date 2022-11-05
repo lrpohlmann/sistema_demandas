@@ -10,6 +10,23 @@ from sistema.web import eventos_cliente
 
 
 def setup_views(app, db):
+    @app.route("/documento/form/criar/<int:demanda_id>", methods=["GET"])
+    @login_required
+    def obter_form_inserir_documento_view(demanda_id: int):
+        escolhas = [
+            list(x)
+            for x in db.execute(
+                sqlalchemy.select(TipoDocumento.id_tipo_documento, TipoDocumento.nome)
+            )
+        ]
+
+        return renderizacao.renderizar_inserir_documento_form(
+            upload_documento_form.criar_form(
+                escolhas_tipo_documento=escolhas,
+            ),
+            demanda_id,
+        )
+
     @app.route("/documento/criar/<int:demanda_id>", methods=["GET", "POST"])
     @login_required
     def inserir_documento_view(demanda_id: int):

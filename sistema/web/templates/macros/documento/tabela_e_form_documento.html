@@ -2,7 +2,8 @@
 <div class="row row-cols-1 row-cols-md-2">
     <div hx-get="{{url_for('obter_lista_de_documentos', demanda_id=demanda_id)}}" hx-trigger="load" hx-swap="outerHTML">
     </div>
-    <div hx-get="{{url_for('inserir_documento_view', demanda_id=demanda_id)}}" hx-swap="outerHTML" hx-trigger="load">
+    <div hx-get="{{url_for('obter_form_inserir_documento_view', demanda_id=demanda_id)}}" hx-swap="outerHTML"
+        hx-trigger="load">
     </div>
 </div>
 {% endmacro %}
