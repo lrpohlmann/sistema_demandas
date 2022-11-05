@@ -44,10 +44,10 @@ def setup_views(app, db):
 
                 demanda.documentos.append(
                     Documento(
-                        nome=dado.get("nome"),
-                        tipo=db.get(TipoDocumento, dado.get("tipo")),
-                        identificador=dado.get("identificador"),
-                        descricao=dado.get("descricao"),
+                        nome=dado["nome"],
+                        tipo=db.get(TipoDocumento, dado["tipo"]),
+                        identificador=dado["identificador"],
+                        descricao=dado["descricao"],
                         arquivo=caminho,
                     )
                 )
