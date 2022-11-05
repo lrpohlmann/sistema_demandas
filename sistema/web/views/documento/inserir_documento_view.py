@@ -27,7 +27,7 @@ def setup_views(app, db):
             demanda_id,
         )
 
-    @app.route("/documento/criar/<int:demanda_id>", methods=["GET", "POST"])
+    @app.route("/documento/criar/<int:demanda_id>", methods=["POST"])
     @login_required
     def inserir_documento_view(demanda_id: int):
         demanda: Demanda = db.get(Demanda, demanda_id)
@@ -38,54 +38,46 @@ def setup_views(app, db):
                 sqlalchemy.select(TipoDocumento.id_tipo_documento, TipoDocumento.nome)
             )
         ]
-        if request.method == "GET":
-            return renderizacao.renderizar_inserir_documento_form(
-                upload_documento_form.criar_form(
-                    escolhas_tipo_documento=escolhas,
+
+        form = upload_documento_form.criar_form(
+            escolhas, arquivo=request.files["arquivo"], **request.form
+        )
+
+        form_e_valido = upload_documento_form.e_valido(form)
+        if form_e_valido:
+            dado = upload_documento_form.obter_dados(form)
+            caminho = upload_arquivo.salvar(
+                app.config["UPLOAD_FOLDER"],
+                dado["arquivo"],
+            )
+
+            demanda.documentos.append(
+                Documento(
+                    nome=dado["nome"],
+                    tipo=db.get(TipoDocumento, dado["tipo"]),
+                    identificador=dado["identificador"],
+                    descricao=dado["descricao"],
+                    arquivo=caminho,
+                )
+            )
+            db.add(demanda)
+            db.commit()
+
+            return (
+                renderizacao.renderizar_inserir_documento_form(
+                    form,
+                    demanda_id,
                 ),
-                demanda_id,
+                201,
+                {"HX-Trigger": eventos_cliente.DOCUMENTO_CRIADO},
             )
-
-        elif request.method == "POST":
-            form = upload_documento_form.criar_form(
-                escolhas, arquivo=request.files["arquivo"], **request.form
+        else:
+            return (
+                renderizacao.renderizar_inserir_documento_form(
+                    form,
+                    demanda_id,
+                ),
+                200,
             )
-
-            form_e_valido = upload_documento_form.e_valido(form)
-            if form_e_valido:
-                dado = upload_documento_form.obter_dados(form)
-                caminho = upload_arquivo.salvar(
-                    app.config["UPLOAD_FOLDER"],
-                    dado["arquivo"],
-                )
-
-                demanda.documentos.append(
-                    Documento(
-                        nome=dado["nome"],
-                        tipo=db.get(TipoDocumento, dado["tipo"]),
-                        identificador=dado["identificador"],
-                        descricao=dado["descricao"],
-                        arquivo=caminho,
-                    )
-                )
-                db.add(demanda)
-                db.commit()
-
-                return (
-                    renderizacao.renderizar_inserir_documento_form(
-                        form,
-                        demanda_id,
-                    ),
-                    201,
-                    {"HX-Trigger": eventos_cliente.DOCUMENTO_CRIADO},
-                )
-            else:
-                return (
-                    renderizacao.renderizar_inserir_documento_form(
-                        form,
-                        demanda_id,
-                    ),
-                    200,
-                )
 
     return app, db
