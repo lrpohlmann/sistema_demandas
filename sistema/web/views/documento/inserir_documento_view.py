@@ -1,4 +1,4 @@
-from flask import request, render_template_string
+from flask import request, render_template_string, abort
 import sqlalchemy
 from flask_login import login_required
 
@@ -31,6 +31,8 @@ def setup_views(app, db):
     @login_required
     def inserir_documento_view(demanda_id: int):
         demanda: Demanda = db.get(Demanda, demanda_id)
+        if not demanda:
+            return abort(404)
 
         escolhas = [
             list(x)
