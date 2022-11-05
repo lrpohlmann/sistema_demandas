@@ -13,6 +13,9 @@ from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
 from sistema.persistencia.orm_mapping import mapear
+from sistema.persistencia.realizar_operacao_com_db import realizar_operacao_com_db
+from sistema.persistencia.operacoes import obter_todos_tipos_demanda
+from test.fixtures import temp_db, faker_obj
 
 
 @pytest.fixture(scope="function")
@@ -130,3 +133,11 @@ def test_db_fato(_setup_db):
         f = s.query(Fato).get(1)
 
     assert f
+
+
+def test_obter_todos_tipos_demanda(temp_db, faker_obj):
+    temp_db.add_all([TipoDemanda(nome=faker_obj.bothify("?????")) for _ in range(0, 5)])
+    temp_db.commit()
+
+    tp_dem = realizar_operacao_com_db(temp_db, obter_todos_tipos_demanda)
+    assert len(tp_dem) == 5
