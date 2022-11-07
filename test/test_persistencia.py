@@ -5,16 +5,21 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import registry, relationship, Session
 from sqlalchemy.engine import Engine
+from sqlalchemy import select
 import pytest
-from sistema.model.entidades.demanda import Demanda, TipoDemanda
 
+from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.documento import TipoDocumento, Documento
 from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
+from sistema.model.operacoes.usuario import definir_senha
 from sistema.persistencia.orm_mapping import mapear
 from sistema.persistencia.realizar_operacao_com_db import realizar_operacao_com_db
-from sistema.persistencia.operacoes import obter_todos_tipos_demanda
+from sistema.persistencia.operacoes import (
+    usuario_com_este_nome_existe,
+    obter_todos_tipos_demanda,
+)
 from test.fixtures import temp_db, faker_obj
 
 
@@ -141,3 +146,22 @@ def test_obter_todos_tipos_demanda(temp_db, faker_obj):
 
     tp_dem = realizar_operacao_com_db(temp_db, obter_todos_tipos_demanda)
     assert len(tp_dem) == 5
+
+
+def test_nome_usuario_existe(temp_db):
+    existe = realizar_operacao_com_db(
+        temp_db, lambda db: usuario_com_este_nome_existe(db, "Leo")
+    )
+    assert not existe
+
+
+def test_nome_usuario_existe_true(temp_db):
+    nome = "João"
+
+    temp_db.add(definir_senha(Usuario(nome), "123456"))
+    temp_db.commit()
+
+    existe = realizar_operacao_com_db(
+        temp_db, lambda db: usuario_com_este_nome_existe(db, nome)
+    )
+    assert existe
