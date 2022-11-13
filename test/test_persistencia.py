@@ -1,26 +1,23 @@
-from sqlalchemy import (
-    MetaData,
-    event,
-    create_engine,
-)
-from sqlalchemy.orm import registry, relationship, Session
-from sqlalchemy.engine import Engine
-from sqlalchemy import select
+from test.fixtures import faker_obj, temp_db
+
 import pytest
+from sqlalchemy import MetaData, create_engine, event, select
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import Session, registry, relationship
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
-from sistema.model.entidades.documento import TipoDocumento, Documento
+from sistema.model.entidades.documento import Documento, TipoDocumento
 from sistema.model.entidades.fato import Fato, TipoFatos
 from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
 from sistema.model.operacoes.usuario import definir_senha
+from sistema.persistencia.operacoes import (
+    obter_todos_tipos_demanda,
+    usuario_com_este_nome_existe,
+    tipo_demanda_com_este_nome_existe,
+)
 from sistema.persistencia.orm_mapping import mapear
 from sistema.persistencia.realizar_operacao_com_db import realizar_operacao_com_db
-from sistema.persistencia.operacoes import (
-    usuario_com_este_nome_existe,
-    obter_todos_tipos_demanda,
-)
-from test.fixtures import temp_db, faker_obj
 
 
 @pytest.fixture(scope="function")
@@ -164,4 +161,17 @@ def test_nome_usuario_existe_true(temp_db):
     existe = realizar_operacao_com_db(
         temp_db, lambda db: usuario_com_este_nome_existe(db, nome)
     )
+    assert existe
+
+
+def test_tipo_demanda_existe(temp_db):
+    nome = "Processo"
+
+    temp_db.add(TipoDemanda(nome))
+    temp_db.commit()
+
+    existe = realizar_operacao_com_db(
+        temp_db, lambda db: tipo_demanda_com_este_nome_existe(db, nome)
+    )
+
     assert existe

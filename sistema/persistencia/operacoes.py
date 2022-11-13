@@ -15,3 +15,13 @@ def usuario_com_este_nome_existe(db: Session, nome: str) -> bool:
         return False
 
     return True
+
+
+def tipo_demanda_com_este_nome_existe(db, nome) -> bool:
+    existe = (
+        db.execute(select(TipoDemanda).where(TipoDemanda.nome == nome)).scalars().all()
+    )
+    if not existe:
+        return False
+
+    return True
