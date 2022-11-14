@@ -3,7 +3,6 @@
 {% from 'macros/tarefa/tarefa_card.html' import tarefa_card %}
 {% from 'macros/tarefa/criar_tarefa.html' import criar_tarefa %}
 {% from 'macros/fato/linha_do_tempo_offcanvas.html' import linha_do_tempo %}
-{% from 'macros/documento/lista_documento.html' import lista_documento %}
 {% from 'macros/tarefa/tarefa_card.html' import sequencia_tarefa_em_aberto_card_com_paginacao,
 sequencia_tarefa_finalizada_card_com_paginacao %}
 {% from 'macros/documento/tabela_e_form_documento.html' import obter_tabela_e_form_documento %}
@@ -17,32 +16,34 @@ sequencia_tarefa_finalizada_card_com_paginacao %}
 
 
 {% block main %}
-<div>
-    <h1>{{demanda.titulo}}</h1>
-</div>
-<div class="row">
-    <div class="col-6">
-        {{lista_dados_demanda(demanda, demanda.id_demanda)}}
+<div class="d-flex flex-column gap-3">
+    <div>
+        <h1>{{demanda.titulo}}</h1>
     </div>
-    <div class="col-6">
-        <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
-            data-bs-target="#linha-do-tempo-offcanvas">Linha do Tempo</button>
+    <div class="row">
+        <div class="col-6">
+            {{lista_dados_demanda(demanda, demanda.id_demanda)}}
+        </div>
+        <div class="col-6">
+            <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas"
+                data-bs-target="#linha-do-tempo-offcanvas">Linha do Tempo</button>
+        </div>
     </div>
-</div>
-<div>
-    {{
-    accordion('demanda',
-    [
-    {'titulo': 'Documentos', 'conteudo': obter_tabela_e_form_documento, 'kwargs': {'demanda_id':
-    demanda.id_demanda}},
-    {'titulo': 'Tarefas', 'conteudo': lista_e_form_tarefa, 'kwargs': {'criar_tarefa_form': criar_tarefa_form,
-    'demanda_id': demanda.id_demanda}}
-    ]
-    )
-    }}
-</div>
-<div>
+    <div>
+        {{
+        accordion('demanda',
+        [
+        {'titulo': 'Documentos', 'conteudo': obter_tabela_e_form_documento, 'kwargs': {'demanda_id':
+        demanda.id_demanda}},
+        {'titulo': 'Tarefas', 'conteudo': lista_e_form_tarefa, 'kwargs': {'criar_tarefa_form': criar_tarefa_form,
+        'demanda_id': demanda.id_demanda}}
+        ]
+        )
+        }}
+    </div>
+    <div>
 
-    {{linha_do_tempo(demanda.id_demanda, form_criar_fato)}}
+        {{linha_do_tempo(demanda.id_demanda, form_criar_fato)}}
+    </div>
 </div>
 {% endblock %}{{criar_tarefa(criar_tarefa_form, demanda.id_demanda)}}

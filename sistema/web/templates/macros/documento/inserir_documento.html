@@ -3,8 +3,8 @@
 
 {% macro inserir_documento(form, demanda_id) %}
 <div id="inserir-documento-form">
-    <form hx-post="{{url_for('inserir_documento_view', demanda_id=demanda_id)}}" hx-swap="innerHTML"
-        hx-swap="#inserir-documento-form" hx-encoding="multipart/form-data">
+    <form class="d-flex flex-column gap-2" hx-post="{{url_for('inserir_documento_view', demanda_id=demanda_id)}}"
+        hx-swap="innerHTML" hx-swap="#inserir-documento-form" hx-encoding="multipart/form-data">
         <div>
             <legend>Inserir Documento</legend>
         </div>
