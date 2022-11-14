@@ -56,7 +56,7 @@ def init_tabela_tipo_documento(metadata):
         "tipo_documento",
         metadata,
         Column("id_tipo_documento", Integer, primary_key=True),
-        Column("nome", String, nullable=False),
+        Column("nome", String, nullable=False, unique=True),
     )
 
 
