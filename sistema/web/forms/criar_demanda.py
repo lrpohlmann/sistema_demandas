@@ -10,25 +10,10 @@ from wtforms import (
     ValidationError,
 )
 
-
-class DateFieldSemValidacaoFormato(DateField):
-    def process_formdata(self, valuelist):
-        if isinstance(valuelist[0], str):
-            self.data = valuelist[0]
-            return
-        else:
-            self.data = None
-            return
-
-
-class TimeFieldSemValidacaoFormato(TimeField):
-    def process_formdata(self, valuelist):
-        if isinstance(valuelist[0], str):
-            self.data = valuelist[0]
-            return
-        else:
-            self.data = None
-            return
+from sistema.web.forms.campos import (
+    DateFieldSemValidacaoFormato,
+    TimeFieldSemValidacaoFormato,
+)
 
 
 def _checar_se_dia_e_hora_estao_preenchidos(form, field):
