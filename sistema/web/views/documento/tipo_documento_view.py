@@ -2,9 +2,10 @@ from flask_login import login_required
 import flask
 import sqlalchemy
 
-from sistema.web.forms import criar_tipo_documento_form
+from sistema.web.forms import criar_tipo_documento_form, validacao
 from sistema.web import renderizacao
 from sistema.model.entidades.documento import TipoDocumento
+from sistema.persistencia.operacoes import tipo_documento_com_este_nome_existe
 from sistema.web import eventos_cliente
 
 
@@ -22,7 +23,12 @@ def setup_views(app, db):
         form = criar_tipo_documento_form.criar_form(
             dados_input_usuario=flask.request.form
         )
-        if criar_tipo_documento_form.e_valido(form):
+        if criar_tipo_documento_form.e_valido(
+            form,
+            validacao.validador_campo_unico_factory(
+                lambda nome: tipo_documento_com_este_nome_existe(db, nome)
+            ),
+        ):
             dados = criar_tipo_documento_form.obter_dados(form)
             db.add(TipoDocumento(dados["nome"]))
             db.commit()
