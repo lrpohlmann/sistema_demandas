@@ -14,8 +14,8 @@ def criar_form(dados_input_usuario=None, **dados) -> CriarTipoDemandaForm:
     return CriarTipoDemandaForm(formdata=dados_input_usuario, **dados)
 
 
-def e_valido(form) -> bool:
-    return form.validate()
+def e_valido(form: FlaskForm, validador_nome_unico) -> bool:
+    return form.validate(extra_validators={"nome": [validador_nome_unico]})
 
 
 def obter_dados(form) -> Mapping:
