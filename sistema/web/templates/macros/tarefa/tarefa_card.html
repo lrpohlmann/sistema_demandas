@@ -40,9 +40,16 @@
 {%- endmacro %}
 
 {% macro sequencia_tarefa_card(tarefas) -%}
+{% if tarefas %}
+
 {% for t in tarefas %}
 {{tarefa_card(t)}}
 {% endfor %}
+
+{% else %}
+-
+
+{% endif %}
 {%- endmacro %}
 
 {% macro sequencia_tarefa_em_aberto_card_com_paginacao(demanda_id) %}
