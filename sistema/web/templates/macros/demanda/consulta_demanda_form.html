@@ -1,5 +1,6 @@
 {% macro consulta_demanda_form(form_consulta_demanda) %}
-<form hx-get="{{url_for('consulta_demanda')}}" hx-params="*" hx-target="#consulta-demandas-alvo" hx-swap="innerHTML">
+<form class="d-flex flex-column gap-2" hx-get="{{url_for('consulta_demanda')}}" hx-params="*"
+    hx-target="#consulta-demandas-alvo" hx-swap="innerHTML">
     <legend>Consulta Demanda</legend>
     {{form_consulta_demanda.csrf_token}}
     <div>
