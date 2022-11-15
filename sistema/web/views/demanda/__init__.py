@@ -1,4 +1,5 @@
 from sistema.web.views.demanda import (
+    consulta_demanda_view,
     demanda_view,
     editar_demanda_form,
     salvar_edicao_demanda,
@@ -6,7 +7,6 @@ from sistema.web.views.demanda import (
     obter_documentos_view,
     deletar_documento_view,
     deletar_demanda_view,
-    consulta_demanda,
     atualizar_status_view,
     minhas_demandas_view,
     obter_ultimas_demandas_pendentes_view,
@@ -24,7 +24,7 @@ def setup_views(app, db):
         obter_documentos_view,
         deletar_documento_view,
         deletar_demanda_view,
-        consulta_demanda,
+        consulta_demanda_view,
         atualizar_status_view,
         minhas_demandas_view,
         obter_ultimas_demandas_pendentes_view,

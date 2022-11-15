@@ -5,7 +5,7 @@ from flask_login import login_required
 from sistema.model.entidades import demanda, documento, fato, tarefa, usuario
 from sistema import servicos
 from sistema.web import renderizacao
-from sistema.web.forms.consulta_demanda import criar_form, e_valido, obter_dados
+from sistema.web.forms.consulta_demanda_form import criar_form, e_valido, obter_dados
 
 
 def setup_views(app, db):

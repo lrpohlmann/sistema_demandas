@@ -4,8 +4,8 @@ from flask_login import login_required
 
 from sistema.model.entidades.demanda import Demanda, TipoDemanda
 from sistema.model.entidades.usuario import Usuario
-from sistema.web.forms.consulta_demanda import ConsultaDemandaForm
-from sistema.web.forms import criar_demanda, consulta_demanda
+from sistema.web.forms.consulta_demanda_form import ConsultaDemandaForm
+from sistema.web.forms import consulta_demanda_form, criar_demanda
 
 
 def setup_views(app, db):
