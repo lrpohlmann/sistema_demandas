@@ -14,12 +14,18 @@ def setup_views(app, db):
     def obter_form_consulta_demanda():
         form_consulta_demanda = criar_form(
             [
+                ("", "-"),
+            ]
+            + [
                 (r[0], r[1])
                 for r in db.execute(
                     sqlalchemy.select(usuario.Usuario.id_usuario, usuario.Usuario.nome)
                 ).fetchall()
             ],
             [
+                ("", "-"),
+            ]
+            + [
                 (r[0], r[1])
                 for r in db.execute(
                     sqlalchemy.select(
@@ -40,12 +46,18 @@ def setup_views(app, db):
 
         form_consulta_demanda = criar_form(
             [
+                ("", "-"),
+            ]
+            + [
                 (r[0], r[1])
                 for r in db.execute(
                     sqlalchemy.select(usuario.Usuario.id_usuario, usuario.Usuario.nome)
                 ).fetchall()
             ],
             [
+                ("", "-"),
+            ]
+            + [
                 (r[0], r[1])
                 for r in db.execute(
                     sqlalchemy.select(

@@ -16,8 +16,38 @@
         {{form_consulta_demanda.tipo_id(class_="form-select")}}
     </div>
     <div>
-        {{form_consulta_demanda.data_criacao.label}}
-        {{form_consulta_demanda.data_criacao(class_="form-control")}}
+        <fieldset>
+            <legend>Data de Criação da Demanda por Período</legend>
+            <div class="d-flex gap-2">
+                <div>
+                    {{form_consulta_demanda.periodo_data_criacao_inicio.label}}
+                    {{form_consulta_demanda.periodo_data_criacao_inicio(class_="form-select")}}
+                </div>
+                <div>
+                    {{form_consulta_demanda.periodo_data_criacao_fim.label}}
+                    {{form_consulta_demanda.periodo_data_criacao_fim(class_="form-select")}}
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div>
+        <fieldset>
+            <legend>Data de Entrega da Demanda por Período</legend>
+            <div class="d-flex gap-2">
+                <div>
+                    {{form_consulta_demanda.periodo_data_entrega_inicio.label}}
+                    {{form_consulta_demanda.periodo_data_entrega_inicio(class_="form-select")}}
+                </div>
+                <div>
+                    {{form_consulta_demanda.periodo_data_entrega_fim.label}}
+                    {{form_consulta_demanda.periodo_data_entrega_fim(class_="form-select")}}
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div>
+        {{form_consulta_demanda.status.label}}
+        {{form_consulta_demanda.status(class_="form-select")}}
     </div>
     <div>
         <button type="submit" class="btn btn-primary">Consultar</button>
