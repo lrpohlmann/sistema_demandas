@@ -15,6 +15,7 @@ from sistema.persistencia.operacoes import (
     obter_todos_tipos_demanda,
     usuario_com_este_nome_existe,
     tipo_demanda_com_este_nome_existe,
+    consultar_demandas,
 )
 from sistema.persistencia.orm_mapping import mapear
 from sistema.persistencia.realizar_operacao_com_db import realizar_operacao_com_db
@@ -175,3 +176,14 @@ def test_tipo_demanda_existe(temp_db):
     )
 
     assert existe
+
+
+def test_consultar_demandas(temp_db):
+    temp_db.add(Demanda("Demanda 1", TipoDemanda("1"), status="PENDENTE"))
+    temp_db.commit()
+
+    resultado = consultar_demandas(
+        temp_db, {"status": "PENDENTE", "titulo": "Demanda 1"}
+    )
+
+    assert resultado
