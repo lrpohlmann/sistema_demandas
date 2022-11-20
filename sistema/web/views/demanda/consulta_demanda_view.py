@@ -2,10 +2,10 @@ import flask
 import sqlalchemy
 from flask_login import login_required
 
-from sistema.model.entidades import demanda, documento, fato, tarefa, usuario
-from sistema import servicos
+from sistema.model.entidades import demanda, usuario
 from sistema.web import renderizacao
 from sistema.web.forms.consulta_demanda_form import criar_form, e_valido, obter_dados
+from sistema.persistencia import operacoes
 
 
 def setup_views(app, db):
@@ -69,25 +69,7 @@ def setup_views(app, db):
         )
         if e_valido(form_consulta_demanda):
             dados = obter_dados(form_consulta_demanda)
-            if dados.get("titulo"):
-                consulta = consulta.where(demanda.Demanda.titulo == dados.get("titulo"))
-
-            if dados.get("responsavel_id"):
-                consulta = consulta.where(
-                    demanda.Demanda.responsavel_id == dados.get("responsavel_id")
-                )
-
-            if dados.get("tipo_id"):
-                consulta = consulta.where(
-                    demanda.Demanda.tipo_id == dados.get("tipo_id")
-                )
-
-            if dados.get("data_criacao"):
-                consulta = consulta.where(
-                    demanda.Demanda.data_criacao == dados.get("data_criacao")
-                )
-
-            demandas = db.execute(consulta).scalars().all()
+            demandas = operacoes.consultar_demandas(db, dados)
 
             return renderizacao.renderizar_tabela_de_demandas(
                 demandas=demandas,
