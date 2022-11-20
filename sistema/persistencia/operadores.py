@@ -1,4 +1,5 @@
-from typing import Literal
+from typing import Literal, Any, Callable
+from dataclasses import dataclass
 import operator
 
 
@@ -12,7 +13,14 @@ LIKE = "LIKE"
 _literal_operacoes = Literal["EQ", "LT", "LE", "GT", "GE", "LIKE"]
 
 
-def _obter_operacao(operacao: _literal_operacoes):
+@dataclass
+class ArgsOperacaoPersistencia:
+    alvo: Any
+    operacao: _literal_operacoes
+    dado: Any
+
+
+def _obter_operacao(operacao: _literal_operacoes) -> Callable[[Any, Any], Any]:
     _OPERACAO_FUNCAO = {
         "EQ": operator.eq,
         "LT": operator.lt,

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from sistema.model.entidades import TipoDemanda, Usuario, TipoDocumento
 from sistema.model.entidades.demanda import Demanda
-from sistema.persistencia import operadores
+from sistema.persistencia.operadores import ArgsOperacaoPersistencia, realizar_operacao
 
 
 def obter_todos_tipos_demanda(db: Session) -> List[TipoDemanda]:
@@ -56,38 +56,36 @@ class DadosConsultaDemandaDict(TypedDict):
 def consultar_demandas(
     db, dados_consulta: DadosConsultaDemandaDict
 ) -> Sequence[Demanda]:
-    operacao_por_dado: Dict[str, operadores._literal_operacoes] = {
-        "titulo": operadores.EQ,
-        "responsavel_id": operadores.EQ,
-        "tipo_id": operadores.EQ,
-        "periodo_data_criacao_inicio": operadores.GE,
-        "periodo_data_criacao_fim": operadores.LE,
-        "periodo_data_entrega_inicio": operadores.GE,
-        "periodo_data_entrega_fim": operadores.LE,
-        "status": operadores.EQ,
-    }
-
-    campos_por_dado = {
-        "titulo": Demanda.titulo,
-        "responsavel_id": Demanda.responsavel_id,
-        "tipo_id": Demanda.tipo_id,
-        "periodo_data_criacao_inicio": Demanda.data_criacao,
-        "periodo_data_criacao_fim": Demanda.data_criacao,
-        "periodo_data_entrega_inicio": Demanda.data_entrega,
-        "periodo_data_entrega_fim": Demanda.data_entrega,
-        "status": Demanda.status,
-    }
-
-    dados_filtrados = dict(
-        [(nome, dado) for nome, dado in dados_consulta.items() if dado is not None]
-    )
+    templates_consulta_por_campo = [
+        ArgsOperacaoPersistencia(Demanda.titulo, "EQ", dados_consulta.get("titulo")),
+        ArgsOperacaoPersistencia(
+            Demanda.responsavel_id, "EQ", dados_consulta.get("responsavel_id")
+        ),
+        ArgsOperacaoPersistencia(Demanda.tipo_id, "EQ", dados_consulta.get("tipo_id")),
+        ArgsOperacaoPersistencia(
+            Demanda.data_criacao,
+            "GE",
+            dados_consulta.get("periodo_data_criacao_inicio"),
+        ),
+        ArgsOperacaoPersistencia(
+            Demanda.data_criacao, "LT", dados_consulta.get("periodo_data_criacao_fim")
+        ),
+        ArgsOperacaoPersistencia(
+            Demanda.data_entrega,
+            "GE",
+            dados_consulta.get("periodo_data_entrega_inicio"),
+        ),
+        ArgsOperacaoPersistencia(
+            Demanda.data_criacao, "LT", dados_consulta.get("periodo_data_entrega_fim")
+        ),
+        ArgsOperacaoPersistencia(Demanda.status, "EQ", dados_consulta.get("status")),
+    ]
 
     consuta = select(Demanda).where(
         *[
-            operadores.realizar_operacao(
-                campos_por_dado[campo], operacao_por_dado[campo], dado
-            )
-            for campo, dado in dados_filtrados.items()
+            realizar_operacao(template.alvo, template.operacao, template.dado)
+            for template in templates_consulta_por_campo
+            if template.dado is not None
         ]
     )
 
