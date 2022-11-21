@@ -17,7 +17,7 @@ from sistema.persistencia.operacoes import (
     tipo_demanda_com_este_nome_existe,
     consultar_demandas,
 )
-from sistema.persistencia.orm_mapping import mapear
+from sistema.persistencia.orm_mapping import mapear, criar_tabelas
 from sistema.persistencia.realizar_operacao_com_db import realizar_operacao_com_db
 
 
@@ -31,7 +31,8 @@ def _setup_db(_engine):
     metadata = MetaData()
     mapper = registry()
 
-    mapear(_engine, metadata, mapper)
+    mapear(metadata, mapper)
+    criar_tabelas(_engine, metadata)
 
     yield _engine
     mapper.dispose()

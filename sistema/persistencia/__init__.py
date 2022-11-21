@@ -3,7 +3,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker, registry
 from sqlalchemy import MetaData, create_engine, event
 from sqlalchemy.engine import Engine
 
-from sistema.persistencia.orm_mapping import mapear
+from sistema.persistencia.orm_mapping import mapear, criar_tabelas
 
 
 @event.listens_for(Engine, "connect")
@@ -18,7 +18,8 @@ def setup_persistencia(db_path: str):
     mapper = registry()
     metadata = MetaData(bind=engine)
 
-    mapear(engine, metadata, mapper)
+    mapear(metadata, mapper)
+    criar_tabelas(engine, metadata)
 
     return (
         scoped_session(

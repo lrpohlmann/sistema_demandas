@@ -18,7 +18,7 @@ from sistema.model.entidades.tarefa import Tarefa
 from sistema.model.entidades.usuario import Usuario
 
 
-def mapear(engine: Engine, metadata: MetaData, mapper) -> MetaData:
+def mapear(metadata: MetaData, mapper) -> MetaData:
     mapper.map_imperatively(TipoDocumento, init_tabela_tipo_documento(metadata))
     mapper.map_imperatively(
         Documento,
@@ -47,8 +47,11 @@ def mapear(engine: Engine, metadata: MetaData, mapper) -> MetaData:
     )
     mapper.map_imperatively(Fato, init_tabela_fato(metadata))
 
-    metadata.create_all(engine)
     return metadata
+
+
+def criar_tabelas(engine, metadata):
+    metadata.create_all(engine)
 
 
 def init_tabela_tipo_documento(metadata):
