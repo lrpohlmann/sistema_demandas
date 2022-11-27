@@ -1,10 +1,8 @@
-import random
 from faker import Faker
-from typing import Protocol
 
-from test.fixtures import faker_obj
-from sistema.model.entidades import Demanda, Tarefa, Fato, StatusTarefa, TipoFatos
+from sistema.model.entidades import Demanda, Tarefa, StatusTarefa
 from sistema.model.operacoes.tarefa import finalizar_tarefa
+from test.fixtures import faker_obj
 
 
 def test_finalizacao_tarefa(faker_obj: Faker):

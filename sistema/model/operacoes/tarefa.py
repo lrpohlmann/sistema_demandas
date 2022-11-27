@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from typing import Protocol, Sequence, runtime_checkable
 
 from ..entidades import StatusTarefa, TipoFatos, Fato
