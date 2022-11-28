@@ -2,6 +2,8 @@ from pathlib import Path
 import tempfile
 from typing import Literal
 
+from sistema.web.configs import constantes
+
 
 class WebAppConfig:
     def __init__(
@@ -25,22 +27,22 @@ class WebAppConfig:
 
 def obter_config_teste_automatico(tmp_dir: str):
     return WebAppConfig(
-        DB="sqlite+pysqlite:///:memory:",
+        DB=constantes.DB_TESTE_AUTOMATICO,
         TESTING=True,
         SECRET_KEY="dev",
         WTF_CSRF_ENABLED=False,
         UPLOAD_FOLDER=Path(tmp_dir),
-        MAX_CONTENT_LENGTH=20 * 1024 * 1024,
+        MAX_CONTENT_LENGTH=constantes.TAMANHO_MAXIMO_ARQUIVOS,
         _UPLOAD_FOLDER_OBJECT=tmp_dir,
     )
 
 
 def obter_config_teste_manual(upload_diretorio: Path):
     return WebAppConfig(
-        DB="sqlite+pysqlite:///db.sqlite",
+        DB=constantes.DB_TESTE_MANUAL,
         SECRET_KEY="dev",
         UPLOAD_FOLDER=upload_diretorio,
-        MAX_CONTENT_LENGTH=20 * 1024 * 1024,
+        MAX_CONTENT_LENGTH=constantes.TAMANHO_MAXIMO_ARQUIVOS,
         TESTING=True,
         WTF_CSRF_ENABLED=True,
     )
@@ -52,12 +54,12 @@ def web_app_config_factory(
     if tipo == "teste_automatico":
         pasta_upload_obj = tempfile.TemporaryDirectory()
         return WebAppConfig(
-            DB="sqlite+pysqlite:///:memory:",
+            DB=constantes.DB_TESTE_AUTOMATICO,
             TESTING=True,
             SECRET_KEY="dev",
             WTF_CSRF_ENABLED=False,
             UPLOAD_FOLDER=Path(pasta_upload_obj.name),
-            MAX_CONTENT_LENGTH=20 * 1024 * 1024,
+            MAX_CONTENT_LENGTH=constantes.TAMANHO_MAXIMO_ARQUIVOS,
             _UPLOAD_FOLDER_OBJECT=pasta_upload_obj,
         )
     elif tipo == "teste_manual":
@@ -68,10 +70,10 @@ def web_app_config_factory(
             _UPLOAD_FOLDER_OBJECT.mkdir()
 
         return WebAppConfig(
-            DB="sqlite+pysqlite:///db.sqlite",
+            DB=constantes.DB_TESTE_MANUAL,
             SECRET_KEY="dev",
             UPLOAD_FOLDER=_UPLOAD_FOLDER_OBJECT,
-            MAX_CONTENT_LENGTH=20 * 1024 * 1024,
+            MAX_CONTENT_LENGTH=constantes.TAMANHO_MAXIMO_ARQUIVOS,
             TESTING=True,
             WTF_CSRF_ENABLED=True,
         )
