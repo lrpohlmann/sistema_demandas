@@ -1,7 +1,9 @@
 from typing import Dict, Mapping, Sequence
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed, FileRequired
+from flask_wtf.file import FileField, FileAllowed, FileRequired, FileSize
 from wtforms import StringField, SelectField, TextAreaField, validators
+
+from sistema.web.configs import constantes
 
 
 class UploadDocumentoForm(FlaskForm):
@@ -39,6 +41,10 @@ class UploadDocumentoForm(FlaskForm):
                     "7z",
                     "zip",
                 }
+            ),
+            FileSize(
+                max_size=constantes.TAMANHO_MAXIMO_ARQUIVOS,
+                message="Arquivo não pode ser maior do que 20 megabytes",
             ),
         ],
     )
