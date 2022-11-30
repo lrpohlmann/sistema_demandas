@@ -32,7 +32,7 @@ def web_app_factory(
     config_obj, mapping_config: Optional[Mapping] = None
 ) -> WebAppContextoRuntime:
     app = _setup_web_app(config_obj, mapping_config)
-    db = ContextoDb(*_setup_app_db(app))
+    db = _setup_app_db(app)
     web_app_contexto = WebAppContextoRuntime(app=app, persistencia=db)
 
     _setup_app_autenticacao(web_app_contexto.app, web_app_contexto.persistencia.db)
@@ -53,14 +53,14 @@ def _setup_web_app(config_obj, mapping_config: Optional[Mapping] = None):
     return app
 
 
-def _setup_app_db(app: Flask):
-    db, mapper, metadata = setup_persistencia(app.config["DB"])
+def _setup_app_db(app: Flask) -> ContextoDb:
+    contexto_db = ContextoDb(*setup_persistencia(app.config["DB"]))
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
-        db.remove()
+        contexto_db.db.remove()
 
-    return db, mapper, metadata
+    return contexto_db
 
 
 def _setup_app_autenticacao(app, db):
