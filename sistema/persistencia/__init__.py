@@ -1,5 +1,5 @@
 from importlib_metadata import metadata
-from sqlalchemy.orm import scoped_session, sessionmaker, registry
+from sqlalchemy.orm import scoped_session, sessionmaker, registry, clear_mappers
 from sqlalchemy import MetaData, create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.event import listen
@@ -20,6 +20,7 @@ def desativar_chave_estrangeira_sqlite(dbapi_connection, connection_record):
 
 
 def setup_persistencia(db_path: str):
+    clear_mappers()  # TODO: revisar o pq isso é necessário
     listen(Engine, "connect", ativar_chave_estrangeira_sqlite)
     engine = create_engine(db_path, future=True)
     mapper = registry()

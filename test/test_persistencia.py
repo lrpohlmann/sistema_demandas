@@ -19,6 +19,7 @@ from sistema.persistencia.operacoes import (
 )
 from sistema.persistencia.orm_mapping import mapear, criar_tabelas
 from sistema.persistencia.realizar_operacao_com_db import realizar_operacao_com_db
+from sistema.persistencia import setup_persistencia
 
 
 @pytest.fixture(scope="function")
@@ -188,3 +189,16 @@ def test_consultar_demandas(temp_db):
     )
 
     assert resultado
+
+
+def test_setup_persistencia():
+    setup_persistencia("sqlite+pysqlite:///:memory:")
+
+
+def test_setup_persistencia_db_estabelecido(tmp_path):
+    caminho = tmp_path / "db_teste.sqlite"
+    url = f"sqlite+pysqlite:///{caminho}"
+    db, reg, meta = setup_persistencia(url)
+    reg.dispose()
+    db.remove()
+    setup_persistencia(url)
