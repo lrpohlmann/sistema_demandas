@@ -153,6 +153,7 @@ dmypy.json
 cython_debug/
 
 .vscode
+*.code-workspace
 
 db.sqlite
 pasta_documentos_teste_manual/
