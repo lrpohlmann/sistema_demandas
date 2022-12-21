@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Mapping, Optional, Sequence
 from flask import Flask
+from flask.cli import load_dotenv
+from dotenv import dotenv_values
 from flask_wtf.csrf import CSRFProtect
 from pathlib import Path
 import flask_login
@@ -41,6 +43,17 @@ def web_app_factory(
     return web_app_contexto
 
 
+def web_app_producao_factory() -> Flask:
+    app = Flask(__name__)
+    CSRFProtect(app)
+    load_dotenv()
+    app.config["SECRET_KEY"] = dotenv_values()["SECRET_KEY"]
+    contexto_db = _setup_app_db(app, dotenv_values()["DB"])
+    _setup_app_autenticacao(app, contexto_db.db)
+    setup_todas_views(app, contexto_db.db)
+    return app
+
+
 def _setup_web_app(config_obj, mapping_config: Optional[Mapping] = None):
     app = Flask(__name__)
     CSRFProtect(app)
@@ -53,8 +66,11 @@ def _setup_web_app(config_obj, mapping_config: Optional[Mapping] = None):
     return app
 
 
-def _setup_app_db(app: Flask) -> ContextoDb:
-    contexto_db = ContextoDb(*setup_persistencia(app.config["DB"]))
+def _setup_app_db(app: Flask, db_url: Optional[str] = None) -> ContextoDb:
+    if not db_url:
+        contexto_db = ContextoDb(*setup_persistencia(app.config["DB"]))
+    else:
+        contexto_db = ContextoDb(*setup_persistencia(db_url))
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):
