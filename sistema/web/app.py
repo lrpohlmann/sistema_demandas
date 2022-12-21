@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from typing import Mapping, Optional, Sequence
 from flask import Flask
@@ -44,6 +45,7 @@ def web_app_factory(
 
 
 def web_app_producao_factory() -> Flask:
+    logging.basicConfig(filename="sistema_log.log", level=logging.ERROR)
     app = Flask(__name__)
     CSRFProtect(app)
     load_dotenv()
