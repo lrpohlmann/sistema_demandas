@@ -50,6 +50,7 @@ def web_app_producao_factory() -> Flask:
     CSRFProtect(app)
     load_dotenv()
     app.config["SECRET_KEY"] = dotenv_values()["SECRET_KEY"]
+    app.config["UPLOAD_FOLDER"] = str(Path(dotenv_values()["UPLOAD_FOLDER"]).absolute())
     contexto_db = _setup_app_db(app, dotenv_values()["DB"])
     _setup_app_autenticacao(app, contexto_db.db)
     setup_todas_views(app, contexto_db.db)

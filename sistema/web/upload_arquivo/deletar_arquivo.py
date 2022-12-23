@@ -3,6 +3,6 @@ import os
 from flask import Flask
 
 
-def deletar(app: Flask, arquivo_nome: str):
-    caminho: Path = app.config["UPLOAD_FOLDER"] / arquivo_nome
+def deletar(pasta: str, arquivo_nome: str):
+    caminho: Path = Path(pasta) / arquivo_nome
     os.remove(str(caminho))

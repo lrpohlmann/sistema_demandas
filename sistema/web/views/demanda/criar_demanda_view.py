@@ -58,7 +58,7 @@ def setup_views(app, db):
                     responsavel=db.get(Usuario, dados["responsavel_id"])
                     if dados["responsavel_id"]
                     else None,
-                    data_entrega=dados["data_entrega"],
+                    data_entrega=dados.get("data_entrega"),
                 )
             )
             db.commit()

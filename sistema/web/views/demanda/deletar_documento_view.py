@@ -16,7 +16,7 @@ def setup_views(app, db):
     )
     @login_required
     def deletar_documento_view(documento_id: int):
-        documento = db.get(Documento, documento_id)
+        documento: Documento = db.get(Documento, documento_id)
         if documento:
             demanda: Demanda = (
                 db.execute(
@@ -30,7 +30,7 @@ def setup_views(app, db):
 
             demanda.documentos.remove(documento)
             db.commit()
-            upload_arquivo.deletar(app, documento.arquivo)
+            upload_arquivo.deletar(app.config["UPLOAD_FOLDER"], documento.arquivo)
             return "", 200
         else:
             return "", 404

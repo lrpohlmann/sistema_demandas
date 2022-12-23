@@ -3,7 +3,7 @@
 
 
 {% macro form_criar_demanda(form_criar_demanda) %}
-<form action="{{url_for('main')}}" method="post" class="d-flex flex-column gap-3">
+<form hx-post="{{url_for('criar_demanda_view')}}" class="d-flex flex-column gap-3">
     <div>
         <legend>Nova Demanda</legend>
         {{form_criar_demanda.csrf_token}}

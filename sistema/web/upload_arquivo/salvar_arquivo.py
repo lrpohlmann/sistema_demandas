@@ -5,8 +5,8 @@ from werkzeug.datastructures import FileStorage
 import uuid
 
 
-def salvar(diretorio: Path, arquivo: FileStorage) -> str:
+def salvar(diretorio: str, arquivo: FileStorage) -> str:
     nome_seguro = f"{uuid.uuid4()}_{secure_filename(arquivo.filename)}"
-    caminho_completo = diretorio / nome_seguro
+    caminho_completo = Path(diretorio) / nome_seguro
     arquivo.save(str(caminho_completo))
     return str(nome_seguro)
