@@ -154,6 +154,7 @@ cython_debug/
 
 .vscode
 *.code-workspace
+uploads/
 
 db.sqlite
 pasta_documentos_teste_manual/
