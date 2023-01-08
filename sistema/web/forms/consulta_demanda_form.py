@@ -45,9 +45,9 @@ class ConsultaDemandaForm(FlaskForm):
 
 
 def criar_form(
-    opcoes_responsavel_id: Sequence, opcoes_tipo_id: Sequence, **dados
+    opcoes_responsavel_id: Sequence, opcoes_tipo_id: Sequence, input_usuario=None,**dados
 ) -> ConsultaDemandaForm:
-    form = ConsultaDemandaForm(**dados)
+    form = ConsultaDemandaForm(formdata=input_usuario, **dados)
     form.responsavel_id.choices = opcoes_responsavel_id
     form.tipo_id.choices = opcoes_tipo_id
     return form

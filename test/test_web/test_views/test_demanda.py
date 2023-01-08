@@ -308,7 +308,7 @@ def test_consulta_demanda(web_app_com_autenticacao: WebAppFixture, gerar_usuario
         Demanda(
             titulo="11111",
             tipo=TipoDemanda(nome="xxxxxxxx"),
-            responsavel=Usuario(nome="lllll", senha="123456"),
+            responsavel=usuario,
         )
     )
     web_app_com_autenticacao.db.commit()

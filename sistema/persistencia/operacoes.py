@@ -76,7 +76,7 @@ def consultar_demandas(
             dados_consulta.get("periodo_data_entrega_inicio"),
         ),
         ArgsOperacaoPersistencia(
-            Demanda.data_criacao, "LT", dados_consulta.get("periodo_data_entrega_fim")
+            Demanda.data_entrega, "LE", dados_consulta.get("periodo_data_entrega_fim")
         ),
         ArgsOperacaoPersistencia(Demanda.status, "EQ", dados_consulta.get("status")),
     ]

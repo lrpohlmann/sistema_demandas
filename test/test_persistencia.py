@@ -1,3 +1,4 @@
+from datetime import datetime
 from test.fixtures import faker_obj, temp_db
 
 import pytest
@@ -19,6 +20,7 @@ from sistema.persistencia.operacoes import (
 )
 from sistema.persistencia.orm_mapping import mapear, criar_tabelas
 from sistema.persistencia.realizar_operacao_com_db import realizar_operacao_com_db
+from sistema.persistencia.operacoes import consultar_demandas
 from sistema.persistencia import setup_persistencia
 
 
@@ -202,3 +204,11 @@ def test_setup_persistencia_db_estabelecido(tmp_path):
     reg.dispose()
     db.remove()
     setup_persistencia(url)
+
+
+def test_consulta_demanda_por_data(temp_db):
+    temp_db.add(Demanda("1", TipoDemanda("1"), data_entrega=datetime(2022, 2, 1, 15, 0)))
+    temp_db.commit()
+
+    resultado = consultar_demandas(temp_db, {"periodo_data_entrega_inicio": datetime(2022, 1, 1, 0, 0), "periodo_data_entrega_fim": datetime(2023, 1, 1, 0, 0)})
+    assert resultado
