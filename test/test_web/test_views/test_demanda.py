@@ -309,6 +309,7 @@ def test_consulta_demanda(web_app_com_autenticacao: WebAppFixture, gerar_usuario
             titulo="11111",
             tipo=TipoDemanda(nome="xxxxxxxx"),
             responsavel=usuario,
+            data_entrega=datetime(2023, 1, 1),
         )
     )
     web_app_com_autenticacao.db.commit()
@@ -317,13 +318,34 @@ def test_consulta_demanda(web_app_com_autenticacao: WebAppFixture, gerar_usuario
 
         consultas = [
             {
+                "titulo": None,
                 "tipo_id": "1",
                 "responsavel_id": "1",
-                "titulo": "xxxxxx",
+                "periodo_data_criacao_inicio": None,
+                "periodo_data_criacao_fim": None,
+                "periodo_data_entrega_inicio": None,
+                "periodo_data_entrega_fim": None,
+                "status": "",
             },
             {
+                "titulo": None,
                 "tipo_id": 1,
                 "responsavel_id": 1,
+                "periodo_data_criacao_inicio": None,
+                "periodo_data_criacao_fim": None,
+                "periodo_data_entrega_inicio": None,
+                "periodo_data_entrega_fim": None,
+                "status": "",
+            },
+            {
+                "titulo": None,
+                "tipo_id": "",
+                "responsavel_id": "",
+                "periodo_data_criacao_inicio": None,
+                "periodo_data_criacao_fim": None,
+                "periodo_data_entrega_inicio": "2022-1-1",
+                "periodo_data_entrega_fim": None,
+                "status": "",
             },
         ]
 

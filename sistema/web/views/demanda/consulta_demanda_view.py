@@ -40,10 +40,6 @@ def setup_views(app, db):
     @app.route("/demanda/consulta", methods=["GET"])
     @login_required
     def consulta_demanda():
-        consulta = sqlalchemy.select(demanda.Demanda).order_by(
-            demanda.Demanda.data_criacao
-        )
-
         form_consulta_demanda = criar_form(
             [
                 ("", "-"),
@@ -65,7 +61,7 @@ def setup_views(app, db):
                     )
                 ).fetchall()
             ],
-            **flask.request.args,
+            input_usuario=flask.request.args,
         )
         if e_valido(form_consulta_demanda):
             dados = obter_dados(form_consulta_demanda)
@@ -79,6 +75,6 @@ def setup_views(app, db):
                 kwargs_url={},
             )
         else:
-            return "", 400
+            return flask.abort(400)
 
     return app, db

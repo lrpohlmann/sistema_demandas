@@ -207,8 +207,23 @@ def test_setup_persistencia_db_estabelecido(tmp_path):
 
 
 def test_consulta_demanda_por_data(temp_db):
-    temp_db.add(Demanda("1", TipoDemanda("1"), data_entrega=datetime(2022, 2, 1, 15, 0)))
+    temp_db.add(
+        Demanda("1", TipoDemanda("1"), data_entrega=datetime(2022, 2, 1, 15, 0))
+    )
     temp_db.commit()
 
-    resultado = consultar_demandas(temp_db, {"periodo_data_entrega_inicio": datetime(2022, 1, 1, 0, 0), "periodo_data_entrega_fim": datetime(2023, 1, 1, 0, 0)})
-    assert resultado
+    resultado = consultar_demandas(
+        temp_db,
+        {
+            "periodo_data_criacao_fim": None,
+            "periodo_data_criacao_inicio": None,
+            "periodo_data_entrega_inicio": None,
+            "responsavel_id": None,
+            "status": None,
+            "tipo_id": None,
+            "titulo": None,
+            "periodo_data_entrega_inicio": datetime(2022, 1, 1),
+            "periodo_data_entrega_fim": datetime(2023, 1, 1),
+        },
+    )
+    assert len(resultado) == 1
